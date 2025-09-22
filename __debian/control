@@ -1,0 +1,8 @@
+Package: vmman4
+Version: 1.00.00-0
+Architecture: amd64
+Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
+Description: libvirt client
+Section: Virtualization
+Depends: 
+
