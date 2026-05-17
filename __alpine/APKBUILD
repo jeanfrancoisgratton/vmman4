@@ -1,29 +1,35 @@
-# Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
-# Packager: package builder <builder@famillegratton.net>
-pkgname=vmman4
-pkgver=1.00.00
+# Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
+# Packager: Package builder <builder@famillegratton.net>
+pkgname=nxtools
+pkgver=0.85.00_pre
 pkgrel=0
 pkgdir=/data/packages
-builddir="$startdir/src/BUILD"
-pkgdesc="libvirt client"
-url="https://git.famillegratton.net:9722/devops/vmman4.git"
+pkgdesc="Nexus Repository Manager tools"
+url="https://git.famillegratton.net:3000/devops/nxtools.git"
 arch=x86_64
 license=GPL2
 #depends="gcompat"
-install="$pkgname.pre-install $pkgname.post-install $pkgname.pre-upgrade $pkgname.post-upgrade $pkgname.pre-deinstall $pkgname.post-deinstall"
+install="$pkgname.pre-deinstall $pkgname.post-install"
 #source="$pkgname-$pkgver-$pkgrel.tar.bz2::http://localhost/$pkgname-$pkgver-$pkgrel.tar.bz2"
-binaryname=vmman
+builddir="$startdir/src/BUILD"
+
+binaryname=nxtools
+
+prepare() {
+	mkdir -p "$builddir"
+	cp -R "$startdir"/../src/* "$builddir"/
+}
 
 build() {
-	pwd
-	mkdir -p "$builddir" && cd "$builddir"/.. && rm -rf BUILD && cp -R "$startdir"/../src . && mv src BUILD
-    cd "$builddir"
-    make -f "$startdir"/Makefile prepare
-    CGO_ENABLED=0 go build -o "$binaryname".exe .
+	cd "$builddir"
+
+	go env | egrep 'GOFLAGS|CGO_ENABLED|GOOS|GOARCH' || true
+
+	# Static, non-PIE, internal linker
+	go build -trimpath -ldflags="-s -w -buildid= -linkmode=internal" -o "$binaryname" .
 }
 
 package() {
-        make -f "$startdir"/Makefile BUILDDIR="$builddir" PREFIX=/opt PKGNM="$binaryname" DESTDIR="$pkgdir" install
+	install -d "$pkgdir"/opt/bin
+	install -m755 "$builddir/$binaryname" "$pkgdir/opt/bin/$binaryname"
 }
-
-

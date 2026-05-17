@@ -1,8 +1,8 @@
-Package: vmman4
-Version: 1.00.00-0
+Package: nxtools
+Version: 0.90.00~debug-0
 Architecture: amd64
-Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
-Description: libvirt client
-Section: Virtualization
+Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
+Description: Nexus Repository Manager tools
+Section: CI/CD
 Depends: 
-
+Suggests: zsh
