@@ -1,4 +1,4 @@
-// nxtools
+// vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
 // Original timestamp: 2025/09/15 08:35
 // Original filename: src/cmd/completionCommands.go
@@ -18,16 +18,16 @@ var completionCmd = &cobra.Command{
 	Long: `Generate completion scripts for your shell.
 
 Bash:
-  $ source <(nxtools completion bash)
+  $ source <(vmman completion bash)
   # To persist:
-  $ nxtools completion bash | sudo tee /etc/bash_completion.d/nxtools > /dev/null
+  $ vmman completion bash | sudo tee /etc/bash_completion.d/vmman > /dev/null
 
 Zsh:
-  $ nxtools completion zsh > ~/.zsh[.completion.d]/_nxtools
+  $ vmman completion zsh > ~/.zsh[.completion.d]/_vmman
   $ echo 'fpath=($HOME/.zsh $fpath)' >> ~/.zshrc
   $ echo 'autoload -Uz compinit && compinit' >> ~/.zshrc
   # Or, for current session:
-  $ source <(nxtools completion zsh)
+  $ source <(vmman completion zsh)
 `,
 }
 

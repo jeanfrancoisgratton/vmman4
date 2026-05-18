@@ -1,8 +1,8 @@
-Package: nxtools
-Version: 0.90.00~debug-0
+Package: vmman4
+Version: 0.10.00~debug-0
 Architecture: amd64
 Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
-Description: Nexus Repository Manager tools
-Section: CI/CD
+Description: libvirt QEMU/KVM client
+Section: virtualization
 Depends: 
 Suggests: zsh

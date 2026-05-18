@@ -1,11 +1,11 @@
 # Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
 # Packager: Package builder <builder@famillegratton.net>
-pkgname=nxtools
-pkgver=0.85.00_pre
+pkgname=vmman4
+pkgver=0.10.00_pre
 pkgrel=0
 pkgdir=/data/packages
-pkgdesc="Nexus Repository Manager tools"
-url="https://git.famillegratton.net:3000/devops/nxtools.git"
+pkgdesc="Virtual Machine Manager"
+url="https://git.famillegratton.net:3000/devops/vmman4.git"
 arch=x86_64
 license=GPL2
 #depends="gcompat"
@@ -13,7 +13,7 @@ install="$pkgname.pre-deinstall $pkgname.post-install"
 #source="$pkgname-$pkgver-$pkgrel.tar.bz2::http://localhost/$pkgname-$pkgver-$pkgrel.tar.bz2"
 builddir="$startdir/src/BUILD"
 
-binaryname=nxtools
+binaryname=vmman
 
 prepare() {
 	mkdir -p "$builddir"

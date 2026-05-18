@@ -1,4 +1,4 @@
-SPEC      := nxtools.spec
+SPEC      := vmman4.spec
 NAME      := $(shell rpmspec -q --qf '%{name}\n'    $(SPEC) | head -1)
 VERSION   := $(shell rpmspec -q --qf '%{version}\n' $(SPEC) | head -1)
 RELEASE   := $(shell rpmspec -q --qf '%{release}\n' $(SPEC) | head -1)
@@ -28,10 +28,10 @@ rpmcl: tarball changelog
 	find $(RPMS) -name '*.rpm' -exec cp {} $(DEST)/ \;
 
 upload:
-	nxtools upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
+	vmman upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
 
 commitcl:
-	git add nxtools.spec
+	git add vmman4.spec
 	git commit -m "chore: update changelog for $(VERSION)-$(RELEASE)"
 
 clean:

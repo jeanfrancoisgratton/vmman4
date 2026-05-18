@@ -1,4 +1,4 @@
-# <img src="./images/vmman_banner.png" alt="vmman logo" height="256" width="512" />
+# <img src="./images/vmman_banner.png" alt="vmman logo" height="384" width="1024" />
 ___
 
 This tool is a CLI-driven client to Nexus Repository Manager 3 servers.<br>It will allow:

@@ -1,12 +1,12 @@
 # Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
 # Packager: Package builder <builder@famillegratton.net>
 
-pkgname=nxtools
-pkgver=0.90.00_debug
+pkgname=vmman4
+pkgver=0.10.00_debug
 pkgrel=0
-pkgdesc="Nexus Repository Manager CLI management tool"
+pkgdesc="QEMU/KVM virtual machines manager"
 arch=('x86_64')
-url="https://git.famillegratton.net:3000/devops/nxtools.git"
+url="https://git.famillegratton.net:3000/devops/vmman4.git"
 license=('GPL-2.0-only')
 
 makedepends=('go')
@@ -16,10 +16,10 @@ optdepends=('zsh: zsh completion support')
 
 options=('!debug')
 
-_binaryname='nxtools'
+_binaryname='vmman'
 _builddir="${pkgname}-${pkgver}"
 
-install=nxtools.install
+install=vmman4.install
 
 prepare() {
   rm -rf "${srcdir:?}/${_builddir}"
