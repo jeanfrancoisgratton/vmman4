@@ -6,10 +6,13 @@
 package inventory
 
 import (
+	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
 )
 
@@ -47,7 +50,12 @@ func getInterfaceSpecs(dom libvirt.Domain, vmname string) (string, string, *ce.C
 
 	domainInterface, err = dom.ListAllInterfaceAddresses(libvirt.DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT)
 	if err != nil {
-		return "", "", &ce.CustomError{Title: "Unable to get interface specs", Message: err.Error()}
+		em := err.Error()
+		if strings.Contains(em, "QEMU guest agent is not connected") {
+			fmt.Println(hftx.WarningSign(vmname + " : QEMU guest agent is not connected"))
+		} else {
+			return "", "", &ce.CustomError{Title: "Unable to get interface specs", Message: err.Error()}
+		}
 	}
 	for _, di := range domainInterface {
 		//if len(di.Name) > 2 && (di.Name[:3] == "enp" || di.Name[:3] == "eth") {
