@@ -29,9 +29,8 @@ func ConnCreate() *ce.CustomError {
 		ct.Host = hf.GetStringValFromPrompt("Please enter a host name (leave blank for localhost): ")
 	}
 	if ConnectionUser == "" {
-
+		ct.User = hf.GetStringValFromPrompt("Please enter a username: ")
 	}
-	ct.User = hf.GetStringValFromPrompt("Please enter a username: ")
 	if ct.Comments == "" {
 		ct.Comments = hf.GetStringValFromPrompt("[OPTIONAL] Please enter a comment: ")
 	}

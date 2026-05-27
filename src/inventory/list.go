@@ -40,7 +40,7 @@ func VmInventory() *ce.CustomError {
 	if err = connection.ResolveConnectionURI(); err != nil {
 		return err
 	}
-	if conn, err = connection.Connect2HVM(); err != nil {
+	if conn, err = shared.Connect2HVM(); err != nil {
 		return err
 	}
 	defer conn.Close()

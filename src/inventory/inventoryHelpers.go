@@ -50,7 +50,8 @@ func getInterfaceSpecs(dom libvirt.Domain, vmname string) (string, string, *ce.C
 		return "", "", &ce.CustomError{Title: "Unable to get interface specs", Message: err.Error()}
 	}
 	for _, di := range domainInterface {
-		if len(di.Name) > 2 && (di.Name[:3] == "enp" || di.Name[:3] == "eth") {
+		//if len(di.Name) > 2 && (di.Name[:3] == "enp" || di.Name[:3] == "eth") {
+		if len(di.Name) > 2 {
 			interfaceName = di.Name
 			domainIPaddresses := di.Addrs
 			for _, dipa := range domainIPaddresses {

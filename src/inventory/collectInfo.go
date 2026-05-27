@@ -7,8 +7,8 @@ package inventory
 import (
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	"libvirt.org/go/libvirt"
+	"vmman4/shared"
 	"vmman4/snapshotmanagement"
-	"vmman4/vmmanagement"
 )
 
 // collectInfo: Lists all VMs and collects info on each of them
@@ -21,12 +21,12 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		dState        libvirt.DomainState
 		doms          []libvirt.Domain
 		cerr          *ce.CustomError
-		serr          error
+		serr          *ce.CustomError
 		domain        *libvirt.Domain
 	)
 
-	if doms, serr = conn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE); serr != nil {
-		return nil, &ce.CustomError{Title: "Error listing domains", Message: serr.Error()}
+	if doms, serr = shared.GetVMlist(); serr != nil {
+		return nil, serr
 	}
 
 	for _, dom := range doms {
@@ -51,7 +51,7 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 			i.viIPaddress = ""
 		}
 		// SNAPSHOT INFO
-		if domain, cerr = vmmanagement.GetDomain(conn, i.viName); cerr != nil {
+		if domain, cerr = shared.GetDomain(conn, i.viName); cerr != nil {
 			return nil, cerr
 		}
 		if domain == nil {

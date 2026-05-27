@@ -11,6 +11,7 @@ import (
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/spf13/cobra"
 	"vmman4/inventory"
+	"vmman4/vmmanagement"
 )
 
 // vmCmd covers all the vm-related subcommands
@@ -34,7 +35,29 @@ var vmLsCmd = &cobra.Command{
 	},
 }
 
+var vmStartCmd = &cobra.Command{
+	Use:     "start",
+	Aliases: []string{"up"},
+	Short:   "Start one or many VMs",
+	Args:    cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vmmanagement.Start(args); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var vmStartAllCmd = &cobra.Command{
+	Use:   "startall",
+	Short: "Start all VMs at once",
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vmmanagement.StartAll(); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 func init() {
-	rootCmd.AddCommand(vmCmd, vmLsCmd)
-	vmCmd.AddCommand(vmLsCmd)
+	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd)
+	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd)
 }

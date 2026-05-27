@@ -8,7 +8,7 @@ package snapshotmanagement
 import (
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	"libvirt.org/go/libvirt"
-	"vmman4/vmmanagement"
+	"vmman4/shared"
 )
 
 // GetCurrentSnapshotName : Gets the name of the current snapshot for a given VM
@@ -19,7 +19,7 @@ func GetCurrentSnapshotName(conn *libvirt.Connect, vmname string) (string, *ce.C
 	var snapshots []libvirt.DomainSnapshot
 	var err error
 
-	if domain, cerr = vmmanagement.GetDomain(conn, vmname); cerr != nil {
+	if domain, cerr = shared.GetDomain(conn, vmname); cerr != nil {
 		return "", cerr
 	}
 

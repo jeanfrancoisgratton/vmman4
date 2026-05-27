@@ -13,7 +13,7 @@ import (
 	"vmman4/shared"
 )
 
-// Wait4Shutdown ; Tries 15 seconds to gracefully shutdown the VM, if not it will shutdown forcefully
+// Wait4Shutdown : Tries 15 seconds to gracefully shutdown the VM, if not it will shutdown forcefully
 func Wait4Shutdown(vm *libvirt.Domain, vmname string) {
 	var bIsActive = false
 	fmt.Println("Will await that the VM " + vmname + " gracefully shuts down on " + shared.ConnectURI)
