@@ -1,7 +1,7 @@
 # <img src="./images/vmman_banner.png" alt="vmman logo" height="384" width="1024" />
 ___
 
-A tool to manage a libvirtd-based KVM/QEMU hypervisor so you can handle the virtual machine it hosts. With it you can
+A tool to manage a libvirtd-based KVM/QEMU hypervisor so you can handle the virtual machines it hosts. With it you can :
 - list / create / stop / start / remove VMs
 - list / create / remove VM snapshots
 - edit the VM's resources (CPU, Memory, storage)
@@ -61,7 +61,7 @@ This should give you an Alpine package
 1. cd to `__debian`
 2. Besides binutils, you do not need any specific package, and of course the required GO version. Have a look at `../go.version`, and `./1.install-build-deps.sh`.
 3. Run `./2.build_binary.sh`
-4. Copy the .deb file in a safe space, then run `./restore_repo.sh`
+4. Copy the .deb file in a safe space, then run `./3.restore_repo.sh`
 
 ### RPMBUILDER : RedHat-based distros (RedHat, CentOS, Fedora, RockyLinux, OpenSUSE)
 1. cd to `__redhat`. Everything is run from there

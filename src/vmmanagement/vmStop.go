@@ -4,69 +4,72 @@
 
 package vmmanagement
 
-//import (
-//	"fmt"
-//	"libvirt.org/go/libvirt"
-//	"os"
-//	"vmman3/db"
-//	"vmman3/domainmanagement"
-//	"vmman3/helpers"
-//	"vmman3/hypervisor"
-//	"vmman3/inventory"
-//)
-//
-//func Stop(args []string) error {
-//	var bIsActive bool
-//	var err error
-//
-//	conn := hypervisor.Connect2HVM()
-//	defer conn.Close()
-//
-//	for _, vmname := range args {
-//		var host string
-//		domain := domainmanagement.GetDomain(conn, vmname)
-//		if domain == nil {
-//			os.Exit(0)
-//		}
-//		defer domain.Free()
-//
-//		bIsActive, _ = domain.IsActive()
-//		if !bIsActive {
-//			fmt.Printf("Domain %s on %s is already shut down\n", vmname, helpers.ConnectURI)
-//		} else {
-//			err = domain.ShutdownFlags(libvirt.DOMAIN_SHUTDOWN_DEFAULT)
-//			fmt.Printf("Domain %s is being shut down... ", vmname)
-//			if err != nil {
-//				fmt.Printf("\nERROR: %s\n", helpers.Red(err.Error()))
-//			} else {
-//				fmt.Printf(helpers.Green("done\n"))
-//				// This is where we update the vmstates table
-//				if helpers.ConnectURI == "qemu:///system" {
-//					host, _ = os.Hostname()
-//				} else {
-//					_, _, host = db.SplitConnectURI(helpers.ConnectURI)
-//				}
-//				vmStateChange(host, vmname)
-//			}
-//		}
-//	}
-//	return nil
-//}
-//
-//func StopAll() error {
-//	var vmlist []string
-//	var domains []libvirt.Domain
-//	var err error
-//
-//	if domains, err = inventory.GetVMlist(); err != nil {
-//		return err
-//	}
-//	for _, domain := range domains {
-//		_, err = domain.GetID()
-//		if err == nil { // this means GetID() returned an ID, thus the VM is not shutdown (could be paused)
-//			vmname, _ := domain.GetName()
-//			vmlist = append(vmlist, vmname)
-//		}
-//	}
-//	return Stop(vmlist)
-//}
+import (
+	"fmt"
+
+	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
+	"libvirt.org/go/libvirt"
+	"vmman4/connection"
+	"vmman4/shared"
+)
+
+// Stop : stops one or many VMs
+func Stop(args []string) *ce.CustomError {
+	var bIsActive bool
+	var err *ce.CustomError
+	var conn *libvirt.Connect
+	var domain *libvirt.Domain
+
+	if err = connection.ResolveConnectionURI(); err != nil {
+		return err
+	}
+	if conn, err = shared.Connect2HVM(); err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	for _, vmname := range args {
+		if domain, err = shared.GetDomain(conn, vmname); err != nil {
+			return err
+		}
+		defer domain.Free()
+
+		bIsActive, _ = domain.IsActive()
+		if !bIsActive {
+			fmt.Println(hftx.WarningSign("Domain " + vmname + " is already shut down"))
+		} else {
+			fmt.Printf("%s", hftx.InProgressSign("Domain "+vmname+" is shutting down... "))
+			if serr := domain.ShutdownFlags(libvirt.DOMAIN_SHUTDOWN_DEFAULT); serr != nil {
+				fmt.Println()
+				return &ce.CustomError{Title: "Could not stop " + vmname, Message: serr.Error()}
+			} else {
+				fmt.Println(hftx.Green("DONE"))
+			}
+		}
+	}
+	return nil
+}
+
+// StopAll : fetches the list of VMs on the hypervisor and then stops them
+func StopAll() *ce.CustomError {
+	var vmlist []string
+	var domains []libvirt.Domain
+	var err *ce.CustomError
+
+	if err = connection.ResolveConnectionURI(); err != nil {
+		return err
+	}
+	if domains, err = shared.GetVMlist(); err != nil {
+		return err
+	}
+
+	for _, domain := range domains {
+		_, serr := domain.GetID()
+		if serr != nil { // GetID() failed → domain has no ID → it is not running; candidate to start
+			vmname, _ := domain.GetName()
+			vmlist = append(vmlist, vmname)
+		}
+	}
+	return Stop(vmlist)
+}
