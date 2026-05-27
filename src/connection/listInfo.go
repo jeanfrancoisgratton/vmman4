@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -68,6 +69,8 @@ func ConnList() *ce.CustomError {
 func ExplainConnFile(connfiles []string) *ce.CustomError {
 	c := ConnectionType{}
 
+	fmt.Printf("\nNumber of connection files: %s\n\n", hftx.Blue(strconv.Itoa(len(connfiles))))
+
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
 	t.AppendHeader(table.Row{"Connection file", "Connection name", "Hostname", "User", "Comments"})
@@ -83,9 +86,10 @@ func ExplainConnFile(connfiles []string) *ce.CustomError {
 	t.SortBy([]table.SortBy{
 		{Name: "Connection file", Mode: table.Asc},
 	})
-	t.SetStyle(table.StyleColoredRedWhiteOnBlack)
+	t.SetStyle(table.StyleColoredBlueWhiteOnBlack)
 	t.Style().Format.Header = text.FormatDefault
 	t.Render()
 
+	fmt.Println()
 	return nil
 }
