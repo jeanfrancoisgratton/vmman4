@@ -16,8 +16,10 @@ import (
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
+	"vmman4/shared"
 )
 
+// ConnList : list all connection files
 func ConnList() *ce.CustomError {
 	var err error
 	var dirFH *os.File
@@ -41,11 +43,7 @@ func ConnList() *ce.CustomError {
 		}
 	}
 
-	//if err != nil {
-	//	return err
-	//}
-
-	fmt.Printf("Number of environment files: %s\n", hftx.Green(fmt.Sprintf("%d", len(finfo))))
+	fmt.Printf("\nNumber of environment files: %s\n\n", hftx.Green(fmt.Sprintf("%d", len(finfo))))
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
@@ -60,6 +58,32 @@ func ConnList() *ce.CustomError {
 		{Name: "File size", Mode: table.Asc},
 	})
 	t.SetStyle(table.StyleBold)
+	t.Style().Format.Header = text.FormatDefault
+	t.Render()
+
+	return nil
+}
+
+// ExplainConnFile : list all information of given connection files
+func ExplainConnFile(connfiles []string) *ce.CustomError {
+	c := ConnectionType{}
+
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.AppendHeader(table.Row{"Connection file", "Connection name", "Hostname", "User", "Comments"})
+
+	for _, connfile := range connfiles {
+		shared.ConnectionFilename = connfile
+		if err := c.LoadConnectionInfo(); err != nil {
+			return err
+		} else {
+			t.AppendRow([]interface{}{shared.ConnectionFilename, c.Name, c.Host, c.User, c.Comments})
+		}
+	}
+	t.SortBy([]table.SortBy{
+		{Name: "Connection file", Mode: table.Asc},
+	})
+	t.SetStyle(table.StyleColoredRedWhiteOnBlack)
 	t.Style().Format.Header = text.FormatDefault
 	t.Render()
 

@@ -15,8 +15,7 @@ import (
 	"vmman4/shared"
 )
 
-func (ct ConnectionType) ConnSave() *ce.CustomError {
-
+func (ct *ConnectionType) ConnSave() *ce.CustomError {
 	jStream, err := json.MarshalIndent(ct, "", "  ")
 	if err != nil {
 		return &ce.CustomError{Title: "Error marshaling JSON", Message: err.Error()}
@@ -31,7 +30,7 @@ func (ct ConnectionType) ConnSave() *ce.CustomError {
 }
 
 // LoadConnectionInfo : the connection JSON file is unmarshalled and loaded in a variable
-func (ct ConnectionType) LoadConnectionInfo() *ce.CustomError {
+func (ct *ConnectionType) LoadConnectionInfo() *ce.CustomError {
 	if !strings.HasSuffix(shared.ConnectionFilename, ".json") {
 		shared.ConnectionFilename += ".json"
 	}

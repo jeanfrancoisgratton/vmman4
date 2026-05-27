@@ -57,9 +57,23 @@ var connAddCmd = &cobra.Command{
 	},
 }
 
+var connInfoCmd = &cobra.Command{
+	Use:     "info",
+	Aliases: []string{"explain"},
+	Example: "vmman conn info FILE1[.json] FILE2[.json]... FILEn[.json]",
+	Short:   "Prints the connection FILE[12n] information",
+	Long:    `You can list as many connection files as you wish, here`,
+	Args:    cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := connection.ExplainConnFile(args); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(connCmd)
-	connCmd.AddCommand(connLsCmd, connRmCmd, connAddCmd)
+	connCmd.AddCommand(connLsCmd, connRmCmd, connAddCmd, connInfoCmd)
 
 	//connAddCmd.Flags().StringVar(&connection.ConnectionName, "connection", "", "Target hypervisor")
 	connAddCmd.Flags().StringVar(&connection.ConnectionHost, "host", "", "Environment file.")

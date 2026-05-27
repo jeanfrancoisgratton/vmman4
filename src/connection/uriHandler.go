@@ -27,11 +27,11 @@ func ResolveConnectionURI() *ce.CustomError {
 		if strings.ToLower(ct.Name) == "localhost" {
 			shared.ConnectURI = "qemu:///system"
 		} else {
-			if ct.User != "" {
+			if ct.User == "" {
 				return &ce.CustomError{Title: "Unable to build the connection string",
-					Message: "Invalid username: " + ct.User}
+					Message: "Username is empty"}
 			}
-			shared.ConnectURI = "qemu+ssh://" + ct.User + "@" + ct.Host
+			shared.ConnectURI = "qemu+ssh://" + ct.User + "@" + ct.Host + "/system"
 		}
 	}
 	return nil
