@@ -50,5 +50,6 @@ var completionZshCmd = &cobra.Command{
 }
 
 func init() {
+	rootCmd.AddCommand(completionCmd)
 	completionCmd.AddCommand(completionBashCmd, completionZshCmd)
 }

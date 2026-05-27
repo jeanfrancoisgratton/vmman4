@@ -4,28 +4,19 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
+	"vmman4/shared"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "vmman4",
-	Short:   "Add a short description here",
-	Version: "1.00.00-0 (2025.09.22)",
-	Long: `This tools allows you to a software directory structure.
-This follows my template and allows you with minimal effort to package your software once built`,
-}
-
-// Shows changelog
-var clCmd = &cobra.Command{
-	Use:     "changelog",
-	Aliases: []string{"cl"},
-	Short:   "Shows the Changelog",
-	Run: func(cmd *cobra.Command, args []string) {
-		changeLog()
-	},
+	Short:   "Virtual Machine Management Tool",
+	Version: "DEBUG0.10.00 (2026.05.18)",
+	Long: `This tool allows you to manage your VM farm.
+With it you can start, stop, snapshot, snapshot-revert, create or delete VMs.`,
 }
 
 func Execute() {
@@ -39,20 +30,8 @@ func init() {
 	rootCmd.DisableAutoGenTag = true
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 
-	rootCmd.AddCommand(clCmd)
-}
-
-func changeLog() {
-	//fmt.Printf("\x1b[2J")
-	fmt.Printf("\x1bc")
-
-	fmt.Println("CHANGELOG")
-	fmt.Println("=========")
-	fmt.Println()
-
-	fmt.Print(`
-VERSION			DATE			COMMENT
--------			----			-------
-1.00.00		2025.09.22		Initial release
-`)
+	//rootCmd.AddCommand(clCmd)
+	rootCmd.PersistentFlags().BoolVarP(&shared.QuietOutput, "quiet", "q", false, "Suppress output")
+	rootCmd.PersistentFlags().StringVarP(&shared.ConnectionFilename, "connectionfile", "c", "", "Connection configuration file")
+	rootCmd.PersistentFlags().StringVarP(&shared.ConnectURI, "connectionuri", "C", "qemu:///system", "Connection URI")
 }
