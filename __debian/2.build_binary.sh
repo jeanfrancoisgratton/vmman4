@@ -10,7 +10,7 @@ done
 
 echo "Building binary from source"
 cd ../src
-CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o ../__debian/${PKGDIR}/opt/bin/vmman .
+CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid=" -o ../__debian/${PKGDIR}/opt/bin/vmman .
 sudo chown 0:0 ../__debian/${PKGDIR}/opt/bin/vmman
 
 echo "Binary built. Now packaging..."

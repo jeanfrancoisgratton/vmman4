@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://git.famillegratton.net:3000/devops/vmman4.git"
 license=('GPL-2.0-only')
 
-makedepends=('go')
+makedepends=('go', 'base-devel')
 depends=()
 
 optdepends=('zsh: zsh completion support')
@@ -31,7 +31,7 @@ prepare() {
 build() {
   cd "${srcdir}/${_builddir}"
 
-  export CGO_ENABLED=0
+  export CGO_ENABLED=1
   export GOPATH="${srcdir}/gopath"
   export GOMODCACHE="${GOPATH}/pkg/mod"
 
