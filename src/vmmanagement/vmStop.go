@@ -35,7 +35,11 @@ func Stop(args []string) *ce.CustomError {
 		}
 		defer domain.Free()
 
-		bIsActive, _ = domain.IsActive()
+		var e error
+		bIsActive, e = domain.IsActive()
+		if e != nil {
+			fmt.Println(e.Error())
+		}
 		if !bIsActive {
 			fmt.Println(hftx.WarningSign("Domain " + vmname + " is already shut down"))
 		} else {
@@ -66,7 +70,7 @@ func StopAll() *ce.CustomError {
 
 	for _, domain := range domains {
 		_, serr := domain.GetID()
-		if serr != nil { // GetID() failed → domain has no ID → it is not running; candidate to start
+		if serr == nil { // GetID() failed → domain has no ID → it is not running; candidate to start
 			vmname, _ := domain.GetName()
 			vmlist = append(vmlist, vmname)
 		}

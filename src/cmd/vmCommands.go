@@ -57,7 +57,29 @@ var vmStartAllCmd = &cobra.Command{
 	},
 }
 
+var vmStopCmd = &cobra.Command{
+	Use:     "stop",
+	Aliases: []string{"down"},
+	Short:   "Stop one or many VMs",
+	Args:    cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vmmanagement.Stop(args); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var vmStopAllCmd = &cobra.Command{
+	Use:   "stopall",
+	Short: "Stop all VMs at once",
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vmmanagement.StopAll(); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 func init() {
-	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd)
-	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd)
+	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd)
+	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd)
 }
