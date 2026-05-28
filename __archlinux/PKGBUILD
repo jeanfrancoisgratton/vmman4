@@ -9,7 +9,7 @@ arch=('x86_64')
 url="https://git.famillegratton.net:3000/devops/vmman4.git"
 license=('GPL-2.0-only')
 
-makedepends=('go', 'base-devel')
+makedepends=('go' 'base-devel')
 depends=()
 
 optdepends=('zsh: zsh completion support')
