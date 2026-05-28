@@ -20,7 +20,7 @@ URL:        https://git.famillegratton.net:9722/devops/vmman4.git
 
 Source0:    %{name}-%{_version}.tar.gz
 #BuildArchitectures: x86_64
-BuildRequires: gcc, pkg-config, libvirt
+BuildRequires: gcc, pkg-config, libvirt-devel
 #Requires: sudo
 #Obsoletes: vmman1 > 1.140
 
