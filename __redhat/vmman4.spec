@@ -20,7 +20,7 @@ URL:        https://git.famillegratton.net:9722/devops/vmman4.git
 
 Source0:    %{name}-%{_version}.tar.gz
 #BuildArchitectures: x86_64
-BuildRequires: gcc, pkg-config
+BuildRequires: gcc, pkg-config, libvirt
 #Requires: sudo
 #Obsoletes: vmman1 > 1.140
 
@@ -67,3 +67,22 @@ fi
 
 
 %changelog
+* Thu May 28 2026 Binary package builder <builder@famillegratton.net> 0.10.00~DEBUG-0
+- fixed paths in script
+- archlinux build fixes
+- disabled some file so compile will not fail
+- fixed error in PKGBUILD
+- Fixed output for Stop/Start, added the Rename subcommand
+- completed the console
+- fixed vm stop[all]
+- Fixed issue where vm list failed if a VM is not fully booted
+- stubbed most vm subcommands
+- completed start/startall commands
+- fixed various cosmetic issues
+- Completed vm list and the conn subcommand
+- first attempt at wiring everything
+- completed package building wiring
+- refreshed the whole structure
+- initial stub
+- interim submit
+
