@@ -31,13 +31,13 @@ rpmcl: changelog
 	exit $$BUILD_STATUS
 
 upload:
-        nxtools upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
+	nxtools upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
 
 commitcl:
-        git add $(SPEC)
-        git commit -m "chore: update changelog for $(VERSION)-$(RELEASE)"
-		git push
+	git add $(SPEC)
+	git commit -m "chore: update changelog for $(VERSION)-$(RELEASE)"
+	git push
 
 clean:
-        rm -f  $(SOURCES)/$(NAME)-$(VERSION).tar.gz
-        rm -rf $(HOME)/rpmbuild/BUILD/$(NAME)-$(VERSION)
+	rm -f  $(SOURCES)/$(NAME)-$(VERSION).tar.gz
+	rm -rf $(HOME)/rpmbuild/BUILD/$(NAME)-$(VERSION)
