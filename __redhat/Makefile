@@ -10,14 +10,11 @@ NEXUSREPO := dnfLocal
 
 .PHONY: tarball rpm rpmcl clean upload changelog commitcl
 
-# Intended workflow: make rpm → make upload → make commitcl
-
 tarball:
-        git -C $(REPOROOT) archive --prefix=$(NAME)-$(VERSION)/ HEAD \
-          | gzip > $(SOURCES)/$(NAME)-$(VERSION).tar.gz
+	git -C $(REPOROOT) archive --prefix=$(NAME)-$(VERSION)/ HEAD | gzip > $(SOURCES)/$(NAME)-$(VERSION).tar.gz
 
 changelog: tarball
-        $(REPOROOT)/__redhat/updateChangelog.sh
+	$(REPOROOT)/__redhat/updateChangelog.sh
 
 rpm: tarball
 	sudo dnf builddep -y $(SPEC); \
