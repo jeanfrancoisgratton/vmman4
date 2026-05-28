@@ -43,12 +43,11 @@ func Stop(args []string) *ce.CustomError {
 		if !bIsActive {
 			fmt.Println(hftx.WarningSign("Domain " + vmname + " is already shut down"))
 		} else {
-			fmt.Printf("%s", hftx.InProgressSign("Domain "+vmname+" is shutting down... "))
 			if serr := domain.ShutdownFlags(libvirt.DOMAIN_SHUTDOWN_DEFAULT); serr != nil {
 				fmt.Println()
 				return &ce.CustomError{Title: "Could not stop " + vmname, Message: serr.Error()}
 			} else {
-				fmt.Println(hftx.Green("DONE"))
+				fmt.Println(hftx.EnabledSign("Domain " + vmname + hftx.Red(" stopped")))
 			}
 		}
 	}

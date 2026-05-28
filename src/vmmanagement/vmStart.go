@@ -40,12 +40,11 @@ func Start(args []string) *ce.CustomError {
 		if bIsActive {
 			fmt.Println(hftx.WarningSign("Domain " + vmname + " already active"))
 		} else {
-			fmt.Printf("%s", hftx.InProgressSign("Domain "+vmname+" is starting... "))
 			if serr := domain.Create(); serr != nil {
 				fmt.Println()
 				return &ce.CustomError{Title: "Could not start " + vmname, Message: serr.Error()}
 			} else {
-				fmt.Println(hftx.Green("DONE"))
+				fmt.Println(hftx.EnabledSign("Domain " + vmname + hftx.Green(" started")))
 			}
 		}
 	}

@@ -79,7 +79,33 @@ var vmStopAllCmd = &cobra.Command{
 	},
 }
 
+var vmConsoleCmd = &cobra.Command{
+	Use:   "console",
+	Short: "Open a console session on the VM",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vmmanagement.Console(args[0]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var vmRenameCmd = &cobra.Command{
+	Use:   "rename",
+	Short: "Rename a VM",
+	Long: `Be aware that that VM's underlying disk won't change name.
+Also, if the VM holds any snapshot, they need to be removed before effecting the rename`,
+	Args: cobra.ExactArgs(2),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vmmanagement.Rename(args[0], args[1]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd)
-	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd)
+	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmConsoleCmd, vmRenameCmd)
+
+	vmConsoleCmd.Flags().BoolVarP(&vmmanagement.ForceConsoleConnection, "force", "f", false, "Force previous session logout")
 }
