@@ -20,18 +20,24 @@ changelog: tarball
 	$(REPOROOT)/__redhat/updateChangelog.sh
 
 rpm: tarball
-	rpmbuild -bb $(SPEC)
-	find $(RPMS) -name '*.rpm' -exec cp {} $(DEST)/ \;
+	sudo dnf builddep -y $(SPEC); \
+	rpmbuild -bb $(SPEC); BUILD_STATUS=$$?; \
+	sudo dnf history undo last -y; \
+	find $(RPMS) -name '*.rpm' -exec cp {} $(DEST)/ \;; \
+	exit $$BUILD_STATUS
 
-rpmcl: tarball changelog
-	rpmbuild -bb $(SPEC)
-	find $(RPMS) -name '*.rpm' -exec cp {} $(DEST)/ \;
+rpmcl: changelog
+	sudo dnf builddep -y $(SPEC); \
+	rpmbuild -bb $(SPEC); BUILD_STATUS=$$?; \
+	sudo dnf history undo last -y; \
+	find $(RPMS) -name '*.rpm' -exec cp {} $(DEST)/ \;; \
+	exit $$BUILD_STATUS
 
 upload:
 	nxtools upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
 
 commitcl:
-	git add vmman4.spec
+	git add ${SPEC}
 	git commit -m "chore: update changelog for $(VERSION)-$(RELEASE)"
 
 clean:
