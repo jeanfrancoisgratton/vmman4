@@ -4,7 +4,7 @@
 # -----
 # This docker container has been stripped down as much as possible, and works for GO software
 # The following extra packages might be needed for languages other than GO :
-# sudo apt install -y g++ fakeroot devscripts build-essential
+sudo apt install -y gcc g++ fakeroot devscripts build-essential
 
 echo "Installing dependencies";echo
 sudo apt-get update && sudo apt update -y
