@@ -3,5 +3,5 @@
 git restore control preinst prerm postinst postrm
 rm -rf "vmman"*
 
-apt remove -y gcc g++ pkg-config libvirt-dev
-apt autoremove -y
+sudo apt remove -y gcc pkg-config libvirt-dev
+sudo apt autoremove -y
