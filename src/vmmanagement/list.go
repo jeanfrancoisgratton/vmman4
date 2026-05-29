@@ -3,7 +3,7 @@
 // Original filename: src/inventory/list.go
 // Original timestamp: 2026/05/22 07:54:46
 
-package inventory
+package vmmanagement
 
 import (
 	"fmt"

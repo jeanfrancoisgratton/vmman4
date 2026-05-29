@@ -10,7 +10,6 @@ import (
 
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/spf13/cobra"
-	"vmman4/inventory"
 	"vmman4/vmmanagement"
 )
 
@@ -29,7 +28,7 @@ var vmLsCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List all VMs",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := inventory.VmInventory(); err != nil {
+		if err := vmmanagement.VmInventory(); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
