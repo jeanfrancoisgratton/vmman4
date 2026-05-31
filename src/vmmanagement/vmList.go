@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/inventory/list.go
+// Original filename: src/inventory/vmList.go
 // Original timestamp: 2026/05/22 07:54:46
 
 package vmmanagement
