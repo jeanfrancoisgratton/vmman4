@@ -1,11 +1,11 @@
 post_install() {
     # Bash completion — always install
-    vmman completion bash > /etc/bash_completion.d/vmman
+    /opt/bin/vmman completion bash > /etc/bash_completion.d/vmman
 
     # Zsh completion — only if zsh is present
     if command -v zsh > /dev/null 2>&1; then
         mkdir -p /usr/share/zsh/site-functions
-       vmman completion zsh > /usr/share/zsh/site-functions/_vmman
+       /opt/bin/vmman completion zsh > /usr/share/zsh/site-functions/_vmman
     fi
 }
 
