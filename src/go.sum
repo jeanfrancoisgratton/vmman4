@@ -17,6 +17,8 @@ github.com/jeanfrancoisgratton/helperFunctions/v5 v5.1.0 h1:v9CXTCMdqUSKQBeBSaif
 github.com/jeanfrancoisgratton/helperFunctions/v5 v5.1.0/go.mod h1:/Gqu5QjH1uRIc9FEnUivAlLcqoYmFimyfQy8nWs5Yfk=
 github.com/jeanfrancoisgratton/helperFunctions/v5 v5.2.0 h1:CwxScTmv6xfPx+zmfjF4G5B97nl9V23DMZ4LS3SXVgA=
 github.com/jeanfrancoisgratton/helperFunctions/v5 v5.2.0/go.mod h1:/Gqu5QjH1uRIc9FEnUivAlLcqoYmFimyfQy8nWs5Yfk=
+github.com/jeanfrancoisgratton/helperFunctions/v5 v5.2.1 h1:0Sw9/M7/2N+NTONafbjUztDehngcHuoLK70nnjWFid4=
+github.com/jeanfrancoisgratton/helperFunctions/v5 v5.2.1/go.mod h1:/Gqu5QjH1uRIc9FEnUivAlLcqoYmFimyfQy8nWs5Yfk=
 github.com/jedib0t/go-pretty/v6 v6.7.10 h1:B/2qW2Bkv2L6n14PP8o1kx75kWzHOQ3YTluWzg9icac=
 github.com/jedib0t/go-pretty/v6 v6.7.10/go.mod h1:YwC5CE4fJ1HFUDeivSV1r//AmANFHyqczZk+U6BDALU=
 github.com/jwalton/gchalk v1.3.0 h1:uTfAaNexN8r0I9bioRTksuT8VGjrPs9YIXR1PQbtX/Q=

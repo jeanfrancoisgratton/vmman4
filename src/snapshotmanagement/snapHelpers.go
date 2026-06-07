@@ -1,14 +1,15 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/snapshotmanagement/snapshots.go
+// Original filename: src/snapshotmanagement/snapHelpers.go
 // Original timestamp: 2026/05/26 19:33:08
 
 package snapshotmanagement
 
 import (
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	"libvirt.org/go/libvirt"
-	"vmman4/shared"
 )
 
 // GetCurrentSnapshotName : Gets the name of the current snapshot for a given VM

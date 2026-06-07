@@ -111,11 +111,12 @@ func ListStoragePools() ([]StoragePoolInfo, *ce.CustomError) {
 	return result, nil
 }
 
+// displayPoolList : actual table rendering of the storage pool list
 func displayPoolList(result []StoragePoolInfo) *ce.CustomError {
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"Pool name", "UUID", "# volumes",
-		"Pool path", "Pool state", "Pool size (GB)"})
+	t.AppendHeader(table.Row{"Pool name", "UUID", "# volumes", "Pool path", "Pool state", "Pool size (GB)"})
+
 	for _, p := range result {
 		var vSizes string
 		var volumeSize uint64

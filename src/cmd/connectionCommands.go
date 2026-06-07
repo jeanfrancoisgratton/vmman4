@@ -18,7 +18,7 @@ var connCmd = &cobra.Command{
 	Short:   "Connection subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, rm, info.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("You need to provide one of the following subcommands: ls, create, or rm")
+		fmt.Println("You need to provide one of the following subcommands: ls, create, rm or info")
 	},
 }
 
