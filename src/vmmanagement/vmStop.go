@@ -63,7 +63,7 @@ func StopAll() *ce.CustomError {
 	if err = connection.ResolveConnectionURI(); err != nil {
 		return err
 	}
-	if domains, err = shared.GetVMlist(); err != nil {
+	if domains, err = GetVMlist(); err != nil {
 		return err
 	}
 

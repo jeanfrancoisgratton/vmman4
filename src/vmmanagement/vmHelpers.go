@@ -121,7 +121,7 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		domain        *libvirt.Domain
 	)
 
-	if doms, serr = shared.GetVMlist(); serr != nil {
+	if doms, serr = GetVMlist(); serr != nil {
 		return nil, serr
 	}
 

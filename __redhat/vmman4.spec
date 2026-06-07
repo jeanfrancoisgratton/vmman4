@@ -50,6 +50,7 @@ install -Dpm 0755 %{_builddir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryna
 if command -v zsh > /dev/null 2>&1; then
     mkdir -p %{_zsh_completionsdir}/zsh/site-functions
     /opt/bin/vmman completion zsh > %{_zsh_completionsdir}/_vmman
+    zsh -c 'autoload -Uz compinit && compinit' 2>/dev/null || true
 fi
 
 %preun

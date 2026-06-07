@@ -45,19 +45,3 @@ func GetDomain(conn *libvirt.Connect, vmname string) (*libvirt.Domain, *customEr
 	}
 	return domain, nil
 }
-
-// GetVMlist : Returns all domains (active + inactive) on the hypervisor.
-// Moved here from inventory to break the vmmanagement -> inventory import cycle.
-func GetVMlist() ([]libvirt.Domain, *customError.CustomError) {
-	conn, cerr := Connect2HVM()
-	if cerr != nil {
-		return nil, cerr
-	}
-	defer conn.Close()
-
-	doms, err := conn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE)
-	if err != nil {
-		return nil, &customError.CustomError{Title: "Error listing domains", Message: err.Error()}
-	}
-	return doms, nil
-}
