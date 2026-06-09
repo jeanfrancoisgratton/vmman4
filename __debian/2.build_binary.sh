@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PKGDIR="vmman-0.10.00-0_amd64"
+PKGDIR="vmman-0.20.00-0_amd64"
 
 mkdir -p ${PKGDIR}/opt/bin ${PKGDIR}/DEBIAN
 mkdir -p ${PKGDIR}/opt/bin ${PKGDIR}/DEBIAN
