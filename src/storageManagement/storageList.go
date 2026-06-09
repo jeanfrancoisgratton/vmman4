@@ -8,7 +8,6 @@ package storagemanagement
 import (
 	"encoding/xml"
 	"fmt"
-
 	"os"
 
 	"vmman4/connection"
@@ -59,10 +58,7 @@ func ListVMStorage(domainName string, displayOutput bool) (VMStorageInfo, *ce.Cu
 			continue
 		}
 
-		di := DiskInfo{
-			Device: d.Target.Dev,
-			Type:   d.Type,
-		}
+		di := DiskInfo{Device: d.Target.Dev, Type: d.Type}
 
 		switch d.Type {
 		case "file":
@@ -90,29 +86,27 @@ func ListVMStorage(domainName string, displayOutput bool) (VMStorageInfo, *ce.Cu
 	// displayOutput is set to true, we render the received output
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"Disk count", "Device", "Disk type", "Source path", "Size (GB)"})
-	var vSizeString []string
-	var vSizeInt []uint64
-	var vSizeFloat []float64
+	t.AppendHeader(table.Row{"Disk", "Device", "Disk type", "Source path", "Size (GB)"})
+	var vSizeString string
+	var berr error
 
 	for ndx, di := range info.Disks {
-		vSizeInt = append(vSizeInt, di.SizeBytes)
-		if cSize, berr := hf.BytesToUnit(vSizeInt[ndx], 'g', 3); berr != nil {
+		if vSizeString, berr = hf.BytesToUnit(di.SizeBytes, 'g', 3); berr != nil {
 			return VMStorageInfo{}, &ce.CustomError{Title: "ListVMStorage: size conversion failed",
 				Message: berr.Error()}
-		} else {
-			vSizeFloat = append(vSizeFloat, cSize)
-
 		}
-		//	t.AppendRow([]interface{}{shared.ConnectionFilename, c.Name, c.Host, c.User, c.Comments})
+		t.AppendRow([]interface{}{ndx, "/dev/" + di.Device, di.Type, di.SourcePath, vSizeString + " GB"})
+
 	}
 
 	t.SortBy([]table.SortBy{
-		{Name: "Connection file", Mode: table.Asc},
+		{Name: "Disk", Mode: table.Asc},
 	})
 	t.SetStyle(table.StyleColoredBlueWhiteOnBlack)
 	t.Style().Format.Header = text.FormatDefault
 	t.Render()
 
 	fmt.Println()
+
+	return VMStorageInfo{}, nil
 }

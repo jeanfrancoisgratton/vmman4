@@ -12,9 +12,9 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:     "vmman4",
+	Use:     "vmman",
 	Short:   "Virtual Machine Management Tool",
-	Version: "DEBUG0.10.00 (2026.05.18)",
+	Version: "DEBUG0.20.00 (2026.06.09)",
 	Long: `This tool allows you to manage your VM farm.
 With it you can start, stop, snapshot, snapshot-revert, create or delete VMs.`,
 }
@@ -31,7 +31,6 @@ func init() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 
 	//rootCmd.AddCommand(clCmd)
-	rootCmd.PersistentFlags().BoolVarP(&shared.DebugMode, "debug", "D", false, "enable debug mode")
 	rootCmd.PersistentFlags().BoolVarP(&shared.QuietOutput, "quiet", "q", false, "Suppress output")
 	rootCmd.PersistentFlags().BoolVarP(&shared.DebugMode, "debug", "D", false, "Enable debug mode")
 	rootCmd.PersistentFlags().StringVarP(&shared.ConnectionFilename, "connectionfile", "c", "", "Connection configuration file")

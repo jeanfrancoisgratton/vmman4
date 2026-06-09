@@ -7,9 +7,11 @@ package shared
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
 )
 
@@ -25,6 +27,11 @@ func Connect2HVM() (*libvirt.Connect, *customError.CustomError) {
 		} else {
 			return nil, &customError.CustomError{Title: "Unable to connect to host", Message: err.Error()}
 		}
+	}
+	if !QuietOutput {
+		fmt.Println()
+		fmt.Printf(hftx.InfoSign(fmt.Sprintf("Connected on hypervisor %s\n", hftx.Blue(ConnectURI))))
+		fmt.Println()
 	}
 	return conn, nil
 }
