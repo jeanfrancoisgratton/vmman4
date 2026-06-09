@@ -30,7 +30,7 @@ func Connect2HVM() (*libvirt.Connect, *customError.CustomError) {
 	}
 	if !QuietOutput {
 		fmt.Println()
-		fmt.Printf(hftx.InfoSign(fmt.Sprintf("Connected on hypervisor %s\n", hftx.Blue(ConnectURI))))
+		fmt.Println(hftx.InfoSign("Connected on hypervisor " + hftx.Blue(ConnectURI)))
 		fmt.Println()
 	}
 	return conn, nil
