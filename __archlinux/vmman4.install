@@ -1,6 +1,8 @@
 post_install() {
     # Bash completion — always install
-    /opt/bin/vmman completion bash > /etc/bash_completion.d/vmman
+    if [ -d /etc/bash_completion.d ]; then
+        /opt/bin/vmman completion bash > /etc/bash_completion.d/vmman
+    fi
 
     # Zsh completion — only if zsh is present
     if command -v zsh > /dev/null 2>&1; then
