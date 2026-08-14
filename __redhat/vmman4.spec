@@ -4,8 +4,8 @@
 %define _prefix /opt
 %define _bash_completionsdir /usr/share/bash-completion/completions
 %define _zsh_completionsdir  /usr/share/zsh/site-functions
-%define _version 0.20.00~DEBUG
-%define _rel 0
+%define _version 0.30.00~DEBUG
+%define _rel 1
 %define _arch x86_64
 %define _binaryname vmman
 
@@ -43,26 +43,10 @@ rm -rf $RPM_BUILD_ROOT
 install -Dpm 0755 %{_builddir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
 
 %post
-# Bash completion — always install
-/opt/bin/vmman completion bash > %{_bash_completionsdir}/vmman
-
-# Zsh completion — only if zsh is present
-if command -v zsh > /dev/null 2>&1; then
-    mkdir -p %{_zsh_completionsdir}/zsh/site-functions
-    /opt/bin/vmman completion zsh > %{_zsh_completionsdir}/_vmman
-    mkdir -p %{_zsh_completionsdir}/zsh/site-functions
-    /opt/bin/vmman completion zsh > %{_zsh_completionsdir}/_vmman
-    zsh -c 'autoload -Uz compinit && compinit' 2>/dev/null || true
-fi
 
 %preun
 
 %postun
-if [ $1 -eq 0 ]; then
-    # $1 == 0 means this is a full uninstall, not an upgrade
-    rm -f %{_bash_completionsdir}/vmman
-    rm -f %{_zsh_completionsdir}/_vmman
-fi
 
 %files
 %defattr(-,root,root,-)
