@@ -13,7 +13,10 @@ install="$pkgname.pre-deinstall $pkgname.post-install"
 #source="$pkgname-$pkgver-$pkgrel.tar.bz2::http://localhost/$pkgname-$pkgver-$pkgrel.tar.bz2"
 builddir="$startdir/src/BUILD"
 binaryname=vmman
-makedepends=pkgconfig
+# libvirt-dev ships the headers plus all four pkg-config files the Go binding
+# needs: libvirt.pc, libvirt-admin.pc, libvirt-qemu.pc and libvirt-lxc.pc.
+# Runtime dep on libvirt-libs is auto-detected by abuild (so:libvirt.so.0).
+makedepends="pkgconfig libvirt-dev"
 
 prepare() {
 	mkdir -p "$builddir"

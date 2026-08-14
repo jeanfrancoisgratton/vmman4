@@ -2,8 +2,6 @@
 %define _build_id_links none
 %define _name vmman4
 %define _prefix /opt
-%define _bash_completionsdir /usr/share/bash-completion/completions
-%define _zsh_completionsdir  /usr/share/zsh/site-functions
 %define _version 0.30.00~DEBUG
 %define _rel 1
 %define _arch x86_64

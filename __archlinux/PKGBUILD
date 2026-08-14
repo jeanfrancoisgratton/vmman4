@@ -3,16 +3,17 @@
 
 pkgname=vmman4
 pkgver=0.30.00_debug
-pkgrel=1
+pkgrel=2
 pkgdesc="QEMU/KVM virtual machines manager"
 arch=('x86_64')
 url="https://git.famillegratton.net:3000/devops/vmman4.git"
 license=('GPL-2.0-only')
 
-makedepends=('base-devel' 'gcc' 'go' 'libvirt')
-depends=('bash-completion')
-
-optdepends=('zsh: zsh completion support')
+# Arch does not split out a -devel package: 'libvirt' carries the headers and
+# the pkg-config files (libvirt, libvirt-admin, libvirt-qemu, libvirt-lxc) as
+# well as the shared libs, so it is both a make- and a runtime dependency.
+makedepends=('base-devel' 'gcc' 'go')
+depends=('libvirt')
 
 options=('!debug')
 
