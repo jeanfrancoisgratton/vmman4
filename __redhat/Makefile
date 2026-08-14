@@ -7,7 +7,13 @@ RPMS      := $(HOME)/rpmbuild/RPMS
 DEST      := /data
 REPOROOT  := $(shell git rev-parse --show-toplevel)
 NEXUSREPO := dnfLocal
-TAG       := v$(VERSION)
+# RPM uses '~' as its pre-release separator (0.30.00~DEBUG sorts *before*
+# 0.30.00), but git forbids '~' in a ref name. Swapping it for '-' yields a
+# valid tag that is also a valid SemVer pre-release, so it keeps the same
+# "sorts before the final release" meaning: v0.30.00-DEBUG.
+# Only the tag is rewritten -- the tarball keeps the raw RPM version, since
+# Source0 in the specfile expects $(NAME)-$(VERSION).tar.gz verbatim.
+TAG       := v$(subst ~,-,$(VERSION))
 
 .PHONY: tag release tarball check-tags changelog rpm rpmcl upload commitcl clean
 
@@ -18,6 +24,11 @@ tarball:
 	  | gzip > $(SOURCES)/$(NAME)-$(VERSION).tar.gz
 
 check-tags:
+	@# 0. Fail loudly here rather than deep inside `make release`:
+	@git check-ref-format "refs/tags/$(TAG)" || { \
+	  echo "ERROR: '$(TAG)' is not a valid git tag name (derived from version '$(VERSION)')."; \
+	  exit 1; \
+	}
 	@# 1. The condition that silently breaks changelog generation:
 	@if git describe --exact-match --tags HEAD >/dev/null 2>&1; then \
 	  echo "WARNING: HEAD is already tagged $$(git describe --exact-match --tags HEAD)."; \
