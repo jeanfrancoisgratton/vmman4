@@ -52,6 +52,14 @@ install -Dpm 0755 %{_builddir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryna
 
 
 %changelog
+* Sun Aug 16 2026 Binary package builder <builder@famillegratton.net> 0.4.0~DEBUG-4
+- updated build deps
+- RPMBUILDER: fixed build order
+- RPMBUILDER: dummy build to test the new build order
+- added a new script (to be integrated in stubber) to manage jenkins builds
+- Merge remote-tracking branch 'refs/remotes/origin/main'
+- Enable builds
+
 * Fri Aug 14 2026 Binary package builder <builder@famillegratton.net> 0.4.0~DEBUG-1
 - repackaged to follow SemVer
 - RPMBUILDER: fixed tag using reserved characted issue
