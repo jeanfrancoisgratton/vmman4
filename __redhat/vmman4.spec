@@ -3,7 +3,7 @@
 %define _name vmman4
 %define _prefix /opt
 %define _version 0.4.0~DEBUG
-%define _rel 1
+%define _rel 2
 %define _arch x86_64
 %define _binaryname vmman
 
