@@ -55,6 +55,14 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Wed Sep 09 2026 Binary package builder <builder@famillegratton.net> 0.4.0-3
+- bug(RPMBUILDER): fixed missing builddep
+- chore: CL update
+- bug(RPMBUILDER): wrong package name
+- bug(DEBBUILDER): fixed endline issue in control file
+- Merge branch 'main' into develop
+- chore: update changelog for 0.4.0-1
+
 * Wed Sep 09 2026 Binary package builder <builder@famillegratton.net> 0.4.0-2
 - bug(RPMBUILDER): wrong package name
 - bug(DEBBUILDER): fixed endline issue in control file
