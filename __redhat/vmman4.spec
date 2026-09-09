@@ -55,6 +55,21 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Wed Sep 09 2026 Binary package builder <builder@famillegratton.net> 0.4.0-1
+- chore: perm fix
+- removed windows support, CGO build is now consistent
+- removed dontexec
+- completed repo resync
+- Merge remote-tracking branch 'refs/remotes/origin/develop' into develop
+- Added windows and macos support, go version bump, software version numbering now SemVer-aligned
+- chore: update changelog for 0.4.0~DEBUG-4
+- updated build deps
+- RPMBUILDER: fixed build order
+- RPMBUILDER: dummy build to test the new build order
+- added a new script (to be integrated in stubber) to manage jenkins builds
+- Merge remote-tracking branch 'refs/remotes/origin/main'
+- Enable builds
+
 * Tue Jun 09 2026 Binary package builder <builder@famillegratton.net> 0.20.00~DEBUG-0
 - version bump
 - completed pool list
