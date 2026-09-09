@@ -51,19 +51,31 @@ The simplest way : just go in the RELEASES tab of the repo, select your format, 
 The scripts and files (__alpine/, __debian/, __redhat, __archlinux/) are there for my own ease of work; I usually build my tools using "builder containers" for each format: `apkbuilder`, `debbuilder`, `rpmbuilder`
 I'll leave you with homeworks, and will show you how to roughly reproduce my environment
 
+**Whatever the format, the build is a CGO build**: `libvirt.org/go/libvirt` binds to the C library through `pkg-config`, and it needs four `.pc` files -- `libvirt`, `libvirt-admin`, `libvirt-qemu` and `libvirt-lxc` -- even though vmman4 only ever calls the plain libvirt API. All four ship in a single package:
+
+| Distro | Development package | Runtime package |
+| --- | --- | --- |
+| Alpine | `libvirt-dev` | `libvirt-libs` (resolved automatically by abuild) |
+| Debian / Ubuntu | `libvirt-dev` | `libvirt0` |
+| RedHat / Fedora / Rocky | `libvirt-devel` (in the `crb` repo on RHEL clones) | resolved automatically by rpm |
+| Archlinux | `libvirt` (no split -devel package) | `libvirt` |
+
+Note that the Fedora/RHEL package literally named `libvirt-admin` is *not* what you want: that one only ships the `virt-admin` CLI. The `libvirt-admin.pc` file the build needs comes from `libvirt-devel`.
+
+Build with `CGO_ENABLED=1`; `CGO_ENABLED=0` cannot work here.
+
 ### APKBUILDER : Alpine Linux
-1. In an Alpine container or VM, you need the following packages: `abuild-doc pax-utils git alpine-sdk`. Some other packages might be needed, depending on the config in __alpine/APKBUILD
+1. In an Alpine container or VM, you need the following packages: `abuild-doc pax-utils git alpine-sdk libvirt-dev`. Some other packages might be needed, depending on the config in __alpine/APKBUILD
 2. From the `__alpine`, run: `abuild -r`
 
 This should give you an Alpine package
 
 ### DEBBUILDER : Debian-based distros (Debian, Ubuntu, Mint, etc)
 1. cd to `__debian`
-2. Besides binutils, you do not need any specific package, and of course the required GO version. Have a look at `../go.version`, and `./1.install-build-deps.sh`.
-3. Run `./2.build_binary.sh`
-4. Copy the .deb file in a safe space, then run `./3.restore_repo.sh`
+2. Run `./install-build-deps.sh`; it pulls in `build-essential`, `pkg-config` and `libvirt-dev`, then installs the GO version named in `../go.version`
+3. Run `make build` to produce the .deb, `make release` to build and upload it to your nexus repository, and `make clean` to drop the staging tree
 
-### RPMBUILDER : RedHat-based distros (RedHat, CentOS, Fedora, RockyLinux, OpenSUSE)
+### RPMBUILDER : RedHat-based distros (RedHat, CentOS, Fedora, RockyLinux)
 1. cd to `__redhat`. Everything is run from there
 2. run `./rpmbuild-deps.sh` to ensure that everything needed to build; you might also need to install `rpm-build` and `rpmdevtools`
 3. run `make` :
