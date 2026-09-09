@@ -12,7 +12,7 @@ license=GPL2
 #install="$pkgname.pre-deinstall $pkgname.post-install"
 #source="$pkgname-$pkgver-$pkgrel.tar.bz2::http://localhost/$pkgname-$pkgver-$pkgrel.tar.bz2"
 builddir="$startdir/src/BUILD"
-binaryname=vmman
+binaryname=vmman4
 makedepends=pkgconfig
 
 prepare() {

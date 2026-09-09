@@ -4,7 +4,7 @@ set -e
 
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 BRANCH=$(echo "$BRANCH" | tr '/' '_')
-BINARY=vmman
+BINARY=vmman4
 OUTPUT=/opt/bin
 CHECK_PERMS=0
 CGO_ENABLED=0

@@ -16,7 +16,7 @@ optdepends=('zsh: zsh completion support')
 
 options=('!debug')
 
-_binaryname='vmman'
+_binaryname='vmman4'
 _builddir="${pkgname}-${pkgver}"
 
 install=vmman4.install
