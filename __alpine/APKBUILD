@@ -13,7 +13,7 @@ license=GPL2
 #source="$pkgname-$pkgver-$pkgrel.tar.bz2::http://localhost/$pkgname-$pkgver-$pkgrel.tar.bz2"
 builddir="$startdir/src/BUILD"
 binaryname=vmman4
-makedepends=pkgconfig
+makedepends="pkgconfig libvirt-dev"
 
 prepare() {
 	mkdir -p "$builddir"

@@ -83,4 +83,4 @@ else
 fi
 
 cd "$SRC_DIR"
-CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o "$BUILD_OUTPATH" .
+CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid=" -o "$BUILD_OUTPATH" .

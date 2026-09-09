@@ -41,11 +41,17 @@ password.
 ./build-macos.sh
 ```
 
-This builds `vmman4` with `CGO_ENABLED=0` (no C toolchain needed)
-and drops it at `/opt/sbin/vmman4y` by default — the same install
-path every other platform this project packages for uses. It works no
-matter which directory you run it from; it finds the Go module (`../src`)
-relative to its own location, not your current directory.
+This is a CGO build -- `libvirt.org/go/libvirt` binds to the C library
+through `pkg-config`, same as every other builder in this repo (see the
+root [README](../README.md#build-install-requirements)'s dependency
+table). On macOS that means `libvirt` and `pkg-config` need to be on hand
+(e.g. via Homebrew: `brew install libvirt pkg-config`) before running this
+script.
+
+`build-macos.sh` drops the binary at `/opt/sbin/vmman4` by default — the
+same install path every other platform this project packages for uses. It
+works no matter which directory you run it from; it finds the Go module
+(`../src`) relative to its own location, not your current directory.
 
 If you're not on `main`/`develop`, the binary is named
 `vmman4-<branch>` instead, so a build off a feature branch never

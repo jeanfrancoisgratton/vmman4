@@ -4,10 +4,10 @@
 # Lives at the root of the repo; every path it touches is relative to that
 # root, so the script can be dropped into any repo unchanged.
 #
-#   dontexec.sh <dir>      create _dontexec in <dir>
-#   dontexec.sh -r <dir>   remove _dontexec from <dir>
-#   dontexec.sh -g         create _dontexec in the repo root
-#   dontexec.sh -gr        remove _dontexec from the repo root
+#   dontexec.sh             create _dontexec in every __* subdirectory
+#   dontexec.sh <dir>       create _dontexec in <dir>
+#   dontexec.sh -r          remove _dontexec from every __* subdirectory
+#   dontexec.sh -r <dir>    remove _dontexec from <dir>
 
 set -euo pipefail
 
@@ -19,35 +19,30 @@ MARKER="_dontexec"
 
 usage() {
 	cat >&2 <<-EOF
-	Usage: ${0##*/} [-r] <directory>
-	       ${0##*/} -g[r]
+	Usage: ${0##*/} [-r] [directory]
 
 	  -r  remove the ${MARKER} file instead of creating it
-	  -g  operate on the repo root
 
-	<directory> must be one of the repo root's __* subdirectories:
+	With no <directory>, the operation applies to every __* subdirectory of
+	the repo root. <directory>, if given, must be one of:
 	$(printf '  %s\n' __*/)
 	EOF
 	exit 1
 }
 
 remove=0
-global=0
 
-while getopts ":rg" opt; do
+while getopts ":r" opt; do
 	case "${opt}" in
 		r) remove=1 ;;
-		g) global=1 ;;
 		*) usage ;;
 	esac
 done
 shift $((OPTIND - 1))
 
-if ((global)); then
-	(($# == 0)) || usage
-	target="."
-else
-	(($# == 1)) || usage
+(($# <= 1)) || usage
+
+if (($# == 1)); then
 	target="${1#./}"    # tolerate ./__debian
 	target="${target%/}" # tolerate __debian/
 	# only the repo root's own __* subdirectories are legal targets: no
@@ -56,19 +51,25 @@ else
 		echo "${0##*/}: ${1}: not a __* subdirectory of the repo root" >&2
 		exit 1
 	fi
-fi
-
-if [[ ! -d "${target}" ]]; then
-	echo "${0##*/}: ${target}: no such directory" >&2
-	exit 1
-fi
-
-[[ "${target}" == "." ]] && label="${MARKER}" || label="${target}/${MARKER}"
-
-if ((remove)); then
-	rm -f -- "${target}/${MARKER}"
-	echo "removed ${label}"
+	targets=("${target}")
 else
-	touch -- "${target}/${MARKER}"
-	echo "created ${label}"
+	targets=(__*/)
+	targets=("${targets[@]%/}")
 fi
+
+for target in "${targets[@]}"; do
+	if [[ ! -d "${target}" ]]; then
+		echo "${0##*/}: ${target}: no such directory" >&2
+		exit 1
+	fi
+
+	label="${target}/${MARKER}"
+
+	if ((remove)); then
+		rm -f -- "${label}"
+		echo "removed ${label}"
+	else
+		touch -- "${label}"
+		echo "created ${label}"
+	fi
+done
