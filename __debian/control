@@ -1,9 +1,8 @@
 Package: vmman4
-Version: 0.20.00~debug-0
+Version: 0.30.0-1
 Architecture: amd64
 Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
 Description: libvirt QEMU/KVM client
 Section: virtualization
 Build-Depends: pkg-config libvirt-dev
 Depends: 
-Suggests: zsh
