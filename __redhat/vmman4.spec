@@ -4,11 +4,11 @@
 %define _prefix /opt
 %define _bindir %{_prefix}/bin
 %define _version 0.4.0
-%define _rel 1
+%define _rel 3
 %define _arch x86_64
 %define _binaryname vmman4
 
-Name:       msggw
+Name:       vmman4
 Version:    %{_version}
 Release:    %{_rel}
 Summary:    Libvirt client
@@ -19,7 +19,7 @@ URL:        https://git.famillegratton.net:3000/devops/vmman4.git
 
 Source0:    %{name}-%{_version}.tar.gz
 #BuildArchitectures: x86_64
-BuildRequires: gcc
+BuildRequires: gcc, pkg-config, libvirt-devel
 #Requires: sudo
 #Obsoletes: vmman1 > 1.140
 
@@ -55,14 +55,6 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
-* Wed Sep 09 2026 Binary package builder <builder@famillegratton.net> 0.4.0-3
-- bug(RPMBUILDER): fixed missing builddep
-- chore: CL update
-- bug(RPMBUILDER): wrong package name
-- bug(DEBBUILDER): fixed endline issue in control file
-- Merge branch 'main' into develop
-- chore: update changelog for 0.4.0-1
-
 * Wed Sep 09 2026 Binary package builder <builder@famillegratton.net> 0.4.0-2
 - bug(RPMBUILDER): wrong package name
 - bug(DEBBUILDER): fixed endline issue in control file
