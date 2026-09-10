@@ -7,21 +7,25 @@ package vmmanagement
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	ce "github.com/jeanfrancoisgratton/customError/v3"
-	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
-	"libvirt.org/go/libvirt"
 	"vmman4/shared"
 	"vmman4/snapshotmanagement"
+
+	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
+	"golang.org/x/term"
+	"libvirt.org/go/libvirt"
 )
 
 // Wait4Shutdown : Tries 15 seconds to gracefully shutdown the VM, if not it will shutdown forcefully
 func Wait4Shutdown(vm *libvirt.Domain, vmname string) {
 	var bIsActive = false
-	fmt.Println("Will await that the VM " + vmname + " gracefully shuts down on " + shared.ConnectURI)
+	fmt.Println(hftx.InProgressSign("Waiting for VM to shutdown..."))
+	//fmt.Println("Will await that the VM " + vmname + " gracefully shuts down on " + shared.ConnectURI)
 	bIsActive, _ = vm.IsActive()
 	if bIsActive {
 		n := 15
@@ -84,19 +88,37 @@ func getInterfaceSpecs(dom libvirt.Domain, vmname string) (string, string, *ce.C
 		}
 	}
 	for _, di := range domainInterface {
-		//if len(di.Name) > 2 && (di.Name[:3] == "enp" || di.Name[:3] == "eth") {
-		if len(di.Name) > 2 {
-			interfaceName = di.Name
-			domainIPaddresses := di.Addrs
-			for _, dipa := range domainIPaddresses {
-				if dipa.Type == libvirt.IP_ADDR_TYPE_IPV4 {
-					interfaceAddress = dipa.Addr
-				}
+		if isVirtualInterface(di.Name) {
+			continue
+		}
+		for _, dipa := range di.Addrs {
+			if dipa.Type == libvirt.IP_ADDR_TYPE_IPV4 {
+				interfaceName = di.Name
+				interfaceAddress = dipa.Addr
+				break
 			}
-
+		}
+		if interfaceName != "" {
+			break
 		}
 	}
 	return interfaceName, interfaceAddress, nil
+}
+
+// isVirtualInterface : filters out loopback and container/bridge interfaces
+// (e.g. docker0, veth*) that guest agents report alongside the real NIC, so
+// they don't get mistaken for the VM's actual network interface.
+func isVirtualInterface(name string) bool {
+	if len(name) < 2 {
+		return true
+	}
+	virtualPrefixes := []string{"lo", "docker", "veth", "br-", "virbr", "vnet", "tap", "tun", "cni", "flannel", "cali", "podman"}
+	for _, p := range virtualPrefixes {
+		if strings.HasPrefix(name, p) {
+			return true
+		}
+	}
+	return false
 }
 
 // getUptime : gets the active VM's uptime from the database
@@ -121,7 +143,7 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		domain        *libvirt.Domain
 	)
 
-	if doms, serr = GetVMlist(); serr != nil {
+	if doms, serr = listDomains(conn); serr != nil {
 		return nil, serr
 	}
 
@@ -173,4 +195,13 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 			viSnapshots: uint(numsnap), viCurrentSnapshot: i.viCurrentSnapshot, viInterfaceName: i.viInterfaceName, viIPaddress: i.viIPaddress})
 	}
 	return vmspec, nil
+}
+
+// termWidth returns the current terminal width, falling back to 80 on error.
+func termWidth() int {
+	w, _, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil || w <= 0 {
+		return 80
+	}
+	return w
 }

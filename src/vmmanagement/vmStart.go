@@ -17,18 +17,23 @@ import (
 
 // Start : starts one or many VMs
 func Start(args []string) *ce.CustomError {
-	var bIsActive bool
-	var err *ce.CustomError
-	var conn *libvirt.Connect
-	var domain *libvirt.Domain
-
-	if err = connection.ResolveConnectionURI(); err != nil {
+	if err := connection.ResolveConnectionURI(); err != nil {
 		return err
 	}
-	if conn, err = shared.Connect2HVM(); err != nil {
+	conn, err := shared.Connect2HVM()
+	if err != nil {
 		return err
 	}
 	defer conn.Close()
+
+	return startDomains(conn, args)
+}
+
+// startDomains : starts one or many VMs using an already-open connection
+func startDomains(conn *libvirt.Connect, args []string) *ce.CustomError {
+	var bIsActive bool
+	var err *ce.CustomError
+	var domain *libvirt.Domain
 
 	for _, vmname := range args {
 		if domain, err = shared.GetDomain(conn, vmname); err != nil {
@@ -53,23 +58,27 @@ func Start(args []string) *ce.CustomError {
 
 // StartAll : fetches the list of VMs on the hypervisor, and then starts them
 func StartAll() *ce.CustomError {
+	if err := connection.ResolveConnectionURI(); err != nil {
+		return err
+	}
+	conn, err := shared.Connect2HVM()
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	domains, serr := listDomains(conn)
+	if serr != nil {
+		return serr
+	}
+
 	var vmlist []string
-	var domains []libvirt.Domain
-	var err *ce.CustomError
-
-	if err = connection.ResolveConnectionURI(); err != nil {
-		return err
-	}
-	if domains, err = GetVMlist(); err != nil {
-		return err
-	}
-
 	for _, domain := range domains {
-		_, serr := domain.GetID()
-		if serr != nil { // GetID() failed → domain has no ID → it is not running; candidate to start
+		_, e := domain.GetID()
+		if e != nil { // GetID() failed → domain has no ID → it is not running; candidate to start
 			vmname, _ := domain.GetName()
 			vmlist = append(vmlist, vmname)
 		}
 	}
-	return Start(vmlist)
+	return startDomains(conn, vmlist)
 }
