@@ -11,24 +11,15 @@ import (
 	"strconv"
 	"strings"
 
+	"vmman4/connection"
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
-	"golang.org/x/term"
 	"libvirt.org/go/libvirt"
-	"vmman4/connection"
-	"vmman4/shared"
 )
-
-// termWidth returns the current terminal width, falling back to 80 on error.
-func termWidth() int {
-	w, _, err := term.GetSize(int(os.Stdout.Fd()))
-	if err != nil || w <= 0 {
-		return 80
-	}
-	return w
-}
 
 func VmInventory() *ce.CustomError {
 	var (
@@ -118,6 +109,11 @@ func GetVMlist() ([]libvirt.Domain, *ce.CustomError) {
 	}
 	defer conn.Close()
 
+	return listDomains(conn)
+}
+
+// listDomains : Returns all domains (active + inactive) using an already-open connection.
+func listDomains(conn *libvirt.Connect) ([]libvirt.Domain, *ce.CustomError) {
 	doms, err := conn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE)
 	if err != nil {
 		return nil, &ce.CustomError{Title: "Error listing domains", Message: err.Error()}
