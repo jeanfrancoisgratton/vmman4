@@ -55,6 +55,19 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Fri Sep 11 2026 Binary package builder <builder@famillegratton.net> 0.6.0-1
+- Merge branch 'develop'
+- Merge branch 'vmmanagement' into develop
+- chore: version bump
+- feat: Completed vmInfo(), enhancements to vmInventory()
+- completed the DumpXML command
+- Added SetVMem() and SetVCPUs()
+- added Reset() / ResetAll()
+- chore: yet another package refactoring
+- chore: package refactoring
+- bug(vm remove): reordered tasks in vm rm command
+- chore: update changelog for 0.5.0-1
+
 * Thu Sep 10 2026 Binary package builder <builder@famillegratton.net> 0.5.0-1
 - Merge branch 'develop'
 - Merge branch 'vmmanagement' into develop
