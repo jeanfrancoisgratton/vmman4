@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storageManagement/helpers.go
+// Original filename: src/storage_management/helpers.go
 // Original timestamp: 2026/05/30 13:00:10
 
 package storagemanagement

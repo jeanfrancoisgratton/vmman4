@@ -3,7 +3,7 @@
 // Original filename: src/inventory/vmList.go
 // Original timestamp: 2026/05/22 07:54:46
 
-package vmmanagement
+package vm_management
 
 import (
 	"fmt"
@@ -101,7 +101,7 @@ func VmInventory() *ce.CustomError {
 }
 
 // GetVMlist : Returns all domains (active + inactive) on the hypervisor.
-// Moved here from inventory to break the vmmanagement -> inventory import cycle.
+// Moved here from inventory to break the vm_management -> inventory import cycle.
 func GetVMlist() ([]libvirt.Domain, *ce.CustomError) {
 	if cerr := connection.ResolveConnectionURI(); cerr != nil {
 		return nil, cerr

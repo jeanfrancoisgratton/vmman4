@@ -1,17 +1,18 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// vmmanagement/vmStop.go
+// vm_management/vmStop.go
 // 2022-08-22 13:13:14
 
-package vmmanagement
+package vm_management
 
 import (
 	"fmt"
 
+	"vmman4/connection"
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
-	"vmman4/connection"
-	"vmman4/shared"
 )
 
 // Stop : stops one or many VMs

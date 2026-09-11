@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/types.go
+// Original filename: src/vm_management/types.go
 // Original timestamp: 2026/05/27 18:46:59
 
-package vmmanagement
+package vm_management
 
 var ForceConsoleConnection = false
 var KeepStorage = false

@@ -1,8 +1,8 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/vmCreate.go
+// Original filename: src/vm_management/vmCreate.go
 
-package vmmanagement
+package vm_management
 
 import (
 	"encoding/json"

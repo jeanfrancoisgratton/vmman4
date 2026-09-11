@@ -1,14 +1,14 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// src/vmmanagement/vmRemove.go
+// src/vm_management/vmRemove.go
 // 2022-10-22 12:42:35
 
-package vmmanagement
+package vm_management
 
 import (
 	"fmt"
 	"os"
 	"vmman4/connection"
-	storagemanagement "vmman4/storageManagement"
+	storagemanagement "vmman4/storage_management"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"

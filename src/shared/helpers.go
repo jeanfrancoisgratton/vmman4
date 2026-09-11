@@ -30,13 +30,13 @@ func Connect2HVM() (*libvirt.Connect, *customError.CustomError) {
 	}
 	if !QuietOutput {
 		fmt.Println()
-		fmt.Println(hftx.InfoSign(" Connected on hypervisor " + hftx.Blue(ConnectURI)))
+		fmt.Println(hftx.InfoSign("Connected on hypervisor " + hftx.Blue(ConnectURI)))
 	}
 	return conn, nil
 }
 
 // GetDomain : Connects to the VM, returning the domain object.
-// Moved here from vmmanagement to break the inventory <-> vmmanagement import cycle.
+// Moved here from vm_management to break the inventory <-> vm_management import cycle.
 func GetDomain(conn *libvirt.Connect, vmname string) (*libvirt.Domain, *customError.CustomError) {
 	domain, err := conn.LookupDomainByName(vmname)
 	if err != nil {

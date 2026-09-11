@@ -1,18 +1,19 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// src/vmmanagement/vmRename.go
+// src/vm_management/vmRename.go
 // 2022-10-29 19:04:58
 
-package vmmanagement
+package vm_management
 
 import (
 	"fmt"
 	"strconv"
 
+	"vmman4/connection"
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
-	"vmman4/connection"
-	"vmman4/shared"
 )
 
 func Rename(oldName, newName string) *ce.CustomError {

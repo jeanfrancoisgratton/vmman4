@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storageManagement/storageSpecs.go
+// Original filename: src/storage_management/storageSpecs.go
 // Original timestamp: 2026/09/10
 
 package storagemanagement

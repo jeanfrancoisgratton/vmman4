@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/vmHelpers.go
+// Original filename: src/vm_management/vmHelpers.go
 // Original timestamp: 2026/05/26 19:08:41
 
-package vmmanagement
+package vm_management
 
 import (
 	"fmt"

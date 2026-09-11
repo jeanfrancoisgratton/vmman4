@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/vmConsole.go
+// Original filename: src/vm_management/vmConsole.go
 // Original timestamp: 2026/05/27
 
-package vmmanagement
+package vm_management
 
 import (
 	"fmt"
@@ -12,11 +12,12 @@ import (
 	"os/signal"
 	"syscall"
 
+	"vmman4/connection"
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	"golang.org/x/term"
 	"libvirt.org/go/libvirt"
-	"vmman4/connection"
-	"vmman4/shared"
 )
 
 // escapeChar is the session escape sequence (Ctrl+]), matching virsh behaviour

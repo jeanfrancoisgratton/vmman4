@@ -1,18 +1,19 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/vmStart.go
+// Original filename: src/vm_management/vmStart.go
 // Original timestamp: 2026/05/27 08:46:14
 
-package vmmanagement
+package vm_management
 
 import (
 	"fmt"
 
+	"vmman4/connection"
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
-	"vmman4/connection"
-	"vmman4/shared"
 )
 
 // Start : starts one or many VMs
