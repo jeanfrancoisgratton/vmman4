@@ -92,9 +92,9 @@ var vmResetCmd = &cobra.Command{
 }
 
 var vmResetAllCmd = &cobra.Command{
-	Use:   "resetall",
+	Use:     "resetall",
 	Aliases: []string{"rebootall"},
-	Short: "Stop/Start all VMs at once",
+	Short:   "Stop/Start all VMs at once",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := vm_mgt.ResetAll(); err != nil {
 			fmt.Println(err.Error())
@@ -127,6 +127,33 @@ Also, if the VM holds any snapshot, they need to be removed before effecting the
 	},
 }
 
+var vmSetMemCmd = &cobra.Command{
+	Use:   "setmem",
+	Short: "Set a VM's memory (in MiB)",
+	Long: `Expects 1 or 2 numeric arguments: min_mem [max_mem].
+If only min_mem is passed, min_mem = max_mem.
+Overcommitting the hypervisor's physical memory is warned about, but not blocked.`,
+	Args: cobra.RangeArgs(2, 3),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vm_mgt.SetVMem(args[0], args[1:]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var vmSetVcpusCmd = &cobra.Command{
+	Use:     "setvcpus",
+	Aliases: []string{"setcpu", "setcpus"},
+	Short:   "Set a VM's vCPU count",
+	Long:    `Overcommitting the hypervisor's physical CPUs is warned about, but not blocked.`,
+	Args:    cobra.ExactArgs(2),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vm_mgt.SetVCPUs(args[0], args[1]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 var vmRemoveCmd = &cobra.Command{
 	Use:     "rm",
 	Aliases: []string{"remove", "destroy", "delete"},
@@ -144,7 +171,7 @@ func init() {
 	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
 		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
 	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
-		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
+		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd, vmSetMemCmd, vmSetVcpusCmd)
 
 	vmConsoleCmd.Flags().BoolVarP(&vm_mgt.ForceConsoleConnection, "force", "f", false, "Force previous session logout")
 	vmRemoveCmd.Flags().BoolVarP(&vm_mgt.KeepStorage, "keep", "k", false, "Keep VM disk after removal")
