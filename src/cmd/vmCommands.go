@@ -8,9 +8,10 @@ package cmd
 import (
 	"fmt"
 
+	"vmman4/vmmanagement"
+
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/spf13/cobra"
-	"vmman4/vmmanagement"
 )
 
 // vmCmd covers all the vm-related subcommands
@@ -81,6 +82,7 @@ var vmStopAllCmd = &cobra.Command{
 var vmConsoleCmd = &cobra.Command{
 	Use:   "console",
 	Short: "Open a console session on the VM",
+	Long:  "a -f flag will force the connection to the console, if that connection was already opened.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := vmmanagement.Console(args[0]); err != nil {
@@ -102,9 +104,23 @@ Also, if the VM holds any snapshot, they need to be removed before effecting the
 	},
 }
 
+var vmRemoveCmd = &cobra.Command{
+	Use:     "rm",
+	Aliases: []string{"remove", "destroy", "delete"},
+	Short:   "Remove one or more VMs",
+	Long:    `By default this command also removes the attached disks, unless the -k flag is passed`,
+	Args:    cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vmmanagement.Remove(args); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 func init() {
-	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd)
-	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmConsoleCmd, vmRenameCmd)
+	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
+	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
 
 	vmConsoleCmd.Flags().BoolVarP(&vmmanagement.ForceConsoleConnection, "force", "f", false, "Force previous session logout")
+	vmRemoveCmd.Flags().BoolVarP(&vmmanagement.KeepStorage, "keep", "k", false, "Keep VM disk after removal")
 }
