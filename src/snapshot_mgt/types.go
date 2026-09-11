@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F. Gratton (jean-francois@famillegratton.net)
-// Original filename : src/snapshotmanagement/types.go
+// Original filename : src/snapshot_mgt/types.go
 // original timestamp : 2026/05/31 15:00:31
 
-package snapshotmanagement
+package snapshot_mgt
 
 import "encoding/xml"
 

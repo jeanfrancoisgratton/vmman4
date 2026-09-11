@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storage_management/types.go
+// Original filename: src/storage_mgt/types.go
 // Original timestamp: 2026/05/30 12:58:55
 
 package storagemanagement

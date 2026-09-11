@@ -15,7 +15,7 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-// Connect2HVM : this is where we actually handle the connection
+// Connect2HVM : this is where we actually handle the connection_mgt
 func Connect2HVM() (*libvirt.Connect, *customError.CustomError) {
 	conn, err := libvirt.NewConnect(ConnectURI)
 	if err != nil {
@@ -36,7 +36,7 @@ func Connect2HVM() (*libvirt.Connect, *customError.CustomError) {
 }
 
 // GetDomain : Connects to the VM, returning the domain object.
-// Moved here from vm_management to break the inventory <-> vm_management import cycle.
+// Moved here from vm_mgt to break the inventory <-> vm_mgt import cycle.
 func GetDomain(conn *libvirt.Connect, vmname string) (*libvirt.Domain, *customError.CustomError) {
 	domain, err := conn.LookupDomainByName(vmname)
 	if err != nil {

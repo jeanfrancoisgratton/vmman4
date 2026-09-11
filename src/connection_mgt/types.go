@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/connection/types.go
+// Original filename: src/connection_mgt/types.go
 // Original timestamp: 2026/05/17 22:21:02
 
-package connection
+package connection_mgt
 
 var (
 	ConnectionHost    string

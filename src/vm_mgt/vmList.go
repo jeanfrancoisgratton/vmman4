@@ -3,7 +3,7 @@
 // Original filename: src/inventory/vmList.go
 // Original timestamp: 2026/05/22 07:54:46
 
-package vm_management
+package vm_mgt
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"vmman4/connection"
+	"vmman4/connection_mgt"
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -28,7 +28,7 @@ func VmInventory() *ce.CustomError {
 		err     *ce.CustomError
 	)
 
-	if err = connection.ResolveConnectionURI(); err != nil {
+	if err = connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
 	if conn, err = shared.Connect2HVM(); err != nil {
@@ -58,7 +58,7 @@ func VmInventory() *ce.CustomError {
 
 	for _, vmspec := range vmspecs {
 		sID := fmt.Sprintf("%04d", vmspec.viId)
-		t.AppendRow([]interface{}{sID, vmspec.viName, vmspec.viState, vmspec.viMem, vmspec.viCpu,
+		t.AppendRow([]any{sID, vmspec.viName, vmspec.viState, vmspec.viMem, vmspec.viCpu,
 			vmspec.viSnapshots, vmspec.viCurrentSnapshot, vmspec.viInterfaceName, vmspec.viIPaddress})
 	}
 
@@ -101,9 +101,9 @@ func VmInventory() *ce.CustomError {
 }
 
 // GetVMlist : Returns all domains (active + inactive) on the hypervisor.
-// Moved here from inventory to break the vm_management -> inventory import cycle.
+// Moved here from inventory to break the vm_mgt -> inventory import cycle.
 func GetVMlist() ([]libvirt.Domain, *ce.CustomError) {
-	if cerr := connection.ResolveConnectionURI(); cerr != nil {
+	if cerr := connection_mgt.ResolveConnectionURI(); cerr != nil {
 		return nil, cerr
 	}
 	conn, cerr := shared.Connect2HVM()
@@ -115,7 +115,7 @@ func GetVMlist() ([]libvirt.Domain, *ce.CustomError) {
 	return listDomains(conn)
 }
 
-// listDomains : Returns all domains (active + inactive) using an already-open connection.
+// listDomains : Returns all domains (active + inactive) using an already-open connection_mgt.
 func listDomains(conn *libvirt.Connect) ([]libvirt.Domain, *ce.CustomError) {
 	doms, err := conn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE)
 	if err != nil {

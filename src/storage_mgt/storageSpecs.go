@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storage_management/storageSpecs.go
+// Original filename: src/storage_mgt/storageSpecs.go
 // Original timestamp: 2026/09/10
 
 package storagemanagement
@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"vmman4/connection"
+	"vmman4/connection_mgt"
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -24,7 +24,7 @@ func GetStorageSpecs4VM(vmName string, conn *libvirt.Connect) (VMStorageInfo, *c
 	//var conn *libvirt.Connect
 
 	if conn == nil {
-		if cerr = connection.ResolveConnectionURI(); cerr != nil {
+		if cerr = connection_mgt.ResolveConnectionURI(); cerr != nil {
 			return VMStorageInfo{}, cerr
 		}
 		if conn, cerr = shared.Connect2HVM(); cerr != nil {

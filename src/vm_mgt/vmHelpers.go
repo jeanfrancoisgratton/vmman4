@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_management/vmHelpers.go
+// Original filename: src/vm_mgt/vmHelpers.go
 // Original timestamp: 2026/05/26 19:08:41
 
-package vm_management
+package vm_mgt
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"vmman4/shared"
-	"vmman4/snapshotmanagement"
+	"vmman4/snapshot_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -178,7 +178,7 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		defer domain.Free()
 		numsnap, _ = domain.SnapshotNum(snapshotflags)
 		if numsnap > 0 {
-			if i.viCurrentSnapshot, cerr = snapshotmanagement.GetCurrentSnapshotName(conn, i.viName); cerr != nil {
+			if i.viCurrentSnapshot, cerr = snapshot_mgt.GetCurrentSnapshotName(conn, i.viName); cerr != nil {
 				return nil, cerr
 			}
 		} else {

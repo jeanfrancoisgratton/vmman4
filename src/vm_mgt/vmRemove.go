@@ -1,14 +1,14 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// src/vm_management/vmRemove.go
+// src/vm_mgt/vmRemove.go
 // 2022-10-22 12:42:35
 
-package vm_management
+package vm_mgt
 
 import (
 	"fmt"
 	"os"
-	"vmman4/connection"
-	storagemanagement "vmman4/storage_management"
+	"vmman4/connection_mgt"
+	storagemanagement "vmman4/storage_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -22,7 +22,7 @@ import (
 
 // This will remove the VM, and optionally leave its storage there
 func Remove(args []string) *ce.CustomError {
-	if err := connection.ResolveConnectionURI(); err != nil {
+	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
 	conn, err := shared.Connect2HVM()
@@ -71,9 +71,9 @@ func Remove(args []string) *ce.CustomError {
 	return nil
 }
 
-// removeStorage(): remove the VM's volumes on the hypervisor the connection points to.
+// removeStorage(): remove the VM's volumes on the hypervisor the connection_mgt points to.
 // This goes through libvirt's storage APIs (rather than a local os.Remove) so that
-// removal happens on the actual host owning the connection, not on the machine running
+// removal happens on the actual host owning the connection_mgt, not on the machine running
 // vmman4 -- which matters when operating against a remote hypervisor.
 func removeStorage(conn *lv.Connect, info []storagemanagement.DiskInfo) *ce.CustomError {
 	if len(info) == 0 {

@@ -1,13 +1,13 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// vm_management/vmStop.go
+// vm_mgt/vmStop.go
 // 2022-08-22 13:13:14
 
-package vm_management
+package vm_mgt
 
 import (
 	"fmt"
 
-	"vmman4/connection"
+	"vmman4/connection_mgt"
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -17,7 +17,7 @@ import (
 
 // Stop : stops one or many VMs
 func Stop(args []string) *ce.CustomError {
-	if err := connection.ResolveConnectionURI(); err != nil {
+	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
 	conn, err := shared.Connect2HVM()
@@ -29,7 +29,7 @@ func Stop(args []string) *ce.CustomError {
 	return stopDomains(conn, args)
 }
 
-// stopDomains : stops one or many VMs using an already-open connection
+// stopDomains : stops one or many VMs using an already-open connection_mgt
 func stopDomains(conn *libvirt.Connect, args []string) *ce.CustomError {
 	var bIsActive bool
 	var err *ce.CustomError
@@ -62,7 +62,7 @@ func stopDomains(conn *libvirt.Connect, args []string) *ce.CustomError {
 
 // StopAll : fetches the list of VMs on the hypervisor and then stops them
 func StopAll() *ce.CustomError {
-	if err := connection.ResolveConnectionURI(); err != nil {
+	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
 	conn, err := shared.Connect2HVM()

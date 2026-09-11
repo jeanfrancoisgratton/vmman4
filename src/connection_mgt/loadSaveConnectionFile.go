@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/connection/loadSaveConnectionFile.go
+// Original filename: src/connection_mgt/loadSaveConnectionFile.go
 // Original timestamp: 2026/05/19 20:05:24
 
-package connection
+package connection_mgt
 
 import (
 	"encoding/json"
@@ -11,8 +11,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	ce "github.com/jeanfrancoisgratton/customError/v3"
 	"vmman4/shared"
+
+	ce "github.com/jeanfrancoisgratton/customError/v3"
 )
 
 func (ct *ConnectionType) ConnSave() *ce.CustomError {
@@ -29,7 +30,7 @@ func (ct *ConnectionType) ConnSave() *ce.CustomError {
 	return nil
 }
 
-// LoadConnectionInfo : the connection JSON file is unmarshalled and loaded in a variable
+// LoadConnectionInfo : the connection_mgt JSON file is unmarshalled and loaded in a variable
 func (ct *ConnectionType) LoadConnectionInfo() *ce.CustomError {
 	if !strings.HasSuffix(shared.ConnectionFilename, ".json") {
 		shared.ConnectionFilename += ".json"

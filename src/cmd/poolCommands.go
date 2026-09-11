@@ -8,7 +8,7 @@ package cmd
 import (
 	"fmt"
 
-	storagemanagement "vmman4/storage_management"
+	storagemanagement "vmman4/storage_mgt"
 
 	"github.com/spf13/cobra"
 )

@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/connection/createRemoveConnections.go
+// Original filename: src/connection_mgt/createRemoveConnections.go
 // Original timestamp: 2026/05/19 19:54:47
 
-package connection
+package connection_mgt
 
 import (
 	"fmt"
@@ -11,19 +11,20 @@ import (
 	"path/filepath"
 	"strings"
 
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hf "github.com/jeanfrancoisgratton/helperFunctions/v5"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
-	"vmman4/shared"
 )
 
-// ConnCreate : Create a connection file; user will be prompted for relevant information,
+// ConnCreate : Create a connection_mgt file; user will be prompted for relevant information,
 // unless the --name, --host --user flags are used
 func ConnCreate() *ce.CustomError {
 	ct := ConnectionType{}
 
-	fmt.Println("Please enter a connection name")
-	ct.Name = hf.GetStringValFromPrompt("This will be the filename of the connection definition file, located in $HOME/.config/JFG/vmman4/ : ")
+	fmt.Println("Please enter a connection_mgt name")
+	ct.Name = hf.GetStringValFromPrompt("This will be the filename of the connection_mgt definition file, located in $HOME/.config/JFG/vmman4/ : ")
 
 	if ConnectionHost == "" {
 		ct.Host = hf.GetStringValFromPrompt("Please enter a host name (leave blank for localhost): ")
@@ -38,7 +39,7 @@ func ConnCreate() *ce.CustomError {
 	return ct.ConnSave()
 }
 
-// ConnRemove : Remove one or many connection file(s)
+// ConnRemove : Remove one or many connection_mgt file(s)
 func ConnRemove(connfiles []string) *ce.CustomError {
 	for _, connfile := range connfiles {
 		if !strings.HasSuffix(connfile, ".json") {
