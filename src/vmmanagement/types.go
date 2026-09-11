@@ -6,6 +6,7 @@
 package vmmanagement
 
 var ForceConsoleConnection = false
+var KeepStorage = false
 
 type vmInfo struct {
 	viId              uint
