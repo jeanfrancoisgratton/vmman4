@@ -7,6 +7,7 @@ package vmmanagement
 import (
 	"fmt"
 	"os"
+	"vmman4/connection"
 	storagemanagement "vmman4/storageManagement"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -21,6 +22,9 @@ import (
 
 // This will remove the VM, and optionally leave its storage there
 func Remove(args []string) *ce.CustomError {
+	if err := connection.ResolveConnectionURI(); err != nil {
+		return err
+	}
 	conn, err := shared.Connect2HVM()
 	if err != nil {
 		return err
@@ -30,9 +34,6 @@ func Remove(args []string) *ce.CustomError {
 	for _, vmname := range args {
 		//var host string
 		domain, err := shared.GetDomain(conn, vmname)
-		if domain == nil {
-			return nil
-		}
 		if err != nil {
 			return err
 		}
@@ -41,6 +42,20 @@ func Remove(args []string) *ce.CustomError {
 		// Shut the VM down, if active
 		Wait4Shutdown(domain, vmname)
 		fmt.Println(vmname + " now shutdown. Proceeding to removal from inventory.")
+
+		// Storage specs must be gathered while the domain is still defined:
+		// UndefineFlags() below removes it from libvirt's inventory, and
+		// GetStorageSpecs4VM looks the domain up by name.
+		if !KeepStorage {
+			storageInfo, e := storagemanagement.GetStorageSpecs4VM(vmname, conn)
+			if e != nil {
+				return e
+			}
+			if e := removeStorage(conn, storageInfo.Disks); e != nil {
+				return e
+			}
+		}
+
 		derr := domain.UndefineFlags(lv.DOMAIN_UNDEFINE_SNAPSHOTS_METADATA)
 		if derr != nil {
 			lverr, ok := derr.(lv.Error)
@@ -49,29 +64,33 @@ func Remove(args []string) *ce.CustomError {
 				os.Exit(-1)
 			}
 		}
-		if !KeepStorage {
-			storageInfo, e := storagemanagement.GetStorageSpecs4VM(vmname, conn)
-			if e != nil {
-				return e
-			}
-			if e := removeStorage(storageInfo.Disks); e != nil {
-				return e
-			}
-		}
 
-		fmt.Println(hftx.EnabledSign(fmt.Sprintf("VM %s has been removed.", vmname)))
+		fmt.Println(hftx.EnabledSign(vmname + hftx.DimRed(" REMOVED")))
+		//fmt.Println(hftx.EnabledSign(fmt.Sprintf("VM %s has been removed.", vmname)))
 	}
 	return nil
 }
 
-// removeStorage(): remove the VM files from the disks
-func removeStorage(info []storagemanagement.DiskInfo) *ce.CustomError {
+// removeStorage(): remove the VM's volumes on the hypervisor the connection points to.
+// This goes through libvirt's storage APIs (rather than a local os.Remove) so that
+// removal happens on the actual host owning the connection, not on the machine running
+// vmman4 -- which matters when operating against a remote hypervisor.
+func removeStorage(conn *lv.Connect, info []storagemanagement.DiskInfo) *ce.CustomError {
 	if len(info) == 0 {
 		return nil
 	}
 	for _, disk := range info {
-		if e := os.Remove(disk.SourcePath); e != nil {
-			return &ce.CustomError{Title: "Error removing " + disk.SourcePath, Message: e.Error()}
+		if disk.Type != "file" && disk.Type != "block" {
+			continue
+		}
+		vol, err := conn.LookupStorageVolByPath(disk.SourcePath)
+		if err != nil {
+			return &ce.CustomError{Title: "Error looking up volume " + disk.SourcePath, Message: err.Error()}
+		}
+		derr := vol.Delete(lv.STORAGE_VOL_DELETE_NORMAL)
+		vol.Free()
+		if derr != nil {
+			return &ce.CustomError{Title: "Error removing " + disk.SourcePath, Message: derr.Error()}
 		}
 	}
 	return nil

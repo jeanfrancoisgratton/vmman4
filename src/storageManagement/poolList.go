@@ -58,20 +58,7 @@ func ListStoragePools() ([]StoragePoolInfo, *ce.CustomError) {
 		pinfo := StoragePoolInfo{Name: name, UUID: uuid}
 
 		if poolInfo, err := p.GetInfo(); err == nil {
-			switch poolInfo.State {
-			case libvirt.STORAGE_POOL_RUNNING:
-				pinfo.State = "running"
-			case libvirt.STORAGE_POOL_INACTIVE:
-				pinfo.State = "inactive"
-			case libvirt.STORAGE_POOL_BUILDING:
-				pinfo.State = "building"
-			case libvirt.STORAGE_POOL_DEGRADED:
-				pinfo.State = "degraded"
-			case libvirt.STORAGE_POOL_INACCESSIBLE:
-				pinfo.State = "inaccessible"
-			default:
-				pinfo.State = "unknown"
-			}
+			pinfo.State = poolStateString(poolInfo.State)
 		}
 
 		if xmlDesc, err := p.GetXMLDesc(0); err == nil {

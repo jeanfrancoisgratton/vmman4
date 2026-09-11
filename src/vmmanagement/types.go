@@ -21,5 +21,6 @@ type vmInfo struct {
 	//viHypervisor       string
 	//viOperatingSystem  string
 	//viLastStatusChange string
-	//viStoragePool      string
+	//viStoragePool string
+	//viDisks       []storagemanagement.DiskInfo
 }

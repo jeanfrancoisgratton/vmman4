@@ -71,7 +71,7 @@ func GetStorageSpecs4VM(vmName string, conn *libvirt.Connect) (VMStorageInfo, *c
 			}
 		}
 
-		di.SizeBytes = resolveVolumeSize(conn, di.SourcePath, d.Source.Pool, d.Source.Volume)
+		di.SizeBytes, di.PoolName, di.PoolTargetPath, di.PoolState = resolveVolumeInfo(conn, di.SourcePath, d.Source.Pool, d.Source.Volume)
 		info.Disks = append(info.Disks, di)
 	}
 
