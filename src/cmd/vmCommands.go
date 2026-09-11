@@ -154,6 +154,18 @@ var vmSetVcpusCmd = &cobra.Command{
 	},
 }
 
+var vmDumpXmlCmd = &cobra.Command{
+	Use:   "dumpxml",
+	Short: "Dump a VM's XML configuration to a file",
+	Long:  `Shuts the VM down (if active) before dumping its inactive, migratable XML description.`,
+	Args:  cobra.ExactArgs(2),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vm_mgt.XmlDump(args[0], args[1]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 var vmRemoveCmd = &cobra.Command{
 	Use:     "rm",
 	Aliases: []string{"remove", "destroy", "delete"},
@@ -171,7 +183,7 @@ func init() {
 	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
 		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
 	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
-		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd, vmSetMemCmd, vmSetVcpusCmd)
+		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd, vmSetMemCmd, vmSetVcpusCmd, vmDumpXmlCmd)
 
 	vmConsoleCmd.Flags().BoolVarP(&vm_mgt.ForceConsoleConnection, "force", "f", false, "Force previous session logout")
 	vmRemoveCmd.Flags().BoolVarP(&vm_mgt.KeepStorage, "keep", "k", false, "Keep VM disk after removal")
