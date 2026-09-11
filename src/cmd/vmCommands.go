@@ -35,6 +35,17 @@ var vmLsCmd = &cobra.Command{
 	},
 }
 
+var vmInfoCmd = &cobra.Command{
+	Use:   "info",
+	Short: "Show detailed information about a VM",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vm_mgt.VmInfo(args[0]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 var vmStartCmd = &cobra.Command{
 	Use:     "start",
 	Aliases: []string{"up"},
@@ -180,9 +191,9 @@ var vmRemoveCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
+	rootCmd.AddCommand(vmCmd, vmLsCmd, vmInfoCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
 		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
-	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
+	vmCmd.AddCommand(vmLsCmd, vmInfoCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
 		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd, vmSetMemCmd, vmSetVcpusCmd, vmDumpXmlCmd)
 
 	vmConsoleCmd.Flags().BoolVarP(&vm_mgt.ForceConsoleConnection, "force", "f", false, "Force previous session logout")

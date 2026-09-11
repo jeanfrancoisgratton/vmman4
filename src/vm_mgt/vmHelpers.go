@@ -14,6 +14,7 @@ import (
 
 	"vmman4/shared"
 	"vmman4/snapshot_mgt"
+	storagemanagement "vmman4/storage_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -191,8 +192,19 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		//	i.viLastStatusChange = getUptime(i.viLastStatusChange)
 		//}
 
+		// DISK INFO
+		storageInfo, serr := storagemanagement.GetStorageSpecs4VM(i.viName, conn)
+		if serr != nil {
+			return nil, serr
+		}
+		var diskTotalSize uint64
+		for _, disk := range storageInfo.Disks {
+			diskTotalSize += disk.SizeBytes
+		}
+
 		vmspec = append(vmspec, vmInfo{viId: i.viId, viName: i.viName, viState: getStateHelper(dState), viMem: specs.Memory / 1024, viCpu: specs.NrVirtCpu,
-			viSnapshots: uint(numsnap), viCurrentSnapshot: i.viCurrentSnapshot, viInterfaceName: i.viInterfaceName, viIPaddress: i.viIPaddress})
+			viSnapshots: uint(numsnap), viCurrentSnapshot: i.viCurrentSnapshot, viInterfaceName: i.viInterfaceName, viIPaddress: i.viIPaddress,
+			viDiskCount: uint(storageInfo.DiskCount), viDiskTotalSize: diskTotalSize})
 	}
 	return vmspec, nil
 }

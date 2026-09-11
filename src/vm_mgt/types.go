@@ -18,6 +18,8 @@ type vmInfo struct {
 	viCurrentSnapshot string
 	viInterfaceName   string
 	viIPaddress       string
+	viDiskCount       uint
+	viDiskTotalSize   uint64 // bytes
 	//viHypervisor       string
 	//viOperatingSystem  string
 	//viLastStatusChange string

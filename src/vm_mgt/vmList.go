@@ -15,6 +15,7 @@ import (
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hf "github.com/jeanfrancoisgratton/helperFunctions/v5"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
@@ -54,12 +55,17 @@ func VmInventory() *ce.CustomError {
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"ID", "VM name", "State", "vMem", "vCPUs", "Snapshots", "Current snapshot", "Interface", "IP addr"})
+	t.AppendHeader(table.Row{"ID", "VM name", "State", "vMem", "vCPUs", "Snapshots", "Current snapshot", "Disks", "Interface", "IP addr"})
 
 	for _, vmspec := range vmspecs {
 		sID := fmt.Sprintf("%04d", vmspec.viId)
+		diskSize, derr := hf.BytesToUnit(vmspec.viDiskTotalSize, 'g', 2)
+		if derr != nil {
+			return &ce.CustomError{Title: "Unable to convert disk size units", Message: derr.Error()}
+		}
+		sDisks := fmt.Sprintf("%d (%s GB)", vmspec.viDiskCount, diskSize)
 		t.AppendRow([]any{sID, vmspec.viName, vmspec.viState, vmspec.viMem, vmspec.viCpu,
-			vmspec.viSnapshots, vmspec.viCurrentSnapshot, vmspec.viInterfaceName, vmspec.viIPaddress})
+			vmspec.viSnapshots, vmspec.viCurrentSnapshot, sDisks, vmspec.viInterfaceName, vmspec.viIPaddress})
 	}
 
 	t.SortBy([]table.SortBy{
