@@ -79,6 +79,29 @@ var vmStopAllCmd = &cobra.Command{
 	},
 }
 
+var vmResetCmd = &cobra.Command{
+	Use:     "reset",
+	Aliases: []string{"reboot"},
+	Short:   "Stop one or many VMs",
+	Args:    cobra.MinimumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vm_mgt.Reset(args); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var vmResetAllCmd = &cobra.Command{
+	Use:   "resetall",
+	Aliases: []string{"rebootall"},
+	Short: "Stop/Start all VMs at once",
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vm_mgt.ResetAll(); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 var vmConsoleCmd = &cobra.Command{
 	Use:   "console",
 	Short: "Open a console session on the VM",
@@ -118,8 +141,10 @@ var vmRemoveCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
-	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
+	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
+		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
+	vmCmd.AddCommand(vmLsCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
+		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
 
 	vmConsoleCmd.Flags().BoolVarP(&vm_mgt.ForceConsoleConnection, "force", "f", false, "Force previous session logout")
 	vmRemoveCmd.Flags().BoolVarP(&vm_mgt.KeepStorage, "keep", "k", false, "Keep VM disk after removal")
