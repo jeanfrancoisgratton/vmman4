@@ -1,16 +1,16 @@
 // vmman4
 // Written by J.F. Gratton (jean-francois@famillegratton.net)
-// Original filename : src/snapshotmanagement/snapList.go
+// Original filename : src/snapshot_mgt/snapList.go
 // original timestamp : 2026/05/31 14:57:46
 
-package snapshotmanagement
+package snapshot_mgt
 
 import (
 	"encoding/xml"
 	"fmt"
 	"os"
 	"time"
-	"vmman4/connection"
+	"vmman4/connection_mgt"
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -27,7 +27,7 @@ func ListSnapshots(vmname string) *ce.CustomError {
 	var conn *libvirt.Connect
 	var domain *libvirt.Domain
 
-	if cerr = connection.ResolveConnectionURI(); cerr != nil {
+	if cerr = connection_mgt.ResolveConnectionURI(); cerr != nil {
 		return cerr
 	}
 	if conn, cerr = shared.Connect2HVM(); cerr != nil {

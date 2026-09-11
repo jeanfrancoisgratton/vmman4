@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/connection/listInfo.go
+// Original filename: src/connection_mgt/listInfo.go
 // Original timestamp: 2026/05/20 08:09:45
 
-package connection
+package connection_mgt
 
 import (
 	"fmt"
@@ -12,15 +12,16 @@ import (
 	"strconv"
 	"strings"
 
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hf "github.com/jeanfrancoisgratton/helperFunctions/v5"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
-	"vmman4/shared"
 )
 
-// ConnList : list all connection files
+// ConnList : list all connection_mgt files
 func ConnList() *ce.CustomError {
 	var err error
 	var dirFH *os.File
@@ -65,11 +66,11 @@ func ConnList() *ce.CustomError {
 	return nil
 }
 
-// ExplainConnFile : list all information of given connection files
+// ExplainConnFile : list all information of given connection_mgt files
 func ExplainConnFile(connfiles []string) *ce.CustomError {
 	c := ConnectionType{}
 
-	fmt.Printf("\nNumber of connection files: %s\n\n", hftx.Blue(strconv.Itoa(len(connfiles))))
+	fmt.Printf("\nNumber of connection_mgt files: %s\n\n", hftx.Blue(strconv.Itoa(len(connfiles))))
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)

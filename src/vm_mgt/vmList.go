@@ -3,7 +3,7 @@
 // Original filename: src/inventory/vmList.go
 // Original timestamp: 2026/05/22 07:54:46
 
-package vmmanagement
+package vm_mgt
 
 import (
 	"fmt"
@@ -11,10 +11,11 @@ import (
 	"strconv"
 	"strings"
 
-	"vmman4/connection"
+	"vmman4/connection_mgt"
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hf "github.com/jeanfrancoisgratton/helperFunctions/v5"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
@@ -28,7 +29,7 @@ func VmInventory() *ce.CustomError {
 		err     *ce.CustomError
 	)
 
-	if err = connection.ResolveConnectionURI(); err != nil {
+	if err = connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
 	if conn, err = shared.Connect2HVM(); err != nil {
@@ -54,12 +55,17 @@ func VmInventory() *ce.CustomError {
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"ID", "VM name", "State", "vMem", "vCPUs", "Snapshots", "Current snapshot", "Interface", "IP addr"})
+	t.AppendHeader(table.Row{"ID", "VM name", "State", "vMem", "vCPUs", "Snapshots", "Current snapshot", "Disks", "Interface", "IP addr"})
 
 	for _, vmspec := range vmspecs {
 		sID := fmt.Sprintf("%04d", vmspec.viId)
-		t.AppendRow([]interface{}{sID, vmspec.viName, vmspec.viState, vmspec.viMem, vmspec.viCpu,
-			vmspec.viSnapshots, vmspec.viCurrentSnapshot, vmspec.viInterfaceName, vmspec.viIPaddress})
+		diskSize, derr := hf.BytesToUnit(vmspec.viDiskTotalSize, 'g', 2)
+		if derr != nil {
+			return &ce.CustomError{Title: "Unable to convert disk size units", Message: derr.Error()}
+		}
+		sDisks := fmt.Sprintf("%d (%s GB)", vmspec.viDiskCount, diskSize)
+		t.AppendRow([]any{sID, vmspec.viName, vmspec.viState, vmspec.viMem, vmspec.viCpu,
+			vmspec.viSnapshots, vmspec.viCurrentSnapshot, sDisks, vmspec.viInterfaceName, vmspec.viIPaddress})
 	}
 
 	t.SortBy([]table.SortBy{
@@ -101,8 +107,11 @@ func VmInventory() *ce.CustomError {
 }
 
 // GetVMlist : Returns all domains (active + inactive) on the hypervisor.
-// Moved here from inventory to break the vmmanagement -> inventory import cycle.
+// Moved here from inventory to break the vm_mgt -> inventory import cycle.
 func GetVMlist() ([]libvirt.Domain, *ce.CustomError) {
+	if cerr := connection_mgt.ResolveConnectionURI(); cerr != nil {
+		return nil, cerr
+	}
 	conn, cerr := shared.Connect2HVM()
 	if cerr != nil {
 		return nil, cerr
@@ -112,7 +121,7 @@ func GetVMlist() ([]libvirt.Domain, *ce.CustomError) {
 	return listDomains(conn)
 }
 
-// listDomains : Returns all domains (active + inactive) using an already-open connection.
+// listDomains : Returns all domains (active + inactive) using an already-open connection_mgt.
 func listDomains(conn *libvirt.Connect) ([]libvirt.Domain, *ce.CustomError) {
 	doms, err := conn.ListAllDomains(libvirt.CONNECT_LIST_DOMAINS_ACTIVE | libvirt.CONNECT_LIST_DOMAINS_INACTIVE)
 	if err != nil {

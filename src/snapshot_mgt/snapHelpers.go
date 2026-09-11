@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/snapshotmanagement/snapHelpers.go
+// Original filename: src/snapshot_mgt/snapHelpers.go
 // Original timestamp: 2026/05/26 19:33:08
 
-package snapshotmanagement
+package snapshot_mgt
 
 import (
 	"vmman4/shared"
