@@ -3,7 +3,7 @@
 %define _name vmman4
 %define _prefix /opt
 %define _bindir %{_prefix}/bin
-%define _version 0.5.0
+%define _version 0.6.0
 %define _rel 1
 %define _arch x86_64
 %define _binaryname vmman4
@@ -55,6 +55,28 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Thu Sep 10 2026 Binary package builder <builder@famillegratton.net> 0.5.0-1
+- Merge branch 'develop'
+- Merge branch 'vmmanagement' into develop
+- feat: completed vm remove
+- Merge branch 'vmmanagement' into develop
+- Completed all vm subcommands except Console
+- chore: update changelog for 0.4.0-4
+- fixed deps issue
+- Merge branch 'vmmanagement' into develop
+- chore: block windows build
+- chore: update changelog for 0.4.0-3
+- chore: doc update
+- Merge branch 'main' into develop
+- chore: update changelog for 0.4.0-3
+- bug(RPMBUILDER): fixed missing builddep
+- chore: CL update
+- chore: update changelog for 0.4.0-2
+- bug(RPMBUILDER): wrong package name
+- bug(DEBBUILDER): fixed endline issue in control file
+- Merge branch 'main' into develop
+- chore: update changelog for 0.4.0-1
+
 * Wed Sep 09 2026 Binary package builder <builder@famillegratton.net> 0.4.0-4
 - fixed deps issue
 - Merge branch 'vmmanagement' into develop

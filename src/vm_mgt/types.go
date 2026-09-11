@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/types.go
+// Original filename: src/vm_mgt/types.go
 // Original timestamp: 2026/05/27 18:46:59
 
-package vmmanagement
+package vm_mgt
 
 var ForceConsoleConnection = false
 var KeepStorage = false
@@ -18,8 +18,11 @@ type vmInfo struct {
 	viCurrentSnapshot string
 	viInterfaceName   string
 	viIPaddress       string
+	viDiskCount       uint
+	viDiskTotalSize   uint64 // bytes
 	//viHypervisor       string
 	//viOperatingSystem  string
 	//viLastStatusChange string
-	//viStoragePool      string
+	//viStoragePool string
+	//viDisks       []storagemanagement.DiskInfo
 }

@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/vmHelpers.go
+// Original filename: src/vm_mgt/vmHelpers.go
 // Original timestamp: 2026/05/26 19:08:41
 
-package vmmanagement
+package vm_mgt
 
 import (
 	"fmt"
@@ -13,7 +13,8 @@ import (
 	"time"
 
 	"vmman4/shared"
-	"vmman4/snapshotmanagement"
+	"vmman4/snapshot_mgt"
+	storagemanagement "vmman4/storage_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -178,7 +179,7 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		defer domain.Free()
 		numsnap, _ = domain.SnapshotNum(snapshotflags)
 		if numsnap > 0 {
-			if i.viCurrentSnapshot, cerr = snapshotmanagement.GetCurrentSnapshotName(conn, i.viName); cerr != nil {
+			if i.viCurrentSnapshot, cerr = snapshot_mgt.GetCurrentSnapshotName(conn, i.viName); cerr != nil {
 				return nil, cerr
 			}
 		} else {
@@ -191,8 +192,19 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		//	i.viLastStatusChange = getUptime(i.viLastStatusChange)
 		//}
 
+		// DISK INFO
+		storageInfo, serr := storagemanagement.GetStorageSpecs4VM(i.viName, conn)
+		if serr != nil {
+			return nil, serr
+		}
+		var diskTotalSize uint64
+		for _, disk := range storageInfo.Disks {
+			diskTotalSize += disk.SizeBytes
+		}
+
 		vmspec = append(vmspec, vmInfo{viId: i.viId, viName: i.viName, viState: getStateHelper(dState), viMem: specs.Memory / 1024, viCpu: specs.NrVirtCpu,
-			viSnapshots: uint(numsnap), viCurrentSnapshot: i.viCurrentSnapshot, viInterfaceName: i.viInterfaceName, viIPaddress: i.viIPaddress})
+			viSnapshots: uint(numsnap), viCurrentSnapshot: i.viCurrentSnapshot, viInterfaceName: i.viInterfaceName, viIPaddress: i.viIPaddress,
+			viDiskCount: uint(storageInfo.DiskCount), viDiskTotalSize: diskTotalSize})
 	}
 	return vmspec, nil
 }

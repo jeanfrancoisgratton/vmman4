@@ -8,8 +8,9 @@ package cmd
 import (
 	"fmt"
 
+	storagemanagement "vmman4/storage_mgt"
+
 	"github.com/spf13/cobra"
-	storagemanagement "vmman4/storageManagement"
 )
 
 var poolCmd = &cobra.Command{

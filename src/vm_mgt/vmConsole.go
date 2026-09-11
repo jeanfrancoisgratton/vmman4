@@ -1,9 +1,9 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vmmanagement/vmConsole.go
+// Original filename: src/vm_mgt/vmConsole.go
 // Original timestamp: 2026/05/27
 
-package vmmanagement
+package vm_mgt
 
 import (
 	"fmt"
@@ -12,11 +12,12 @@ import (
 	"os/signal"
 	"syscall"
 
+	"vmman4/connection_mgt"
+	"vmman4/shared"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	"golang.org/x/term"
 	"libvirt.org/go/libvirt"
-	"vmman4/connection"
-	"vmman4/shared"
 )
 
 // escapeChar is the session escape sequence (Ctrl+]), matching virsh behaviour
@@ -27,7 +28,7 @@ const escapeChar = 0x1d
 // When ForceConsoleConnection is true (the -f flag), any existing console
 // session is forcefully evicted before connecting.
 func Console(vmname string) *ce.CustomError {
-	if err := connection.ResolveConnectionURI(); err != nil {
+	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
 

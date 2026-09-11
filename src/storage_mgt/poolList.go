@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storageManagement/poolList.go
+// Original filename: src/storage_mgt/poolList.go
 // Original timestamp: 2026/05/30 14:09:25
 
 package storagemanagement
@@ -9,7 +9,7 @@ import (
 	"encoding/xml"
 	"os"
 
-	"vmman4/connection"
+	"vmman4/connection_mgt"
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -25,7 +25,7 @@ func ListStoragePools() ([]StoragePoolInfo, *ce.CustomError) {
 	var cerr *ce.CustomError
 	var conn *libvirt.Connect
 
-	if cerr = connection.ResolveConnectionURI(); cerr != nil {
+	if cerr = connection_mgt.ResolveConnectionURI(); cerr != nil {
 		return nil, cerr
 	}
 	if conn, cerr = shared.Connect2HVM(); cerr != nil {
@@ -58,20 +58,7 @@ func ListStoragePools() ([]StoragePoolInfo, *ce.CustomError) {
 		pinfo := StoragePoolInfo{Name: name, UUID: uuid}
 
 		if poolInfo, err := p.GetInfo(); err == nil {
-			switch poolInfo.State {
-			case libvirt.STORAGE_POOL_RUNNING:
-				pinfo.State = "running"
-			case libvirt.STORAGE_POOL_INACTIVE:
-				pinfo.State = "inactive"
-			case libvirt.STORAGE_POOL_BUILDING:
-				pinfo.State = "building"
-			case libvirt.STORAGE_POOL_DEGRADED:
-				pinfo.State = "degraded"
-			case libvirt.STORAGE_POOL_INACCESSIBLE:
-				pinfo.State = "inaccessible"
-			default:
-				pinfo.State = "unknown"
-			}
+			pinfo.State = poolStateString(poolInfo.State)
 		}
 
 		if xmlDesc, err := p.GetXMLDesc(0); err == nil {

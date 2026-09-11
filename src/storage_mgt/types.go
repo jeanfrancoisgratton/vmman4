@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storageManagement/types.go
+// Original filename: src/storage_mgt/types.go
 // Original timestamp: 2026/05/30 12:58:55
 
 package storagemanagement
@@ -9,10 +9,13 @@ import "encoding/xml"
 
 // DiskInfo describes a single disk attached to a VM.
 type DiskInfo struct {
-	Device     string // e.g. "vda", "sda"
-	Type       string // e.g. "file", "block", "network"
-	SourcePath string // file path, pool volume, or network source
-	SizeBytes  uint64 // logical capacity in bytes (0 if unavailable)
+	Device         string // e.g. "vda", "sda"
+	Type           string // e.g. "file", "block", "network"
+	SourcePath     string // file path, pool volume, or network source
+	SizeBytes      uint64 // logical capacity in bytes (0 if unavailable)
+	PoolName       string // owning storage pool name, or "n/a" if none
+	PoolTargetPath string // owning storage pool's target path, or "n/a" if none
+	PoolState      string // owning storage pool's state, or "n/a" if none
 }
 
 // VMStorageInfo is the result of ListVMStorage.

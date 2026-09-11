@@ -114,7 +114,7 @@ vmman vm list
 To manage a remote hypervisor over SSH, create a named connection once:
 
 ```sh
-vmman connection add
+vmman connection_mgt add
 ```
 
 You'll be prompted for a connection name, a hostname, a username, and an optional comment. This is saved as `~/.config/JFG/vmman4/<name>.json`. From then on, point any command at it with `-c`/`--connectionfile`:
