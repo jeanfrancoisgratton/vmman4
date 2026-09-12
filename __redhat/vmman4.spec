@@ -56,6 +56,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Sat Sep 12 2026 Binary package builder <builder@famillegratton.net> 0.6.0-2
+- Merge branch 'develop'
+- bug(BUILDERS): static builds workaround for missing lib functions
+- chore: update changelog for 0.6.0-1
+
 * Fri Sep 11 2026 Binary package builder <builder@famillegratton.net> 0.6.0-1
 - Merge branch 'develop'
 - Merge branch 'vmmanagement' into develop
