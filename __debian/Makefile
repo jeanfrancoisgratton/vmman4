@@ -36,7 +36,7 @@ build:
 	# copyright is documentation, not a control file: policy puts it at
 	# /usr/share/doc/<package>/copyright, and it must be 0644 there.
 	install -m 0644 copyright "$(STAGING)/usr/share/doc/$(NAME)/copyright"
-	cd $(SRCDIR) && CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid=" \
+	cd $(SRCDIR) && CGO_ENABLED=1 go build -tags libvirt_dlopen -trimpath -ldflags="-s -w -buildid=" \
 	  -o "$(CURDIR)/$(STAGING)/opt/sbin/$(BINARY)" .
 	sudo chown -R 0:0 "$(STAGING)/opt/sbin/$(BINARY)"
 	dpkg-deb -b "$(STAGING)" "$(DEB)"

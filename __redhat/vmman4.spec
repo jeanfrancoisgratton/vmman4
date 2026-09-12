@@ -4,7 +4,7 @@
 %define _prefix /opt
 %define _bindir %{_prefix}/bin
 %define _version 0.6.0
-%define _rel 1
+%define _rel 2
 %define _arch x86_64
 %define _binaryname vmman4
 
@@ -20,6 +20,7 @@ URL:        https://git.famillegratton.net:3000/devops/vmman4.git
 Source0:    %{name}-%{_version}.tar.gz
 #BuildArchitectures: x86_64
 BuildRequires: gcc, pkg-config, libvirt-devel
+Requires: libvirt-libs
 #Requires: sudo
 #Obsoletes: vmman1 > 1.140
 
@@ -32,7 +33,7 @@ Virtual Machine Manager
 %build
 cd src
 go mod download
-PATH=$PATH:/opt/go/bin CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid=" -o %{_builddir}/%{name}-%{version}/%{_binaryname} .
+PATH=$PATH:/opt/go/bin CGO_ENABLED=1 go build -tags libvirt_dlopen -trimpath -ldflags="-s -w -buildid=" -o %{_builddir}/%{name}-%{version}/%{_binaryname} .
 
 %clean
 rm -rf $RPM_BUILD_ROOT
