@@ -44,7 +44,7 @@ func RenameVM(oldName, newName string) *ce.CustomError {
 			Message: "You cannot rename " + oldName + " as this VM holds snapshots. The snapshots need to be removed, first."}
 	}
 
-	Wait4Shutdown(domain, oldName)
+	shared.Wait4Shutdown(domain, oldName)
 	if serr := domain.Rename(newName, 0); serr != nil {
 		return &ce.CustomError{Title: "Cannot rename " + oldName + " to " + newName, Message: serr.Error()}
 	}

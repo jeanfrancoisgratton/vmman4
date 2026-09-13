@@ -41,7 +41,7 @@ func RemoveVM(args []string) *ce.CustomError {
 		defer domain.Free()
 
 		// Shut the VM down, if active
-		Wait4Shutdown(domain, vmname)
+		shared.Wait4Shutdown(domain, vmname)
 		fmt.Println(vmname + " now shutdown. Proceeding to removal from inventory.")
 
 		// Storage specs must be gathered while the domain is still defined:

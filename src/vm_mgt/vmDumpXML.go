@@ -41,7 +41,7 @@ func DumpVmXML(vmname string, xmlfile string) *ce.CustomError {
 	defer domain.Free()
 
 	// Shut the VM down, if active
-	Wait4Shutdown(domain, vmname)
+	shared.Wait4Shutdown(domain, vmname)
 	data, _ := domain.GetXMLDesc(libvirt.DOMAIN_XML_SECURE | libvirt.DOMAIN_XML_INACTIVE | libvirt.DOMAIN_XML_MIGRATABLE)
 
 	file, e := os.Create(xmlfile)

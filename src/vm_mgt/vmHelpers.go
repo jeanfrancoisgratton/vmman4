@@ -22,32 +22,6 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-// Wait4Shutdown : Tries 15 seconds to gracefully shutdown the VM, if not it will shutdown forcefully
-func Wait4Shutdown(vm *libvirt.Domain, vmname string) {
-	var bIsActive = false
-	fmt.Println(hftx.InProgressSign("Waiting for VM to shutdown..."))
-	//fmt.Println("Will await that the VM " + vmname + " gracefully shuts down on " + shared.ConnectURI)
-	bIsActive, _ = vm.IsActive()
-	if bIsActive {
-		n := 15
-		vm.DestroyFlags(libvirt.DOMAIN_DESTROY_GRACEFUL)
-		for n > 0 {
-			bIsActive, _ = vm.IsActive()
-			if bIsActive {
-				n -= 1
-				time.Sleep(1 * time.Second)
-			} else {
-				n = 0
-			}
-		}
-		bIsActive, _ = vm.IsActive()
-		if bIsActive {
-			vm.DestroyFlags(libvirt.DOMAIN_DESTROY_DEFAULT)
-			fmt.Println("The VM " + vmname + " was slow to shutdown and was forcely shut down")
-		}
-	}
-}
-
 // getStateHelper : gets DomainState value and transforms it in a string
 func getStateHelper(state libvirt.DomainState) string {
 	ds := ""
