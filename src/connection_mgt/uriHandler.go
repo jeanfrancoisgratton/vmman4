@@ -13,8 +13,8 @@ import (
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 )
 
-// ResolveConnectionURI : this is where we set the connection_mgt string up
-// The connection_mgt info can be provided with -c CONNECTION_NAME or -C CONNECTION_STRING
+// ResolveConnectionURI : this is where we set the connection string up
+// The connection info can be provided with -c CONNECTION_NAME or -C CONNECTION_STRING
 func ResolveConnectionURI() *ce.CustomError {
 	// First check, we need to check the value of the -c flag
 	if shared.ConnectionFilename != "" {

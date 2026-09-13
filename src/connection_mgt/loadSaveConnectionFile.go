@@ -16,7 +16,7 @@ import (
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 )
 
-func (ct *ConnectionType) ConnSave() *ce.CustomError {
+func (ct *ConnectionType) SaveConnection() *ce.CustomError {
 	jStream, err := json.MarshalIndent(ct, "", "  ")
 	if err != nil {
 		return &ce.CustomError{Title: "Error marshaling JSON", Message: err.Error()}
