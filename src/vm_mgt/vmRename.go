@@ -16,7 +16,7 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-func Rename(oldName, newName string) *ce.CustomError {
+func RenameVM(oldName, newName string) *ce.CustomError {
 	var snapshotflags libvirt.DomainSnapshotListFlags
 	var err *ce.CustomError
 	var conn *libvirt.Connect

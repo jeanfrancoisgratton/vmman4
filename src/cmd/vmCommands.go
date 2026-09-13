@@ -29,7 +29,7 @@ var vmLsCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List all VMs",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.VmInventory(); err != nil {
+		if err := vm_mgt.ListVMs(); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -52,7 +52,7 @@ var vmStartCmd = &cobra.Command{
 	Short:   "Start one or many VMs",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.Start(args); err != nil {
+		if err := vm_mgt.StartVM(args); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -74,7 +74,7 @@ var vmStopCmd = &cobra.Command{
 	Short:   "Stop one or many VMs",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.Stop(args); err != nil {
+		if err := vm_mgt.StopVM(args); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -96,7 +96,7 @@ var vmResetCmd = &cobra.Command{
 	Short:   "Stop one or many VMs",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.Reset(args); err != nil {
+		if err := vm_mgt.ResetVM(args); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -107,7 +107,7 @@ var vmResetAllCmd = &cobra.Command{
 	Aliases: []string{"rebootall"},
 	Short:   "Stop/Start all VMs at once",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.ResetAll(); err != nil {
+		if err := vm_mgt.ResetAllVMs(); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -132,7 +132,7 @@ var vmRenameCmd = &cobra.Command{
 Also, if the VM holds any snapshot, they need to be removed before effecting the rename`,
 	Args: cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.Rename(args[0], args[1]); err != nil {
+		if err := vm_mgt.RenameVM(args[0], args[1]); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -171,7 +171,7 @@ var vmDumpXmlCmd = &cobra.Command{
 	Long:  `Shuts the VM down (if active) before dumping its inactive, migratable XML description.`,
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.XmlDump(args[0], args[1]); err != nil {
+		if err := vm_mgt.DumpVmXML(args[0], args[1]); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -184,15 +184,14 @@ var vmRemoveCmd = &cobra.Command{
 	Long:    `By default this command also removes the attached disks, unless the -k flag is passed`,
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := vm_mgt.Remove(args); err != nil {
+		if err := vm_mgt.RemoveVM(args); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(vmCmd, vmLsCmd, vmInfoCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
-		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd)
+	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStopCmd)
 	vmCmd.AddCommand(vmLsCmd, vmInfoCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
 		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd, vmSetMemCmd, vmSetVcpusCmd, vmDumpXmlCmd)
 

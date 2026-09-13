@@ -18,7 +18,7 @@ import (
 // libvirt call: https://pkg.go.dev/libvirt.org/go/libvirt#Domain.GetXMLDesc
 // TODO: more robust error handling here...
 
-func XmlDump(vmname string, xmlfile string) *ce.CustomError {
+func DumpVmXML(vmname string, xmlfile string) *ce.CustomError {
 	var conn *libvirt.Connect
 	var err *ce.CustomError
 

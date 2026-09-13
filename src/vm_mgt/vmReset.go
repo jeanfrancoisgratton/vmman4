@@ -7,10 +7,9 @@ package vm_mgt
 
 import ce "github.com/jeanfrancoisgratton/customError/v3"
 
-
 // This one is a simple one, it wraps ResetAll() over StopAll() and StartAll()
 
-func ResetAll() *ce.CustomError {
+func ResetAllVMs() *ce.CustomError {
 	if e := StopAll(); e != nil {
 		return e
 	}
@@ -20,11 +19,11 @@ func ResetAll() *ce.CustomError {
 
 // Same principle here: we wrap Reset() around Stop() and Start()
 
-func Reset(vmlist []string) *ce.CustomError {
+func ResetVM(vmlist []string) *ce.CustomError {
 
-	if e := Stop(vmlist); e != nil {
+	if e := StopVM(vmlist); e != nil {
 		return e
 	}
 
-	return Start(vmlist)
+	return StartVM(vmlist)
 }

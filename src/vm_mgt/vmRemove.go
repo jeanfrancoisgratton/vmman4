@@ -22,7 +22,7 @@ import (
 
 // This will remove the VM, and optionally leave its storage there
 
-func Remove(args []string) *ce.CustomError {
+func RemoveVM(args []string) *ce.CustomError {
 	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}

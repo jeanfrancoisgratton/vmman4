@@ -22,7 +22,7 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-func VmInventory() *ce.CustomError {
+func ListVMs() *ce.CustomError {
 	var (
 		vmspecs []vmInfo
 		conn    *libvirt.Connect
