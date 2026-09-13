@@ -14,7 +14,7 @@ import (
 )
 
 var connCmd = &cobra.Command{
-	Use:     "connection_mgt",
+	Use:     "connection",
 	Aliases: []string{"conn"},
 	Short:   "Connection subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, rm, info.`,
@@ -28,7 +28,7 @@ var connLsCmd = &cobra.Command{
 	Aliases: []string{"list"},
 	Short:   "List connection_mgt files",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := connection_mgt.ConnList(); err != nil {
+		if err := connection_mgt.ListConnections(); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -40,7 +40,7 @@ var connRmCmd = &cobra.Command{
 	Short:   "Delete connection_mgt file(s)",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := connection_mgt.ConnRemove(args); err != nil {
+		if err := connection_mgt.RemoveConnection(args); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -51,7 +51,7 @@ var connAddCmd = &cobra.Command{
 	Aliases: []string{"create"},
 	Short:   "Create an connection_mgt file",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := connection_mgt.ConnCreate(); err != nil {
+		if err := connection_mgt.CreateConnection(); err != nil {
 			fmt.Println(err.Error())
 		}
 

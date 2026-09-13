@@ -6,10 +6,14 @@
 package snapshot_mgt
 
 import (
-	"vmman4/shared"
+	"errors"
+	"strings"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
+
+	"vmman4/shared"
 )
 
 // GetCurrentSnapshotName : Gets the name of the current snapshot for a given VM
@@ -38,4 +42,30 @@ func GetCurrentSnapshotName(conn *libvirt.Connect, vmname string) (string, *ce.C
 		}
 	}
 	return currentSnapshot, nil
+}
+
+// checkoutSnapshot : looks up sname on domain and reverts the domain to it
+func checkoutSnapshot(domain *libvirt.Domain, vmname, sname string) *ce.CustomError {
+	snapshot, err := domain.SnapshotLookupByName(sname, 0)
+	if err != nil {
+		var lverr libvirt.Error
+		if errors.As(err, &lverr) {
+			if strings.HasPrefix(lverr.Message, "Domain snapshot not found") {
+				return &ce.CustomError{Title: "Snapshot not found",
+					Message: "No snapshot named " + hftx.Bold(hftx.Red(sname)) + " exists for " + hftx.Bold(hftx.Red(vmname))}
+			}
+			return &ce.CustomError{Title: "snapshot_mgt.checkoutSnapshot() failure", Message: lverr.Message}
+		}
+		return &ce.CustomError{Title: "snapshot_mgt.checkoutSnapshot() failure", Message: err.Error()}
+	}
+	defer snapshot.Free()
+
+	if err = snapshot.RevertToSnapshot(0); err != nil {
+		var lverr libvirt.Error
+		if errors.As(err, &lverr) {
+			return &ce.CustomError{Title: "Cannot revert " + vmname + " to snapshot " + sname, Message: lverr.Message}
+		}
+		return &ce.CustomError{Title: "Cannot revert " + vmname + " to snapshot " + sname, Message: err.Error()}
+	}
+	return nil
 }

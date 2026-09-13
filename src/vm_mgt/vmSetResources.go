@@ -55,7 +55,7 @@ func SetVMem(vmname string, memParams []string) *ce.CustomError {
 	}
 	defer domain.Free()
 
-	Wait4Shutdown(domain, vmname)
+	shared.Wait4Shutdown(domain, vmname)
 
 	nodeInfo, nerr := conn.GetNodeInfo()
 	if nerr != nil {
@@ -111,7 +111,7 @@ func SetVCPUs(vmname, count string) *ce.CustomError {
 	}
 	defer domain.Free()
 
-	Wait4Shutdown(domain, vmname)
+	shared.Wait4Shutdown(domain, vmname)
 
 	nodeInfo, nerr := conn.GetNodeInfo()
 	if nerr != nil {

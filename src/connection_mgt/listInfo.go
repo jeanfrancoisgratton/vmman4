@@ -21,8 +21,8 @@ import (
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
-// ConnList : list all connection_mgt files
-func ConnList() *ce.CustomError {
+// ListConnections : list all connection_mgt files
+func ListConnections() *ce.CustomError {
 	var err error
 	var dirFH *os.File
 	var finfo, fileInfos []os.FileInfo

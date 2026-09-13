@@ -18,9 +18,9 @@ import (
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 )
 
-// ConnCreate : Create a connection_mgt file; user will be prompted for relevant information,
+// CreateConnection : Create a connection_mgt file; user will be prompted for relevant information,
 // unless the --name, --host --user flags are used
-func ConnCreate() *ce.CustomError {
+func CreateConnection() *ce.CustomError {
 	ct := ConnectionType{}
 
 	fmt.Println("Please enter a connection_mgt name")
@@ -36,11 +36,11 @@ func ConnCreate() *ce.CustomError {
 		ct.Comments = hf.GetStringValFromPrompt("[OPTIONAL] Please enter a comment: ")
 	}
 
-	return ct.ConnSave()
+	return ct.SaveConnection()
 }
 
-// ConnRemove : Remove one or many connection_mgt file(s)
-func ConnRemove(connfiles []string) *ce.CustomError {
+// RemoveConnection : Remove one or many connection_mgt file(s)
+func RemoveConnection(connfiles []string) *ce.CustomError {
 	for _, connfile := range connfiles {
 		if !strings.HasSuffix(connfile, ".json") {
 			connfile += ".json"

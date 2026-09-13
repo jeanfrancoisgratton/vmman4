@@ -22,7 +22,7 @@ import (
 
 // This will remove the VM, and optionally leave its storage there
 
-func Remove(args []string) *ce.CustomError {
+func RemoveVM(args []string) *ce.CustomError {
 	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func Remove(args []string) *ce.CustomError {
 		defer domain.Free()
 
 		// Shut the VM down, if active
-		Wait4Shutdown(domain, vmname)
+		shared.Wait4Shutdown(domain, vmname)
 		fmt.Println(vmname + " now shutdown. Proceeding to removal from inventory.")
 
 		// Storage specs must be gathered while the domain is still defined:

@@ -16,8 +16,8 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-// Start : starts one or many VMs
-func Start(args []string) *ce.CustomError {
+// StartVM : starts one or many VMs
+func StartVM(args []string) *ce.CustomError {
 	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}

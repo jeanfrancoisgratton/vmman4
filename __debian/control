@@ -1,5 +1,5 @@
 Package: vmman4
-Version: 0.6.0-2
+Version: 0.7.0-1
 Architecture: amd64
 Maintainer: J.F.Gratton <jean-francois@famillegratton.net>
 Description: libvirt QEMU/KVM client

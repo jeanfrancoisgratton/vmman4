@@ -15,8 +15,8 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-// Stop : stops one or many VMs
-func Stop(args []string) *ce.CustomError {
+// StopVM : stops one or many VMs
+func StopVM(args []string) *ce.CustomError {
 	if err := connection_mgt.ResolveConnectionURI(); err != nil {
 		return err
 	}
