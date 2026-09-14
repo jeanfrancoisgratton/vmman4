@@ -27,7 +27,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftx.White("vmman v1.0.0 (2026.09.14), Go version = v" + strings.TrimPrefix(runtime.Version(), "go")))
+		fmt.Println(hftx.White("vmman v1.1.0 (2026.09.14), Go version = v" + strings.TrimPrefix(runtime.Version(), "go")))
 	},
 }
 
@@ -44,7 +44,6 @@ func init() {
 
 	rootCmd.AddCommand(versionCmd)
 
-	//rootCmd.AddCommand(clCmd)
 	rootCmd.PersistentFlags().BoolVarP(&shared.QuietOutput, "quiet", "q", false, "Suppress output")
 	rootCmd.PersistentFlags().BoolVarP(&shared.DebugMode, "debug", "D", false, "Enable debug mode")
 	rootCmd.PersistentFlags().StringVarP(&shared.ConnectionFilename, "connectionfile", "c", "", "Connection configuration file")
