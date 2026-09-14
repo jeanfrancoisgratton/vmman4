@@ -4,10 +4,12 @@ ___
 A CLI tool to manage a libvirtd-based KVM/QEMU hypervisor (local or remote, over SSH) and the virtual machines it hosts.
 
 Today, from the command line, you can:
-- list running/defined VMs, and start / stop them (one at a time or all at once)
+- create, list, start/stop/reset, rename, resize (CPU/memory), and remove VMs
+- define a VM from a JSON spec, or clone-provision one from a template with QEMU guest agent networking
 - open a console session on a VM
-- rename a VM
-- list storage pools, and inspect a VM's storage (disks/volumes)
+- create, list, revert, and remove VM snapshots
+- create, list, start/stop, and remove storage pools
+- create, list, and remove storage volumes
 - manage named connections to local or remote hypervisors
 
 Some capabilities exist in the codebase but are not yet exposed as commands — see [Roadmap](#roadmap).
@@ -24,7 +26,9 @@ Some capabilities exist in the codebase but are not yet exposed as commands — 
 - [Global flags](#global-flags)
 - [Connection operations](#conn-ops)
 - [VM operations](#vm-ops)
-- [Storage/pool operations](#storage-ops)
+- [Snapshot operations](#snap-ops)
+- [Storage pool operations](#pool-ops)
+- [Storage volume operations](#vol-ops)
 - [Shell completion](#completion-ops)
 
 [Roadmap](#roadmap)
@@ -48,11 +52,11 @@ Installing from source requires a bit more work in the sense that Go has to be i
 1. Clone/fork the repo: `git clone https://git.famillegratton.net:3000/devops/vmman4` (mirrored at `https://github.com/jeanfrancoisgratton/vmman4`)
 2. Ensure that you have the proper Go version, as stated in the `go.version` file at the root of the repo. Your Go version should be equal to or higher than the one in that file. To check, run `go version`
 3. cd to `src`, and then run `./updateBuildDeps.sh` to ensure all build dependencies are up to date; this might be overkill, but it's good hygiene
-4. Run `./build.sh`. By default, the binary is created in `/opt/bin` (check that directory's permissions ahead of running it). Examine that script if you want to tailor the output — e.g. `./build.sh ~/bin`. Building off a branch other than `main`/`develop` produces a `vmman4-<branch>` binary instead, so a feature-branch build never clobbers your main one.
+4. Run `./build.sh`. By default, the binary is created in `/opt/bin` (check that directory's permissions ahead of running it). Examine that script if you want to tailor the output — e.g. `./build.sh ~/bin`. Building off a branch other than `main`/`develop` produces a `vmman-<branch>` binary instead, so a feature-branch build never clobbers your main one.
 
 <a id="install-from-a-binary-package"></a>
 ## Install from a binary package
-The simplest way: go to the RELEASES tab of the repo, pick your format, download it, and install it through your package manager.
+The simplest way: go to the RELEASES tab of the repo, pick your format, download it, and install it through your package manager. The package is named `vmman4`; the binary it installs is named `vmman`.
 
 <a id="build-your-own-package"></a>
 ## Build your own package
@@ -99,12 +103,12 @@ Build with `CGO_ENABLED=1`; `CGO_ENABLED=0` cannot work here.
 2. Run `make build` (calls `makepkg`, reading package metadata from `PKGBUILD`), `make release` (build, refresh the pacman `repo-add` database, then upload the package and database to the `archLocal` Nexus repository), `make clean`, or `make info` to print name/version/pkgrel/arch extracted from `PKGBUILD`
 
 ### macOS
-There's no macOS package (no `.pkg`, no Homebrew formula) — `__macos/` just builds a plain `vmman4` binary. See [`__macos/README.md`](__macos/README.md) for the two-step process (`goget-macos.sh` to fetch the right Go toolchain, `build-macos.sh` to build). It's the same CGO build as everywhere else, so `libvirt` and `pkg-config` need to be available first (e.g. `brew install libvirt pkg-config`).
+There's no macOS package (no `.pkg`, no Homebrew formula) — `__macos/` just builds a plain `vmman` binary. See [`__macos/README.md`](__macos/README.md) for the two-step process (`goget-macos.sh` to fetch the right Go toolchain, `build-macos.sh` to build). It's the same CGO build as everywhere else, so `libvirt` and `pkg-config` need to be available first (e.g. `brew install libvirt pkg-config`).
 
 <a id="using-the-tool"></a>
 # Using the tool
 
-Once you have a `vmman4` binary on your `PATH` (or aliased as `vmman`), it talks to `qemu:///system` on the local machine by default — no setup needed if libvirtd is running locally and you're in the right group (e.g. `libvirt` / `kvm`) to talk to it:
+Once you have a `vmman` binary on your `PATH`, it talks to `qemu:///system` on the local machine by default — no setup needed if libvirtd is running locally and you're in the right group (e.g. `libvirt` / `kvm`) to talk to it:
 
 ```sh
 vmman vm list
@@ -114,7 +118,7 @@ vmman vm list
 To manage a remote hypervisor over SSH, create a named connection once:
 
 ```sh
-vmman connection_mgt add
+vmman conn add
 ```
 
 You'll be prompted for a connection name, a hostname, a username, and an optional comment. This is saved as `~/.config/JFG/vmman4/<name>.json`. From then on, point any command at it with `-c`/`--connectionfile`:
@@ -125,7 +129,31 @@ vmman -c myhypervisor vm list
 
 This resolves to `qemu+ssh://<user>@<host>/system` under the hood (SSH key auth is assumed — there's no password field). To bypass named connections entirely, pass a raw libvirt URI with `-C`/`--connectionuri` instead.
 
-Manage saved connections with `vmman connection ls`, `vmman connection info <name>`, and `vmman connection rm <name>`.
+Manage saved connections with `vmman conn ls`, `vmman conn info <name>`, and `vmman conn rm <name>`.
+
+## Creating a VM
+Write a JSON spec describing the domain (memory, vCPUs, disks, NICs), then define it:
+
+```sh
+vmman vm create myvm.json
+```
+
+Not sure where to start? Generate a fully annotated example instead of a real spec:
+
+```sh
+vmman vm create -s myvm.json
+```
+
+`vm create` only defines the domain — it does not start it; follow up with `vmman vm start myvm`.
+
+## Provisioning a VM from a template
+`vm provision` clones a template VM's disk and domain definition into a new, running VM, then uses the QEMU guest agent (must already be installed and running in the template) to set its hostname, network configuration, and regenerate its SSH host keys:
+
+```sh
+vmman vm provision newhost 192.168.1.50 mytemplate
+```
+
+Network defaults (storage pool, CIDR, gateway, DNS) come from an environment JSON file — see `~/.config/JFG/vmman4/env-sample.json`, or pass `-E`/`--environment` to use a different one.
 
 <a id="command-summary"></a>
 # Command summary
@@ -145,7 +173,7 @@ Other top-level commands: `vmman version` (prints the software and Go versions).
 
 <a id="conn-ops"></a>
 ## Connection operations
-`vmman connection <subcommand>` (alias: `vmman conn`)
+`vmman conn <subcommand>` (alias: `vmman connection`)
 
 | Subcommand | Aliases | Description |
 | --- | --- | --- |
@@ -161,22 +189,57 @@ Other top-level commands: `vmman version` (prints the software and Go versions).
 | Subcommand | Aliases | Description |
 | --- | --- | --- |
 | `list` | `ls` | List all VMs known to the connection |
+| `info VM` | | Show detailed information about a VM (state, memory, vCPUs, snapshots, disks, network) |
+| `create SPEC.json` | | Define a VM from a JSON spec file (`-s`/`--sample [outfile]` writes an annotated example instead) |
+| `provision HOST IP TEMPLATE` | | Clone TEMPLATE's disk and domain into a new VM, boot it, and configure it via the QEMU guest agent (`-E`/`--environment` to override the defaults file) |
 | `start VM...` | `up` | Start one or many VMs |
 | `startall` | | Start all VMs at once |
 | `stop VM...` | `down` | Stop one or many VMs |
 | `stopall` | | Stop all VMs at once |
+| `reset VM...` | `reboot` | Reset (stop, then start) one or many VMs |
+| `resetall` | `rebootall` | Reset all VMs at once |
 | `console VM` | | Open a console session on a VM (`-f`/`--force` to kick out a previous session) |
 | `rename OLD NEW` | | Rename a VM. The VM's underlying disk keeps its old name; any existing snapshots must be removed first |
+| `setmem VM MIN [MAX]` | | Set a VM's memory in MiB (overcommit is warned about, not blocked) |
+| `setvcpus VM COUNT` | `setcpu`, `setcpus` | Set a VM's vCPU count (overcommit is warned about, not blocked) |
+| `dumpxml VM FILE` | | Shut the VM down (if active), then dump its inactive, migratable XML description to FILE |
+| `rm VM...` | `remove`, `destroy`, `delete` | Remove one or more VMs. Also removes their attached disks, unless `-k`/`--keep` is passed |
 
-`list`, `start`, `startall`, `stop`, and `stopall` are also available directly off the root command (e.g. `vmman list` works the same as `vmman vm list`).
+`list`, `start`, and `stop` are also available directly off the root command (e.g. `vmman list` works the same as `vmman vm list`).
 
-<a id="storage-ops"></a>
-## Storage/pool operations
+<a id="snap-ops"></a>
+## Snapshot operations
+`vmman snapshot <subcommand>` (alias: `vmman snap`)
 
-| Command | Aliases | Description |
+| Subcommand | Aliases | Description |
 | --- | --- | --- |
-| `vmman pool list` | `vmman pool ls` | List storage pools with extended info |
-| `vmman slist VM` | `vmman sls VM` | List the storage (disks/volumes) attached to a specific VM |
+| `list VM...` | `ls` | List all snapshots for one or more VMs (`-x`/`--tree` renders the hierarchy as a tree) |
+| `create VM NAME [PARENT]` | `add` | Create a snapshot named NAME off PARENT (defaults to the current snapshot); `-d`/`--description` attaches a description |
+| `revert VM [NAME]` | `set` | Revert (set) a VM to snapshot NAME (defaults to the current snapshot) |
+| `rm VM [NAME]` | `remove` | Remove snapshot NAME (defaults to the current snapshot); `-k`/`--with-children` also deletes its children, `-K`/`--only-children` deletes only the children (mutually exclusive) |
+| `dumpxml VM [NAME]` | | Dump a snapshot's XML description (defaults to the current snapshot); `-f`/`--file` writes to a file instead of stdout |
+
+<a id="pool-ops"></a>
+## Storage pool operations
+`vmman pool <subcommand>`
+
+| Subcommand | Aliases | Description |
+| --- | --- | --- |
+| `list` | `ls` | List storage pools with extended info (state, target path, volume count/size) |
+| `create NAME PATH` | | Define, build and start a new directory-backed (`dir`-type) storage pool, marked to autostart |
+| `start NAME` | `up` | Start (activate) a defined but inactive pool |
+| `stop NAME` | `down` | Stop (deactivate) an active pool; leaves the definition and storage intact |
+| `rm NAME...` | `remove`, `destroy`, `delete` | Stop and undefine one or more pools. Also wipes their underlying storage, unless `-k`/`--keep` is passed (in which case the pool must already be stopped, or the storage is left as-is and only the definition is removed) |
+
+<a id="vol-ops"></a>
+## Storage volume operations
+`vmman vol <subcommand>` (alias: `vmman volume`)
+
+| Subcommand | Aliases | Description |
+| --- | --- | --- |
+| `list [POOL]` | `ls` | List volumes in POOL, or across every active pool when omitted |
+| `create POOL NAME SIZE_GB` | | Create a new qcow2 volume of SIZE_GB in POOL |
+| `rm POOL NAME...` | `remove`, `destroy`, `delete` | Remove one or more volumes from POOL |
 
 <a id="completion-ops"></a>
 ## Shell completion
@@ -186,6 +249,6 @@ Other top-level commands: `vmman version` (prints the software and Go versions).
 # Roadmap
 
 The following are planned but not yet wired up as CLI commands, even though groundwork for some of them already exists in the codebase:
-- **VM creation** from a JSON spec file (disks, NICs, arch/machine) — the underlying logic exists, but there's no `vmman vm create` yet
-- **Snapshot management** (list / create / remove / revert) — snapshot listing exists internally but isn't exposed as a command yet
-- **Resource editing** (CPU, memory, storage resize) for existing VMs
+- **Non-directory storage pools** — `pool create` currently only supports `dir`-type pools (a plain host directory); network/block/iSCSI-backed pools aren't exposed yet
+- **VM disk resize** for existing volumes
+- **Extended snapshot introspection** — richer per-snapshot detail (beyond `snap list --tree` and `snap dumpxml`)

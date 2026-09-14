@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
 )
 
@@ -44,6 +45,8 @@ func CloneVolume(conn *libvirt.Connect, poolName, srcVolName, destVolName string
     <format type="qcow2"/>
   </target>
 </volume>`, destVolName, srcInfo.Capacity)
+
+	fmt.Println(hftx.InProgressSign("Cloning "+hftx.Bold(srcVolName)+" to "+hftx.Bold(destVolName)) + ". This might take a while...")
 
 	destVol, err := pool.StorageVolCreateXMLFrom(destXML, srcVol, 0)
 	if err != nil {

@@ -2,7 +2,7 @@
 # Packager: Package builder <builder@famillegratton.net>
 
 pkgname=vmman4
-pkgver=0.8.1
+pkgver=1.0.0
 pkgrel=1
 pkgdesc="QEMU/KVM virtual machines manager"
 arch=('x86_64')
@@ -14,7 +14,7 @@ depends=('libvirt')
 
 options=('!debug')
 
-_binaryname='vmman4'
+_binaryname='vmman'
 _builddir="${pkgname}-${pkgver}"
 
 install=vmman4.install

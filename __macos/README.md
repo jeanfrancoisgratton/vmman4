@@ -48,13 +48,13 @@ table). On macOS that means `libvirt` and `pkg-config` need to be on hand
 (e.g. via Homebrew: `brew install libvirt pkg-config`) before running this
 script.
 
-`build-macos.sh` drops the binary at `/opt/sbin/vmman4` by default — the
+`build-macos.sh` drops the binary at `/opt/bin/vmman` by default — the
 same install path every other platform this project packages for uses. It
 works no matter which directory you run it from; it finds the Go module
 (`../src`) relative to its own location, not your current directory.
 
 If you're not on `main`/`develop`, the binary is named
-`vmman4-<branch>` instead, so a build off a feature branch never
+`vmman-<branch>` instead, so a build off a feature branch never
 overwrites your main build.
 
 Useful flags:
@@ -68,7 +68,7 @@ Useful flags:
 ## 3. Confirm it
 
 ```sh
-/opt/sbin/vmman4 version
+/opt/bin/vmman version
 ```
 
 From here on, follow [`../docs/RUNNING.md`](../docs/RUNNING.md) to configure
