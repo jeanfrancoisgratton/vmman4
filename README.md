@@ -9,8 +9,9 @@ Today, from the command line, you can:
 - open a console session on a VM
 - create, list, revert, and remove VM snapshots
 - create, list, start/stop, and remove storage pools
-- create, list, and remove storage volumes
+- create, list, attach, and remove storage volumes
 - manage named connections to local or remote hypervisors
+- define named clusters of VMs (on a given hypervisor) and start/stop/reset them, or revert every node to a snapshot, as a group
 
 Some capabilities exist in the codebase but are not yet exposed as commands — see [Roadmap](#roadmap).
 
@@ -29,6 +30,7 @@ Some capabilities exist in the codebase but are not yet exposed as commands — 
 - [Snapshot operations](#snap-ops)
 - [Storage pool operations](#pool-ops)
 - [Storage volume operations](#vol-ops)
+- [Cluster operations](#cluster-ops)
 - [Shell completion](#completion-ops)
 
 [Roadmap](#roadmap)
@@ -239,7 +241,26 @@ Other top-level commands: `vmman version` (prints the software and Go versions).
 | --- | --- | --- |
 | `list [POOL]` | `ls` | List volumes in POOL, or across every active pool when omitted |
 | `create POOL NAME SIZE_GB` | | Create a new qcow2 volume of SIZE_GB in POOL |
+| `attach VM POOL NAME` | | Attach an existing volume to VM as a new virtio disk, on the next free `vd*` target device. VM is shut down first (gracefully, then forcefully after 15s) if it's running, since the disk is attached to the persistent, inactive domain config |
 | `rm POOL NAME...` | `remove`, `destroy`, `delete` | Remove one or more volumes from POOL |
+
+<a id="cluster-ops"></a>
+## Cluster operations
+`vmman cluster <subcommand>`
+
+A cluster is just a named group of VM node names, saved to `~/.config/JFG/vmman4/clusters.json` under the hypervisor implied by `-c`/`--connectionfile` (defaults to the key `local` when `-c` is omitted). Cluster subcommands act on that node list by delegating to the equivalent `vm`/`snapshot` operation for every node in turn.
+
+| Subcommand | Aliases | Description |
+| --- | --- | --- |
+| `ls` | `list` | Pretty-print the contents of `clusters.json` |
+| `define NAME NODE...` | | Define (or, if it already exists for this hypervisor, replace) a cluster's node list |
+| `remove NAME` | `rm` | Remove a cluster's definition (the hypervisor key itself is kept even if empty) |
+| `start NAME` | `up` | Start every node in a cluster |
+| `stop NAME` | `down` | Stop every node in a cluster |
+| `reset NAME` | `reboot` | Stop then start every node in a cluster |
+| `NAME snaprev [SNAPSHOT]` | `NAME revert [SNAPSHOT]` | Revert every node in a cluster to SNAPSHOT (defaults to each node's current snapshot) |
+
+The last row isn't a real subcommand — it's how you address `vmman cluster CLUSTER_NAME snaprev [SNAPSHOT_NAME]` at the shell. Cobra only routes to `ls`/`define`/`remove`/`start`/`stop`/`reset` when the first argument matches one of those names, so anything else falls through to this snapshot-revert dispatcher, with the first argument taken as the cluster name. This means a cluster literally named `ls`, `define`, `remove`, `start`, `up`, `stop`, `down`, `reset`, or `reboot` can never be reverted this way, since cobra will always treat that name as the matching subcommand instead.
 
 <a id="completion-ops"></a>
 ## Shell completion
