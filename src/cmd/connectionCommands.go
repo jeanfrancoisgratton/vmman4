@@ -14,8 +14,8 @@ import (
 )
 
 var connCmd = &cobra.Command{
-	Use:     "connection",
-	Aliases: []string{"conn"},
+	Use:     "conn",
+	Aliases: []string{"connection"},
 	Short:   "Connection subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, rm, info.`,
 	Run: func(cmd *cobra.Command, args []string) {

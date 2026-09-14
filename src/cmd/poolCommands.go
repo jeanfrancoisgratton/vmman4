@@ -8,7 +8,7 @@ package cmd
 import (
 	"fmt"
 
-	storagemanagement "vmman4/storage_mgt"
+	"vmman4/storagepool_mgt"
 
 	"github.com/spf13/cobra"
 )
@@ -28,7 +28,7 @@ var poolLsCmd = &cobra.Command{
 	Example: "vmman pool list",
 	Short:   "Gives extended information about the storage pools",
 	Run: func(cmd *cobra.Command, args []string) {
-		if _, err := storagemanagement.ListStoragePools(); err != nil {
+		if _, err := storagepool_mgt.ListStoragePools(); err != nil {
 			fmt.Println(err.Error())
 		}
 	},

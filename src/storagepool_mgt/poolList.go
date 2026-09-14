@@ -1,16 +1,15 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storage_mgt/poolList.go
-// Original timestamp: 2026/05/30 14:09:25
+// Original filename: src/storagepool_mgt/poolList.go
 
-package storagemanagement
+package storagepool_mgt
 
 import (
-	"encoding/xml"
 	"os"
 
 	"vmman4/connection_mgt"
 	"vmman4/shared"
+	"vmman4/volume_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hf "github.com/jeanfrancoisgratton/helperFunctions/v5"
@@ -58,15 +57,10 @@ func ListStoragePools() ([]StoragePoolInfo, *ce.CustomError) {
 		pinfo := StoragePoolInfo{Name: name, UUID: uuid}
 
 		if poolInfo, err := p.GetInfo(); err == nil {
-			pinfo.State = poolStateString(poolInfo.State)
+			pinfo.State = shared.PoolStateString(poolInfo.State)
 		}
 
-		if xmlDesc, err := p.GetXMLDesc(0); err == nil {
-			var px poolXML
-			if xml.Unmarshal([]byte(xmlDesc), &px) == nil {
-				pinfo.TargetPath = px.Target.Path
-			}
-		}
+		pinfo.TargetPath = shared.PoolTargetPath(&p)
 
 		if pinfo.State == "running" {
 			if vols, err := p.ListAllStorageVolumes(0); err == nil {
@@ -78,7 +72,7 @@ func ListStoragePools() ([]StoragePoolInfo, *ce.CustomError) {
 					if vi, err := v.GetInfo(); err == nil {
 						vcap = vi.Capacity
 					}
-					pinfo.Volumes = append(pinfo.Volumes, VolumeInfo{
+					pinfo.Volumes = append(pinfo.Volumes, volume_mgt.VolumeInfo{
 						Name:      vname,
 						Path:      vpath,
 						SizeBytes: vcap,

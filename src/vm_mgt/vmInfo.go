@@ -14,7 +14,7 @@ import (
 	"vmman4/connection_mgt"
 	"vmman4/shared"
 	"vmman4/snapshot_mgt"
-	storagemanagement "vmman4/storage_mgt"
+	"vmman4/volume_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hf "github.com/jeanfrancoisgratton/helperFunctions/v5"
@@ -77,7 +77,7 @@ func VmInfo(vmname string) *ce.CustomError {
 		}
 	}
 
-	storageInfo, cerr := storagemanagement.GetStorageSpecs4VM(vmname, conn)
+	storageInfo, cerr := volume_mgt.GetStorageSpecs4VM(vmname, conn)
 	if cerr != nil {
 		return cerr
 	}

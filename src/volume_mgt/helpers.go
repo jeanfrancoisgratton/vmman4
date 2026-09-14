@@ -1,33 +1,14 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storage_mgt/helpers.go
-// Original timestamp: 2026/05/30 13:00:10
+// Original filename: src/volume_mgt/helpers.go
 
-package storagemanagement
+package volume_mgt
 
 import (
-	"encoding/xml"
+	"vmman4/shared"
 
 	"libvirt.org/go/libvirt"
 )
-
-// poolStateString maps a libvirt storage pool state to its display string.
-func poolStateString(state libvirt.StoragePoolState) string {
-	switch state {
-	case libvirt.STORAGE_POOL_RUNNING:
-		return "running"
-	case libvirt.STORAGE_POOL_INACTIVE:
-		return "inactive"
-	case libvirt.STORAGE_POOL_BUILDING:
-		return "building"
-	case libvirt.STORAGE_POOL_DEGRADED:
-		return "degraded"
-	case libvirt.STORAGE_POOL_INACCESSIBLE:
-		return "inaccessible"
-	default:
-		return "unknown"
-	}
-}
 
 // resolveVolumeInfo tries to obtain a volume's logical capacity along with
 // its owning storage pool's name, target path, and state. It first attempts
@@ -65,13 +46,10 @@ func resolveVolumeInfo(conn *libvirt.Connect, path, poolName, volName string) (s
 		pName = name
 	}
 	if poolInfo, err := pool.GetInfo(); err == nil {
-		pState = poolStateString(poolInfo.State)
+		pState = shared.PoolStateString(poolInfo.State)
 	}
-	if xmlDesc, err := pool.GetXMLDesc(0); err == nil {
-		var px poolXML
-		if xml.Unmarshal([]byte(xmlDesc), &px) == nil && px.Target.Path != "" {
-			pTargetPath = px.Target.Path
-		}
+	if tp := shared.PoolTargetPath(pool); tp != "" {
+		pTargetPath = tp
 	}
 
 	return

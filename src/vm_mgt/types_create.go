@@ -26,6 +26,12 @@ type VMSpec struct {
 		VolumeName string `json:"volume"` // volume name inside that pool
 		DeviceName string `json:"device"` // e.g. "vda"
 		Bus        string `json:"bus"`    // e.g. "virtio", "ide", "scsi"
+
+		// SizeGB is the volume's capacity, in GiB. It is only read -- and only
+		// required -- when VolumeName does not already exist in PoolName: in
+		// that case a new qcow2 volume of this size is created. If the volume
+		// already exists, SizeGB is ignored and the existing volume is used as-is.
+		SizeGB float64 `json:"size_gb,omitempty"`
 	} `json:"disks"`
 
 	Networks []struct {

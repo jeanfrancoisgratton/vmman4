@@ -177,6 +177,53 @@ var vmDumpXmlCmd = &cobra.Command{
 	},
 }
 
+var vmCreateCmd = &cobra.Command{
+	Use:   "create <spec.json>",
+	Short: "Create (define) a VM from a JSON spec file",
+	Long: `Reads a VMSpec JSON file and defines the domain on the target hypervisor. The VM is not started; use 'vm start' to boot it.
+
+Pass -s/--sample [outfile] instead of a real spec file to generate a fully annotated example spec (defaults to vmspec.sample.json) -- useful if you're not familiar with libvirt's concepts (pools, volumes, networks, etc).`,
+	Args: cobra.MaximumNArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		if vm_mgt.SampleMode {
+			dest := "vmspec.sample.json"
+			if len(args) == 1 {
+				dest = args[0]
+			}
+			if err := vm_mgt.WriteSample(dest); err != nil {
+				fmt.Println(err.Error())
+			}
+			return
+		}
+		if len(args) != 1 {
+			fmt.Println("Usage: vm create <spec.json>  (or: vm create -s [outfile] to generate a sample)")
+			return
+		}
+		if err := vm_mgt.CreateVM(args[0]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var vmProvisionCmd = &cobra.Command{
+	Use:   "provision TARGET_HOSTNAME IP_ADDRESS TEMPLATE_NAME",
+	Short: "Clone a template VM into a new, network-provisioned VM",
+	Long: `Clones TEMPLATE_NAME's disk (TEMPLATE_NAME.qcow2) and domain definition into a
+new VM named TARGET_HOSTNAME, boots it, then uses the QEMU guest agent
+(must already be installed and running in the template) to set its hostname
+and network configuration and regenerate its SSH host keys.
+
+Network defaults (storage pool, CIDR, gateway, DNS) come from an environment
+JSON file -- see ~/.config/JFG/vmman4/env-sample.json for a baseline; pass
+-E to use a file other than the default ~/.config/JFG/vmman4/env.json.`,
+	Args: cobra.ExactArgs(3),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := vm_mgt.ProvisionVM(args[0], args[1], args[2], vm_mgt.EnvFile); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 var vmRemoveCmd = &cobra.Command{
 	Use:     "rm",
 	Aliases: []string{"remove", "destroy", "delete"},
@@ -192,9 +239,11 @@ var vmRemoveCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(vmCmd, vmLsCmd, vmStartCmd, vmStopCmd)
-	vmCmd.AddCommand(vmLsCmd, vmInfoCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
+	vmCmd.AddCommand(vmLsCmd, vmInfoCmd, vmCreateCmd, vmProvisionCmd, vmStartCmd, vmStartAllCmd, vmStopCmd, vmStopAllCmd, vmResetCmd,
 		vmResetAllCmd, vmConsoleCmd, vmRenameCmd, vmRemoveCmd, vmSetMemCmd, vmSetVcpusCmd, vmDumpXmlCmd)
 
 	vmConsoleCmd.Flags().BoolVarP(&vm_mgt.ForceConsoleConnection, "force", "f", false, "Force previous session logout")
 	vmRemoveCmd.Flags().BoolVarP(&vm_mgt.KeepStorage, "keep", "k", false, "Keep VM disk after removal")
+	vmCreateCmd.Flags().BoolVarP(&vm_mgt.SampleMode, "sample", "s", false, "Write an annotated sample spec file instead of creating a VM")
+	vmProvisionCmd.Flags().StringVarP(&vm_mgt.EnvFile, "environment", "E", "", "Environment file (default: ~/.config/JFG/vmman4/env.json)")
 }
