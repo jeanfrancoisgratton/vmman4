@@ -1,9 +1,8 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storage_mgt/storageSpecs.go
-// Original timestamp: 2026/09/10
+// Original filename: src/volume_mgt/storageSpecs.go
 
-package storagemanagement
+package volume_mgt
 
 import (
 	"encoding/xml"

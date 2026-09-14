@@ -1,9 +1,8 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storage_mgt/types.go
-// Original timestamp: 2026/05/30 12:58:55
+// Original filename: src/volume_mgt/types.go
 
-package storagemanagement
+package volume_mgt
 
 import "encoding/xml"
 
@@ -18,20 +17,11 @@ type DiskInfo struct {
 	PoolState      string // owning storage pool's state, or "n/a" if none
 }
 
-// VMStorageInfo is the result of ListVMStorage.
+// VMStorageInfo is the result of GetStorageSpecs4VM.
 type VMStorageInfo struct {
 	DomainName string
 	DiskCount  int
 	Disks      []DiskInfo
-}
-
-// StoragePoolInfo describes a single libvirt storage pool.
-type StoragePoolInfo struct {
-	Name       string
-	UUID       string
-	State      string // "running", "inactive", …
-	TargetPath string // mount point / directory (empty for network pools)
-	Volumes    []VolumeInfo
 }
 
 // VolumeInfo describes a volume inside a storage pool.
@@ -70,13 +60,4 @@ type diskSource struct {
 type diskTarget struct {
 	Dev string `xml:"dev,attr"`
 	Bus string `xml:"bus,attr"`
-}
-
-type poolXML struct {
-	XMLName xml.Name      `xml:"pool"`
-	Target  poolTargetXML `xml:"target"`
-}
-
-type poolTargetXML struct {
-	Path string `xml:"path"`
 }

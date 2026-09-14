@@ -14,7 +14,7 @@ import (
 
 	"vmman4/shared"
 	"vmman4/snapshot_mgt"
-	storagemanagement "vmman4/storage_mgt"
+	"vmman4/volume_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -167,7 +167,7 @@ func collectInfo(conn *libvirt.Connect) ([]vmInfo, *ce.CustomError) {
 		//}
 
 		// DISK INFO
-		storageInfo, serr := storagemanagement.GetStorageSpecs4VM(i.viName, conn)
+		storageInfo, serr := volume_mgt.GetStorageSpecs4VM(i.viName, conn)
 		if serr != nil {
 			return nil, serr
 		}

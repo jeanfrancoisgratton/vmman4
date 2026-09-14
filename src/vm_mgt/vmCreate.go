@@ -10,15 +10,23 @@ import (
 	"fmt"
 	"os"
 
+	"vmman4/connection_mgt"
+	"vmman4/shared"
+	"vmman4/volume_mgt"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
 )
 
 // ─── Public entry point ───────────────────────────────────────────────────────
 
-// Create reads a VMSpec from a JSON file, resolves all host-specific parameters
-// (emulator binary, arch, machine type) via libvirt's domain capabilities API,
-// and defines the domain. The VM is NOT started; call dom.Create() to boot it.
+// CreateVM resolves the connection_mgt URI (local or remote hypervisor, same as every
+// other vm_mgt command), reads a VMSpec from a JSON file, and defines the domain
+// on that hypervisor. The VM is NOT started; use `vm start` to boot it.
+//
+// Each entry in "disks" may reference an existing volume (used as-is) or a
+// volume to be created (requires "size_gb"); see buildDisksXML.
 //
 // Minimal JSON spec — arch, machine, and os_xml are all optional:
 //
@@ -27,14 +35,38 @@ import (
 //	  "memory_mb": 2048,
 //	  "vcpus":     2,
 //	  "disks": [
-//	    { "pool": "default", "volume": "my-vm.qcow2", "device": "vda", "bus": "virtio" }
+//	    { "pool": "default", "volume": "my-vm.qcow2", "device": "vda", "bus": "virtio", "size_gb": 20 }
 //	  ],
 //	  "networks": [
 //	    { "source": "default", "model": "virtio" }
 //	  ]
 //	}
 
-func CreateVM(conn *libvirt.Connect, specFile string) (*libvirt.Domain, *ce.CustomError) {
+func CreateVM(specFile string) *ce.CustomError {
+	if err := connection_mgt.ResolveConnectionURI(); err != nil {
+		return err
+	}
+	conn, err := shared.Connect2HVM()
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	dom, cerr := defineDomain(conn, specFile)
+	if cerr != nil {
+		return cerr
+	}
+	defer dom.Free()
+
+	name, _ := dom.GetName()
+	fmt.Println(hftx.EnabledSign(name + hftx.Green(" DEFINED")))
+	return nil
+}
+
+// defineDomain reads a VMSpec from a JSON file, resolves all host-specific parameters
+// (emulator binary, arch, machine type) via libvirt's domain capabilities API,
+// and defines the domain on the given connection_mgt.
+func defineDomain(conn *libvirt.Connect, specFile string) (*libvirt.Domain, *ce.CustomError) {
 	spec, cerr := loadSpec(specFile)
 	if cerr != nil {
 		return nil, cerr
@@ -196,7 +228,9 @@ func getDomainCaps(conn *libvirt.Connect, arch, machine string) (*domainCapsXML,
 }
 
 // buildDisksXML resolves each disk's volume path from its pool and assembles
-// the <disk> XML elements.
+// the <disk> XML elements. A disk whose volume does not yet exist in the pool
+// is created as a new qcow2 volume -- 'size_gb' is then mandatory. A disk
+// whose volume already exists is attached as-is, and 'size_gb' is ignored.
 func buildDisksXML(conn *libvirt.Connect, spec *VMSpec) (string, *ce.CustomError) {
 	var out string
 
@@ -219,9 +253,17 @@ func buildDisksXML(conn *libvirt.Connect, spec *VMSpec) (string, *ce.CustomError
 		vol, err := pool.LookupStorageVolByName(d.VolumeName)
 		pool.Free()
 		if err != nil {
-			return "", &ce.CustomError{
-				Title:   fmt.Sprintf("buildDisksXML: volume %q not found in pool %q", d.VolumeName, d.PoolName),
-				Message: err.Error(),
+			// Volume doesn't exist yet -- create it. A size is mandatory in this case.
+			if d.SizeGB <= 0 {
+				return "", &ce.CustomError{
+					Title:   fmt.Sprintf("buildDisksXML: disk[%d] volume %q does not exist in pool %q", i, d.VolumeName, d.PoolName),
+					Message: "'size_gb' is required to create a new volume",
+				}
+			}
+			var cerr *ce.CustomError
+			vol, cerr = volume_mgt.CreateVolume(conn, d.PoolName, d.VolumeName, d.SizeGB)
+			if cerr != nil {
+				return "", cerr
 			}
 		}
 

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 	"vmman4/connection_mgt"
-	storagemanagement "vmman4/storage_mgt"
+	"vmman4/volume_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -48,7 +48,7 @@ func RemoveVM(args []string) *ce.CustomError {
 		// UndefineFlags() below removes it from libvirt's inventory, and
 		// GetStorageSpecs4VM looks the domain up by name.
 		if !KeepStorage {
-			storageInfo, e := storagemanagement.GetStorageSpecs4VM(vmname, conn)
+			storageInfo, e := volume_mgt.GetStorageSpecs4VM(vmname, conn)
 			if e != nil {
 				return e
 			}
@@ -76,7 +76,7 @@ func RemoveVM(args []string) *ce.CustomError {
 // This goes through libvirt's storage APIs (rather than a local os.Remove) so that
 // removal happens on the actual host owning the connection_mgt, not on the machine running
 // vmman4 -- which matters when operating against a remote hypervisor.
-func removeStorage(conn *lv.Connect, info []storagemanagement.DiskInfo) *ce.CustomError {
+func removeStorage(conn *lv.Connect, info []volume_mgt.DiskInfo) *ce.CustomError {
 	if len(info) == 0 {
 		return nil
 	}

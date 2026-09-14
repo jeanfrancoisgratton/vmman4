@@ -7,6 +7,7 @@ package vm_mgt
 
 var ForceConsoleConnection = false
 var KeepStorage = false
+var SampleMode = false
 
 type vmInfo struct {
 	viId              uint
@@ -24,5 +25,5 @@ type vmInfo struct {
 	//viOperatingSystem  string
 	//viLastStatusChange string
 	//viStoragePool string
-	//viDisks       []storagemanagement.DiskInfo
+	//viDisks       []volume_mgt.DiskInfo
 }
