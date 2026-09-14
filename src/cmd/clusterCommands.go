@@ -18,8 +18,9 @@ import (
 // NOTE: a cluster literally named "ls", "define", "remove", "start", "up", "stop", "down", "reset" or
 // "reboot" can never reach this path -- cobra will always treat it as the matching subcommand instead.
 var clusterCmd = &cobra.Command{
-	Use:   "cluster",
-	Short: "Cluster subcommands",
+	Use:     "cluster",
+	Example: "vmman cluster ls\nvmman cluster cluster1 snaprev baseline",
+	Short:   "Cluster subcommands",
 	Long: `You need to provide one of the subcommands: ls, define, remove, start, stop, reset.
 To revert a cluster's nodes to a snapshot: vmman cluster CLUSTER_NAME snaprev [SNAPSHOT_NAME]`,
 	Run: func(cmd *cobra.Command, args []string) {

@@ -17,15 +17,17 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "vmman",
-	Short: "Virtual Machine Management Tool",
+	Use:     "vmman",
+	Example: "vmman vm list\nvmman -c myhypervisor vm list",
+	Short:   "Virtual Machine Management Tool",
 	Long: `This tool allows you to manage your VM farm.
 With it you can start, stop, snapshot, snapshot-revert, create or delete VMs.`,
 }
 
 var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Shows the software version",
+	Use:     "version",
+	Example: "vmman version",
+	Short:   "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(hftx.White("vmman v1.1.0 (2026.09.14), Go version = v" + strings.TrimPrefix(runtime.Version(), "go")))
 	},

@@ -14,9 +14,10 @@ import (
 )
 
 var poolCmd = &cobra.Command{
-	Use:   "pool",
-	Short: "Storage pool subcommands",
-	Long:  `You need to provide one of the subcommands: ls, create, start, stop, rm, info.`,
+	Use:     "pool",
+	Example: "vmman pool list",
+	Short:   "Storage pool subcommands",
+	Long:    `You need to provide one of the subcommands: ls, create, start, stop, rm, info.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("You need to provide one of the following subcommands: ls, create, start, stop, rm or info")
 	},

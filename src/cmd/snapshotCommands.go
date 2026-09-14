@@ -15,6 +15,7 @@ import (
 var snapCmd = &cobra.Command{
 	Use:     "snapshot",
 	Aliases: []string{"snap"},
+	Example: "vmman snap list VM",
 	Short:   "Snapshot subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, rm, revert`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -28,7 +29,7 @@ var snapLsCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
 	Example: "vmman snap list VM",
-	Short:   "Lists all snapshots for a give",
+	Short:   "Lists all snapshots for one or more VMs",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := snapshot_mgt.ListSnapshots(args, snapLsAsTree); err != nil {

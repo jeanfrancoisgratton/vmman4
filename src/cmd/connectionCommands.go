@@ -16,6 +16,7 @@ import (
 var connCmd = &cobra.Command{
 	Use:     "conn",
 	Aliases: []string{"connection"},
+	Example: "vmman conn ls",
 	Short:   "Connection subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, rm, info.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -26,7 +27,8 @@ var connCmd = &cobra.Command{
 var connLsCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list"},
-	Short:   "List connection_mgt files",
+	Example: "vmman conn ls",
+	Short:   "List saved connection files",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := connection_mgt.ListConnections(); err != nil {
 			fmt.Println(err.Error())
@@ -35,9 +37,10 @@ var connLsCmd = &cobra.Command{
 }
 
 var connRmCmd = &cobra.Command{
-	Use:     "rm",
+	Use:     "rm <NAME...>",
 	Aliases: []string{"del", "remove"},
-	Short:   "Delete connection_mgt file(s)",
+	Example: "vmman conn rm myhypervisor",
+	Short:   "Delete one or more connection files",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := connection_mgt.RemoveConnection(args); err != nil {
@@ -49,7 +52,9 @@ var connRmCmd = &cobra.Command{
 var connAddCmd = &cobra.Command{
 	Use:     "add",
 	Aliases: []string{"create"},
-	Short:   "Create an connection_mgt file",
+	Example: "vmman conn add\nvmman conn add --host 192.168.1.10 --username root --comments \"lab hypervisor\"",
+	Short:   "Interactively create a connection file",
+	Long:    `Prompts for a connection name, host, username, and an optional comment, then saves the result to ~/.config/JFG/vmman4/<name>.json. Pass --host, --username, and/or --comments to pre-fill any of those and skip their prompt.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := connection_mgt.CreateConnection(); err != nil {
 			fmt.Println(err.Error())
@@ -59,11 +64,11 @@ var connAddCmd = &cobra.Command{
 }
 
 var connInfoCmd = &cobra.Command{
-	Use:     "info",
+	Use:     "info <NAME...>",
 	Aliases: []string{"explain"},
-	Example: "vmman conn info FILE1[.json] FILE2[.json]... FILEn[.json]",
-	Short:   "Prints the connection_mgt FILE[12n] information",
-	Long:    `You can list as many connection_mgt files as you wish, here`,
+	Example: "vmman conn info myhypervisor\nvmman conn info myhypervisor1 myhypervisor2",
+	Short:   "Print the details of one or more connection files",
+	Long:    `You can list as many connection files as you wish, here`,
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := connection_mgt.ExplainConnFile(args); err != nil {
@@ -77,9 +82,9 @@ func init() {
 	connCmd.AddCommand(connLsCmd, connRmCmd, connAddCmd, connInfoCmd)
 
 	//connAddCmd.Flags().StringVar(&connection_mgt.ConnectionName, "connection_mgt", "", "Target hypervisor")
-	connAddCmd.Flags().StringVar(&connection_mgt.ConnectionHost, "host", "", "Environment file.")
-	connAddCmd.Flags().StringVar(&connection_mgt.ConnectionUser, "username", "", "Make vmman multi hypervisor-aware")
-	connAddCmd.Flags().StringVar(&connection_mgt.ConnectionComment, "comments", "", "Make vmman multi hypervisor-aware")
+	connAddCmd.Flags().StringVar(&connection_mgt.ConnectionHost, "host", "", "Hostname or IP of the remote hypervisor (skips the host prompt)")
+	connAddCmd.Flags().StringVar(&connection_mgt.ConnectionUser, "username", "", "SSH username for the remote hypervisor (skips the username prompt)")
+	connAddCmd.Flags().StringVar(&connection_mgt.ConnectionComment, "comments", "", "Optional free-text comment for the connection (skips the comment prompt)")
 	//// if one the above flag is set, the 3 others have to be set as well
 	//connAddCmd.MarkFlagsRequiredTogether("host", "username", "comments")
 }

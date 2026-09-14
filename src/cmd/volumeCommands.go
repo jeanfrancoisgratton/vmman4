@@ -16,6 +16,7 @@ import (
 var volCmd = &cobra.Command{
 	Use:     "vol",
 	Aliases: []string{"volume"},
+	Example: "vmman vol list",
 	Short:   "Storage volume subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, rm.`,
 	Run: func(cmd *cobra.Command, args []string) {
