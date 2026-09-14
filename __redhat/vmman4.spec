@@ -56,6 +56,12 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 0.8.1-1
+- Merge branch 'develop'
+- Version bump
+- enhancement: sample files are now located in the config dir
+- chore: update changelog for 0.8.0-1
+
 * Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 0.8.0-1
 - Merge branch 'develop'
 - version bump before testing
