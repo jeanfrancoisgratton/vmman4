@@ -56,6 +56,14 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 1.1.0-1
+- chore: doc update, version bump
+- feat: new volume attach command
+- enhancement: more help in all commands -h
+- feat: added the cluster subcommand
+- Merge branch 'main' into develop
+- chore: update changelog for 1.0.0-1
+
 * Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 1.0.0-1
 - Merge branch 'develop'
 - feat: completed pool and vol subcommands
