@@ -56,6 +56,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 1.0.0-1
+- Merge branch 'develop'
+- feat: completed pool and vol subcommands
+- chore: update changelog for 0.8.1-1
+
 * Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 0.8.1-1
 - Merge branch 'develop'
 - Version bump
