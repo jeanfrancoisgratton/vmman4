@@ -182,11 +182,11 @@ var vmCreateCmd = &cobra.Command{
 	Short: "Create (define) a VM from a JSON spec file",
 	Long: `Reads a VMSpec JSON file and defines the domain on the target hypervisor. The VM is not started; use 'vm start' to boot it.
 
-Pass -s/--sample [outfile] instead of a real spec file to generate a fully annotated example spec (defaults to vmspec.sample.json) -- useful if you're not familiar with libvirt's concepts (pools, volumes, networks, etc).`,
+Pass -s/--sample [outfile] instead of a real spec file to generate a fully annotated example spec (defaults to ~/.config/JFG/vmman4/vmspec.sample.json) -- useful if you're not familiar with libvirt's concepts (pools, volumes, networks, etc).`,
 	Args: cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if vm_mgt.SampleMode {
-			dest := "vmspec.sample.json"
+			dest := vm_mgt.DefaultSampleFile()
 			if len(args) == 1 {
 				dest = args[0]
 			}

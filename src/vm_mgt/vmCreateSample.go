@@ -7,6 +7,7 @@ package vm_mgt
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -121,11 +122,20 @@ const sampleSpec = `{
 }
 `
 
+// DefaultSampleFile returns ~/.config/JFG/vmman4/vmspec.sample.json, the
+// default destination for 'vm create -s' when no outfile is given.
+func DefaultSampleFile() string {
+	return filepath.Join(os.Getenv("HOME"), ".config", "JFG", "vmman4", "vmspec.sample.json")
+}
+
 // WriteSample writes the annotated example spec above to destPath, so a user
 // unfamiliar with libvirt has a fully-documented starting point. The file it
 // produces is illustrative, not valid JSON -- comments must be stripped and
 // unwanted fields removed before it can be passed to 'vm create'.
 func WriteSample(destPath string) *ce.CustomError {
+	if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil {
+		return &ce.CustomError{Title: "WriteSample: cannot create destination directory", Message: err.Error()}
+	}
 	if err := os.WriteFile(destPath, []byte(sampleSpec), 0644); err != nil {
 		return &ce.CustomError{Title: "WriteSample: cannot write file", Message: err.Error()}
 	}
