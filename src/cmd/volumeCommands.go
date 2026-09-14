@@ -18,9 +18,9 @@ var volCmd = &cobra.Command{
 	Aliases: []string{"volume"},
 	Example: "vmman vol list",
 	Short:   "Storage volume subcommands",
-	Long:    `You need to provide one of the subcommands: ls, create, rm.`,
+	Long:    `You need to provide one of the subcommands: ls, create, attach, rm.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("You need to provide one of the following subcommands: ls, create or rm")
+		fmt.Println("You need to provide one of the following subcommands: ls, create, attach or rm")
 	},
 }
 
@@ -53,6 +53,19 @@ var volCreateCmd = &cobra.Command{
 	},
 }
 
+var volAttachCmd = &cobra.Command{
+	Use:     "attach <VM> <POOL> <VOL_NAME>",
+	Example: "vmman vol attach myvm default my-extra-disk.qcow2",
+	Short:   "Attach an existing storage volume to a VM as a new disk",
+	Long:    `The VM is shut down first (gracefully, then forcefully after 15s) if it's running, since the disk is attached to the persistent, inactive domain config. The new disk is given the next free vd* target device on the virtio bus.`,
+	Args:    cobra.ExactArgs(3),
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := volume_mgt.AttachVolume(args[0], args[1], args[2]); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
 var volRemoveCmd = &cobra.Command{
 	Use:     "rm <pool> <name...>",
 	Aliases: []string{"remove", "destroy", "delete"},
@@ -68,5 +81,5 @@ var volRemoveCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(volCmd)
-	volCmd.AddCommand(volLsCmd, volCreateCmd, volRemoveCmd)
+	volCmd.AddCommand(volLsCmd, volCreateCmd, volAttachCmd, volRemoveCmd)
 }
