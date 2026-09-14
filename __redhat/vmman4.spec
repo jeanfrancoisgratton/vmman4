@@ -3,10 +3,10 @@
 %define _name vmman4
 %define _prefix /opt
 %define _bindir %{_prefix}/bin
-%define _version 0.8.1
+%define _version 1.0.0
 %define _rel 1
 %define _arch x86_64
-%define _binaryname vmman4
+%define _binaryname vmman
 
 Name:       vmman4
 Version:    %{_version}
@@ -56,6 +56,12 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 0.8.1-1
+- Merge branch 'develop'
+- Version bump
+- enhancement: sample files are now located in the config dir
+- chore: update changelog for 0.8.0-1
+
 * Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 0.8.0-1
 - Merge branch 'develop'
 - version bump before testing

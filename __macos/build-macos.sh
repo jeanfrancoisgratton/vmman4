@@ -2,7 +2,7 @@
 
 set -eu
 
-BINARY=vmman4
+BINARY=vmman
 OUTPUT="/opt/bin"
 DRY_RUN=false
 

@@ -6,10 +6,45 @@ package volume_mgt
 
 import (
 	"fmt"
+	"strconv"
+
+	"vmman4/connection_mgt"
+	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
 )
+
+// NewVolume is the CLI entry point for `vol create`: it resolves the
+// connection (local or remote hypervisor, same as every other *_mgt command),
+// parses sizeGB, and creates the volume via CreateVolume. CreateVolume itself
+// stays the lower-level primitive, since it's also called internally (e.g. by
+// vm_mgt when auto-creating a VM's disks) against an already-open connection.
+func NewVolume(poolName, volName, sizeGB string) *ce.CustomError {
+	size, e := strconv.ParseFloat(sizeGB, 64)
+	if e != nil {
+		return &ce.CustomError{Title: "Invalid size_gb value", Message: e.Error()}
+	}
+
+	if err := connection_mgt.ResolveConnectionURI(); err != nil {
+		return err
+	}
+	conn, err := shared.Connect2HVM()
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	vol, cerr := CreateVolume(conn, poolName, volName, size)
+	if cerr != nil {
+		return cerr
+	}
+	defer vol.Free()
+
+	fmt.Println(hftx.EnabledSign(volName + hftx.Green(" CREATED")))
+	return nil
+}
 
 // CreateVolume creates a new qcow2 volume of the given capacity (in GiB)
 // inside the named storage pool. The caller must Free() the returned volume.
