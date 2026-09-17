@@ -61,6 +61,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Thu Sep 17 2026 Binary package builder <builder@famillegratton.net> 1.2.1-1
+- enhancement: changed param order in the `cluster` command
+- Chore: changelog update (forgotten in previous commits)
+- chore: update changelog for 1.2.0-1
+
 * Thu Sep 17 2026 Binary package builder <builder@famillegratton.net> 1.2.0-1
 - Version bump
 - bug: fixed field in manifest
