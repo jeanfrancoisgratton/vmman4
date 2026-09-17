@@ -24,12 +24,15 @@ var rootCmd = &cobra.Command{
 With it you can start, stop, snapshot, snapshot-revert, create or delete VMs.`,
 }
 
+var buildVersion = "dev"
+var buildDate = "unknown"
+
 var versionCmd = &cobra.Command{
 	Use:     "version",
 	Example: "vmman version",
 	Short:   "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftx.White("vmman v1.1.0 (2026.09.14), Go version = v" + strings.TrimPrefix(runtime.Version(), "go")))
+		fmt.Println(hftx.White("vmman v" + buildVersion + " (" + buildDate + "), Go version = v" + strings.TrimPrefix(runtime.Version(), "go") + " (" + runtime.GOARCH + ")"))
 	},
 }
 

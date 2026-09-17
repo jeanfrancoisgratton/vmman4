@@ -83,4 +83,4 @@ else
 fi
 
 cd "$SRC_DIR"
-CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid=" -o "$BUILD_OUTPATH" .
+CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid= -X nxtools/cmd.buildVersion=%{_version} -X nxtools/cmd.buildDate=%(date +%%Y.%%m.%%d)" -o %{_builddir}/%{name}-%{version}/%{_binaryname} .

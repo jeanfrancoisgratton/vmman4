@@ -99,7 +99,7 @@ var vmStopAllCmd = &cobra.Command{
 
 var vmResetCmd = &cobra.Command{
 	Use:     "reset <VM...>",
-	Aliases: []string{"reboot"},
+	Aliases: []string{"restart", "reboot"},
 	Example: "vmman vm reset myvm",
 	Short:   "Stop then start one or many VMs",
 	Args:    cobra.MinimumNArgs(1),
@@ -112,7 +112,7 @@ var vmResetCmd = &cobra.Command{
 
 var vmResetAllCmd = &cobra.Command{
 	Use:     "resetall",
-	Aliases: []string{"rebootall"},
+	Aliases: []string{"restartall", "rebootall"},
 	Example: "vmman vm resetall",
 	Short:   "Stop/Start all VMs at once",
 	Run: func(cmd *cobra.Command, args []string) {

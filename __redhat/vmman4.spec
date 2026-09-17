@@ -3,7 +3,7 @@
 %define _name vmman4
 %define _prefix /opt
 %define _bindir %{_prefix}/bin
-%define _version 1.1.0
+%define _version 1.2.0
 %define _rel 1
 %define _arch x86_64
 %define _binaryname vmman
@@ -33,7 +33,12 @@ Virtual Machine Manager
 %build
 cd src
 go mod download
-PATH=$PATH:/opt/go/bin CGO_ENABLED=1 go build -tags libvirt_dlopen -trimpath -ldflags="-s -w -buildid=" -o %{_builddir}/%{name}-%{version}/%{_binaryname} .
+# rpmbuild runs %build under set -e, so both of these fast-fail the package
+# build; go test exits 0 for packages with no test files and only fails on
+# an actual test failure.
+PATH=$PATH:/opt/go/bin CGO_ENABLED=1 go vet -tags libvirt_dlopen ./...
+PATH=$PATH:/opt/go/bin CGO_ENABLED=1 go test -tags libvirt_dlopen ./...
+PATH=$PATH:/opt/go/bin CGO_ENABLED=1 go build -tags libvirt_dlopen -trimpath -ldflags="-s -w -buildid= -X vmman4/cmd.buildVersion=%{_version} -X vmman4/cmd.buildDate=%(date +%%Y.%%m.%%d)" -o %{_builddir}/%{name}-%{version}/%{_binaryname} .
 
 %clean
 rm -rf $RPM_BUILD_ROOT

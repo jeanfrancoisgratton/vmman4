@@ -1,34 +1,93 @@
 #!/usr/bin/env sh
 
-set -e
+set -eu
 
-BRANCH=`git rev-parse --abbrev-ref HEAD`
-BRANCH=$(echo "$BRANCH" | tr '/' '_')
 BINARY=vmman
-OUTPUT=/opt/bin
-CHECK_PERMS=0
-CGO_ENABLED=0
+OUTPUT="/opt/bin"
+COMPLETION=false
+DRY_RUN=false
+
+usage() {
+  echo "Usage: $0 [-b|--binary NAME] [--dry-run] [--completion] [OUTPUT_DIR]" >&2
+  exit 2
+}
+
+cleanup_dryrun() {
+  # Only delete if we created it
+  if [ "${DRYRUN_OUTPATH-}" ] && [ -f "$DRYRUN_OUTPATH" ]; then
+    rm -f -- "$DRYRUN_OUTPATH"
+  fi
+}
+trap cleanup_dryrun EXIT INT TERM HUP
 
 # Parse arguments
 while [ "$#" -gt 0 ]; do
-    case "$1" in
-        -c|--checkperms)
-            CHECK_PERMS=1
-            ;;
-        *)
-            OUTPUT="$1"
-            ;;
-    esac
-    shift
+  case "$1" in
+    -b|--binary)
+      shift
+      [ "${1-}" ] || usage
+      BINARY="$1"
+      ;;
+    --dry-run|--dry_run)
+      DRY_RUN=true
+      ;;
+    --completion)
+      COMPLETION=true
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      usage
+      ;;
+    *)
+      OUTPUT="$1"
+      ;;
+  esac
+  shift
 done
 
+# Determine branch name; handle detached HEAD cleanly
+BRANCH="$(git symbolic-ref -q --short HEAD 2>/dev/null || echo "detached_$(git rev-parse --short HEAD 2>/dev/null || echo unknown)")"
+
+# Sanitize for filenames:
+# - replace / with _
+# - map any other odd chars to _
+BRANCH="$(printf '%s' "$BRANCH" | tr '/' '_' | tr -c 'A-Za-z0-9._-' '_')"
+
 if [ "$BRANCH" = "master" ] || [ "$BRANCH" = "main" ] || [ "$BRANCH" = "develop" ]; then
-    FULLNAME="$BINARY"
+  FULLNAME="$BINARY"
 else
-    FULLNAME="$BINARY-$BRANCH"
+  FULLNAME="${BINARY}-${BRANCH}"
 fi
 
+mkdir -p "$OUTPUT"
 
+OUTPATH="${OUTPUT%/}/$FULLNAME"
+if [ "$DRY_RUN" = "true" ]; then
+  DRYRUN_OUTPATH="${OUTPATH}.DRYRUN"
+  echo "Dry-run build: $DRYRUN_OUTPATH (will be deleted)"
+  BUILD_OUTPATH="$DRYRUN_OUTPATH"
+else
+  echo "Building $OUTPATH"
+  BUILD_OUTPATH="$OUTPATH"
+fi
 
-echo "Building ${OUTPUT}/${FULLNAME}"
-CGO_ENABLED=1 go build -o ${OUTPUT}/${FULLNAME} .
+# set -eu (above) fast-fails on either of these; go test exits 0 for packages
+# with no test files and only fails on an actual test failure.
+CGO_ENABLED=1 go vet -tags libvirt_dlopen ./...
+CGO_ENABLED=1 go test -tags libvirt_dlopen ./...
+
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
+VMMAN4VER="$(sed -n 's/.*"versionnumber": *"\([^"]*\)".*/\1/p' "$SCRIPT_DIR/../vmman4.json")"
+BUILDDATE="$(date +%Y.%m.%d)"
+
+CGO_ENABLED=1 go build -tags libvirt_dlopen -trimpath -ldflags="-s -w -buildid= -X vmman4/cmd.buildVersion=$VMMAN4VER -X vmman4/cmd.buildDate=$BUILDDATE" -o "$BUILD_OUTPATH"   .
+
+# Optional completion hook (only if your binary supports it)
+ if [ "$COMPLETION" = "true" ]; then
+   echo "created zsh and bash completion files as ${BUILD_OUTPATH}.{z,ba}sh-completion"
+   "$BUILD_OUTPATH" completion bash > "${BUILD_OUTPATH}.bash-completion"
+   "$BUILD_OUTPATH" completion zsh > "${BUILD_OUTPATH}.zsh-completion"
+ fi

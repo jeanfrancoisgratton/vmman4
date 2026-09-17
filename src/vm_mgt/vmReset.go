@@ -5,7 +5,11 @@
 
 package vm_mgt
 
-import ce "github.com/jeanfrancoisgratton/customError/v3"
+import (
+	"time"
+
+	ce "github.com/jeanfrancoisgratton/customError/v3"
+)
 
 // This one is a simple one, it wraps ResetAll() over StopAll() and StartAll()
 
@@ -13,7 +17,7 @@ func ResetAllVMs() *ce.CustomError {
 	if e := StopAll(); e != nil {
 		return e
 	}
-
+	time.Sleep(2 * time.Second)
 	return StartAll()
 }
 
@@ -24,6 +28,6 @@ func ResetVM(vmlist []string) *ce.CustomError {
 	if e := StopVM(vmlist); e != nil {
 		return e
 	}
-
+	time.Sleep(2 * time.Second)
 	return StartVM(vmlist)
 }

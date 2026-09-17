@@ -2,7 +2,7 @@
   "softwarename": "vmman4",
   "binaryname": "vmman",
   "goversion": "1.27.1",
-  "versionnumber": "1.1.0",
+  "versionnumber": "1.2.0",
   "releasenumber": "1",
   "description": "Virtual Machine Manager",
   "maintainer": "J.F. Gratton <jean-francois@famillegratton.net>",

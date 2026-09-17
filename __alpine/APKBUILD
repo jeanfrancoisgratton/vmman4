@@ -25,8 +25,16 @@ build() {
 
 	go env | egrep 'GOFLAGS|CGO_ENABLED|GOOS|GOARCH' || true
 
+	# abuild runs build() with set -e, so both of these fast-fail the package
+	# build; go test exits 0 for packages with no test files and only fails
+	# on an actual test failure.
+	CGO_ENABLED=1 go vet ./...
+	CGO_ENABLED=1 go test ./...
+
+	builddate="$(date +%Y.%m.%d)"
+
 	# Static, non-PIE, internal linker
-	CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid= -linkmode=internal" -o "$binaryname" .
+	CGO_ENABLED=1 go build -trimpath -ldflags="-s -w -buildid= -linkmode=internal -X vmman4/cmd.buildVersion=$pkgver -X vmman4/cmd.buildDate=$builddate" -o "$binaryname" .
 }
 
 package() {
