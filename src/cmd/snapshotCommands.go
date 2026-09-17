@@ -12,18 +12,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var snapCreateDescription, snapDumpXMLFile string
+var snapLsAsTree, snapRmWithChildren, snapRmOnlyChildren bool
+
 var snapCmd = &cobra.Command{
 	Use:     "snapshot",
 	Aliases: []string{"snap"},
-	Example: "vmman snap list VM",
 	Short:   "Snapshot subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, rm, revert`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("You need to provide one of the following subcommands: ls, create, rm or info")
+		fmt.Println("You need to provide one of the following subcommands: ls, create, rm or dumpxml")
 	},
 }
-
-var snapLsAsTree bool
 
 var snapLsCmd = &cobra.Command{
 	Use:     "list",
@@ -37,8 +37,6 @@ var snapLsCmd = &cobra.Command{
 		}
 	},
 }
-
-var snapCreateDescription string
 
 var snapCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -57,6 +55,7 @@ var snapCreateCmd = &cobra.Command{
 		}
 	},
 }
+
 var snapRevertCmd = &cobra.Command{
 	Use:     "revert",
 	Aliases: []string{"set"},
@@ -75,8 +74,6 @@ var snapRevertCmd = &cobra.Command{
 	},
 }
 
-var snapRmWithChildren, snapRmOnlyChildren bool
-
 var snapRmCmd = &cobra.Command{
 	Use:     "rm",
 	Aliases: []string{"remove"},
@@ -94,8 +91,6 @@ var snapRmCmd = &cobra.Command{
 		}
 	},
 }
-
-var snapDumpXMLFile string
 
 var snapDumpXmlCmd = &cobra.Command{
 	Use:     "dumpxml",
@@ -116,6 +111,7 @@ var snapDumpXmlCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(snapCmd)
+	snapCmd.AddCommand(snapLsCmd, snapCreateCmd, snapRevertCmd, snapRmCmd, snapDumpXmlCmd)
 
 	snapLsCmd.Flags().BoolVarP(&snapLsAsTree, "tree", "x", false, "Render the snapshot hierarchy as a tree")
 
@@ -126,6 +122,4 @@ func init() {
 	snapRmCmd.MarkFlagsMutuallyExclusive("with-children", "only-children")
 
 	snapDumpXmlCmd.Flags().StringVarP(&snapDumpXMLFile, "file", "f", "", "Write XML to file instead of stdout")
-
-	snapCmd.AddCommand(snapLsCmd, snapCreateCmd, snapRevertCmd, snapRmCmd, snapDumpXmlCmd)
 }

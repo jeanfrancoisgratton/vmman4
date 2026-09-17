@@ -3,7 +3,7 @@
 %define _name vmman4
 %define _prefix /opt
 %define _bindir %{_prefix}/bin
-%define _version 1.2.0
+%define _version 1.2.1
 %define _rel 1
 %define _arch x86_64
 %define _binaryname vmman
