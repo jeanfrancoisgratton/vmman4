@@ -61,6 +61,12 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Thu Sep 17 2026 Binary package builder <builder@famillegratton.net> 1.2.0-1
+- Version bump
+- bug: fixed field in manifest
+- feature: dynamic version numbering, sleep between vm stop/start
+- chore: update changelog for 1.1.0-1
+
 * Mon Sep 14 2026 Binary package builder <builder@famillegratton.net> 1.1.0-1
 - chore: doc update, version bump
 - feat: new volume attach command
