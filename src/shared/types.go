@@ -7,6 +7,7 @@ package shared
 
 var QuietOutput = false
 var DebugMode = false
+var DBsupport = false
 
 // ConnectionURI is the actual -C flag
 var ConnectURI = "qemu:///system"
