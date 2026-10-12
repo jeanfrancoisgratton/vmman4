@@ -61,6 +61,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Mon Oct 12 2026 Binary package builder <builder@famillegratton.net> 1.2.1-2
+- chore: go version upgrade, target repo name change
+- chore: CL update
+- chore: update changelog for 1.2.1-1
+
 * Thu Sep 17 2026 Binary package builder <builder@famillegratton.net> 1.2.1-1
 - enhancement: changed param order in the `cluster` command
 - Chore: changelog update (forgotten in previous commits)
