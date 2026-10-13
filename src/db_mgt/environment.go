@@ -28,23 +28,52 @@ func CreateDBenvFile() *ce.CustomError {
 	fmt.Println("The database must already exist, as well the user. Moreover, that user must have ownership of the DB")
 
 	env.Host = hf.GetStringValFromPrompt("Enter the database hostname: ")
-	env.Port = uint(hf.GetIntValFromPrompt("Please enter the db port: "))
+	env.Port = uint(hf.GetIntValFromPrompt("Please enter the db port (empty means 5432): "))
 	if env.Port > 65535 || env.Port == 0 {
 		env.Port = 5432
+	}
+	env.DbName = hf.GetStringValFromPrompt("Enter the database name (empty means vmmandb): ")
+	if env.DbName == "" {
+		env.DbName = "vmmandb"
 	}
 	env.User = hf.GetStringValFromPrompt("Enter the db username: ")
 	env.Password = hf.EncodeString(hf.GetPassword("Enter the username's password: ", shared.DebugMode), "")
 
-	jStream, err := json.MarshalIndent(env, "", "  ")
+	return env.SaveEnvironmentFile()
+}
+
+// Save the above structure into a JSON file in the user's config directory
+
+func (e DBenvironmentStruct) SaveEnvironmentFile() *ce.CustomError {
+	jStream, err := json.MarshalIndent(e, "", "  ")
 	if err != nil {
 		return &ce.CustomError{Title: "Unable to marshal data", Message: err.Error()}
 	}
-	rcFile := filepath.Join(os.Getenv("HOME"), ".config", "JFG", "vmman4", "dbenv.json")
-	if err = os.WriteFile(rcFile, jStream, 0600); err != nil {
-		return &ce.CustomError{Title: "Unable to write file", Message: err.Error()}
+	if err = os.WriteFile(filepath.Join(os.Getenv("HOME"), ".config", "JFG", "vmman4", "dbinfo.json"),
+		jStream, 0600); err != nil {
+		return &ce.CustomError{Title: err.Error()}
 	}
 
 	hftx.EnabledSign("Database environment file created")
-
 	return nil
+}
+
+// Load the JSON environment file in the user's db connection config, and store it into a data type (struct)
+
+func LoadEnvironmentFile() (DBenvironmentStruct, *ce.CustomError) {
+	var payload DBenvironmentStruct
+	var err error
+
+	rcFile := filepath.Join(os.Getenv("HOME"), ".config", "JFG", "vmman4", "dbinfo.json")
+	jFile, err := os.ReadFile(rcFile)
+	if err != nil {
+		return DBenvironmentStruct{}, &ce.CustomError{Title: err.Error()}
+	}
+	err = json.Unmarshal(jFile, &payload)
+	if err != nil {
+		return DBenvironmentStruct{}, &ce.CustomError{Title: err.Error()}
+	} else {
+		payload.Password = hf.DecodeString(payload.Password, "")
+		return payload, nil
+	}
 }

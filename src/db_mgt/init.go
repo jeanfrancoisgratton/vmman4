@@ -5,32 +5,50 @@
 
 package db_mgt
 
-import ce "github.com/jeanfrancoisgratton/customError/v3"
+import (
+	"context"
 
-/*
-
-vmStates table : main table
-
-
-CREATE TABLE IF NOT EXISTS public."vmStates"
-(
-    "vmsID" bigint NOT NULL,
-    "vmsName" character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    "vmsHypervisor" character varying(20) COLLATE pg_catalog."default" NOT NULL,
-    "vmsLastUp" time without time zone,
-    "vmsLastDown" time without time zone,
-    "vmsOS" character varying(30) COLLATE pg_catalog."default",
-    CONSTRAINT vmstates_pkey PRIMARY KEY ("vmsID")
+	"github.com/jackc/pgx/v5/pgxpool"
+	ce "github.com/jeanfrancoisgratton/customError/v3"
 )
 
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public."vmStates"
-    OWNER to vmman;
-GRANT ALL ON TABLE public."vmStates" TO vmman;
-
-*/
+// InitDB creates the vm_states table and applies ownership and privileges.
+// The role executing this function must have the required PostgreSQL privileges.
 
 func DBinit() *ce.CustomError {
+	var pool *pgxpool.Pool
+	var cerr *ce.CustomError
+	ctx := context.Background()
+
+	if pool, cerr = NewPool(ctx); cerr != nil {
+		return cerr
+	}
+	tx, err := pool.Begin(ctx)
+	if err != nil {
+		return &ce.CustomError{Title: "Error beginning database initialization transaction", Message: err.Error()}
+	}
+	defer func() {
+		_ = tx.Rollback(ctx)
+	}()
+
+	statements := []struct {
+		name string
+		sql  string
+	}{
+		{"creating vm_states table", createVMStatesTableSQL},
+		{"setting vm_states owner", setVMStatesOwnerSQL},
+		{"granting vm_states privileges", grantVMStatesSQL},
+	}
+
+	for _, stmt := range statements {
+		if _, err := tx.Exec(ctx, stmt.sql); err != nil {
+			return &ce.CustomError{Title: "Error on statement " + stmt.name, Message: err.Error()}
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return &ce.CustomError{Title: "Error committing database initialization transaction", Message: err.Error()}
+	}
+
 	return nil
 }
