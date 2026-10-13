@@ -3,7 +3,7 @@
 
 pkgname=vmman4
 pkgver=1.2.1
-pkgrel=2
+pkgrel=3
 pkgdesc="QEMU/KVM virtual machines manager"
 arch=('x86_64')
 url="https://git.famillegratton.net:3000/devops/vmman4.git"

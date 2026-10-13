@@ -38,6 +38,7 @@ PKG       := $(PKGDEST)/$(NAME)-$(VERSION)-$(PKGREL)-$(ARCH).$(PKGEXT)
 .PHONY: build release clean info
 
 build:
+	chmod -R u+w src pkg 2>/dev/null || true
 	rm -rf src pkg
 	PKGDEST=$(PKGDEST) makepkg --force --syncdeps --noconfirm
 
@@ -61,6 +62,7 @@ release: build
 	${MAKE} clean
 
 clean:
+	chmod -R u+w src pkg 2>/dev/null || true
 	rm -rf src pkg
 
 info:
