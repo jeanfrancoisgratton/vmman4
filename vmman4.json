@@ -7,7 +7,7 @@
   "description": "Virtual Machine Manager",
   "maintainer": "J.F. Gratton <jean-francois@famillegratton.net>",
   "packager": "Package builder <builder@famillegratton.net>",
-  "section": "Messaging tools",
+  "section": "Virtualization",
   "dependencies": "",
   "url": "https://git.famillegratton.net:3000/devops/vmman4.git",
   "manufacturer": "famillegratton.net",
