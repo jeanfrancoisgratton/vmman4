@@ -64,8 +64,7 @@ func LoadEnvironmentFile() (DBenvironmentStruct, *ce.CustomError) {
 	var payload DBenvironmentStruct
 	var err error
 
-	rcFile := filepath.Join(os.Getenv("HOME"), ".config", "JFG", "vmman4", "dbinfo.json")
-	jFile, err := os.ReadFile(rcFile)
+	jFile, err := os.ReadFile(filepath.Join(os.Getenv("HOME"), ".config", "JFG", "vmman4", "dbinfo.json"))
 	if err != nil {
 		return DBenvironmentStruct{}, &ce.CustomError{Title: err.Error()}
 	}

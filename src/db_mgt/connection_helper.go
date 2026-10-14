@@ -6,7 +6,6 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	ce "github.com/jeanfrancoisgratton/customError/v3"
-	hf "github.com/jeanfrancoisgratton/helperFunctions/v5"
 )
 
 // NewPool creates and verifies a PostgreSQL connection pool.
@@ -19,7 +18,7 @@ func NewPool(ctx context.Context) (*pgxpool.Pool, *ce.CustomError) {
 		return nil, dberr
 	} else {
 		connString = fmt.Sprintf("postgresql://%s:%s@%s:%d/%s?sslmode=disable",
-			dbe.User, dbe.Password, hf.DecodeString(dbe.Host, ""), dbe.Port, dbe.DbName)
+			dbe.User, dbe.Password, dbe.Host, dbe.Port, dbe.DbName)
 	}
 	if connString == "" {
 		return nil, &ce.CustomError{Title: "DATABASE_URL is not set"}
