@@ -12,9 +12,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var snapCreateDescription, snapDumpXMLFile string
-var snapLsAsTree, snapRmWithChildren, snapRmOnlyChildren bool
-
 var snapCmd = &cobra.Command{
 	Use:     "snapshot",
 	Aliases: []string{"snap"},

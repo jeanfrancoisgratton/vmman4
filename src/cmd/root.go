@@ -1,5 +1,7 @@
 // vmman4
-// src/cmd/root.go
+// Written by J.F. Gratton <jean-francois@famillegratton.net>
+// Original filename: src/cmd/root.go
+// Original timestamp : 2026.10.14 22:52:57
 
 package cmd
 
@@ -8,7 +10,6 @@ import (
 	"os"
 	"runtime"
 	"strings"
-
 	"vmman4/shared"
 
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -22,10 +23,32 @@ var rootCmd = &cobra.Command{
 	Short:   "Virtual Machine Management Tool",
 	Long: `This tool allows you to manage your VM farm.
 With it you can start, stop, snapshot, snapshot-revert, create or delete VMs.`,
-}
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		// An explicitly supplied --db/-d flag takes precedence over the environment.
+		// BoolVarP has already set shared.DBsupport from the flag when it was supplied.
+		if cmd.Root().PersistentFlags().Changed("db") {
+			return nil
+		}
 
-var buildVersion = "dev"
-var buildDate = "unknown"
+		// If the flag was not supplied, use VMMAN_DBSUPPORT when it is present.
+		value, exists := os.LookupEnv("VMMAN_DBSUPPORT")
+		if !exists {
+			shared.DBsupport = false
+			return nil
+		}
+
+		switch strings.ToLower(strings.TrimSpace(value)) {
+		case "1", "true", "t":
+			shared.DBsupport = true
+		case "0", "false", "f":
+			shared.DBsupport = false
+		default:
+			return fmt.Errorf("invalid VMMAN_DBSUPPORT value %q: expected 0, 1, t, f, true, or false", value)
+		}
+
+		return nil
+	},
+}
 
 var versionCmd = &cobra.Command{
 	Use:     "version",
