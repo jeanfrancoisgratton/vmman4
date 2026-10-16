@@ -48,7 +48,9 @@ func RenameVM(oldName, newName string) *ce.CustomError {
 	if serr := domain.Rename(newName, 0); serr != nil {
 		return &ce.CustomError{Title: "Cannot rename " + oldName + " to " + newName, Message: serr.Error()}
 	}
-	fmt.Println(hftx.EnabledSign(oldName + hftx.Green(" --> ") + newName))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign(oldName + hftx.Green(" --> ") + newName))
+	}
 
 	return nil
 }

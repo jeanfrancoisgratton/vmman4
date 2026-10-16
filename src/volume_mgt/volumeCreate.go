@@ -77,5 +77,8 @@ func CreateVolume(conn *libvirt.Connect, poolName, volName string, sizeGB float6
 			Message: err.Error(),
 		}
 	}
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Volume " + hftx.Gold(volName) + hftx.Green(" created")))
+	}
 	return vol, nil
 }

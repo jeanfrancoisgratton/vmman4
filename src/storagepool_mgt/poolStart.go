@@ -35,6 +35,8 @@ func StartPool(poolName string) *ce.CustomError {
 		return &ce.CustomError{Title: "StartPool: cannot start pool " + poolName, Message: cerr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" started")))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" started")))
+	}
 	return nil
 }

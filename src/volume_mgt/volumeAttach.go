@@ -71,8 +71,10 @@ func AttachVolume(vmName, poolName, volName string) *ce.CustomError {
 			Title: "AttachVolume: cannot attach " + volName + " to " + vmName, Message: aerr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign(hftx.Gold(volName) + "/" + hftx.Gold(poolName) + hftx.Green(" attached to ") +
-		hftx.Gold(volName) + " as " + hftx.Gold(dev)))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign(hftx.Gold(volName) + "/" + hftx.Gold(poolName) +
+			hftx.Green(" attached to ") + hftx.Gold(volName) + " as " + hftx.Gold(dev)))
+	}
 	return nil
 }
 

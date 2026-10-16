@@ -84,11 +84,13 @@ func RemoveSnapshot(vmname, sname string, withChildren, onlyChildren bool) *ce.C
 
 	verb := "removed"
 	if onlyChildren {
-		verb = "pruned of its children"
+		verb = " pruned of its children "
 	} else if withChildren {
-		verb = "removed along with its children"
+		verb = " removed along with its children "
 	}
-	fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s from %s", hftx.Gold(sname),
-		hftx.Red(verb), hftx.Gold(vmname))))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Snapshot " + hftx.Gold(sname) + hftx.Red(verb) +
+			"from" + (hftx.Gold(vmname))))
+	}
 	return nil
 }

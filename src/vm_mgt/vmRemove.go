@@ -66,7 +66,9 @@ func RemoveVM(args []string) *ce.CustomError {
 			}
 		}
 
-		fmt.Println(hftx.EnabledSign(vmname + hftx.DimRed(" REMOVED")))
+		if !shared.QuietOutput {
+			fmt.Println(hftx.EnabledSign(vmname + hftx.DimRed(" REMOVED")))
+		}
 	}
 	return nil
 }

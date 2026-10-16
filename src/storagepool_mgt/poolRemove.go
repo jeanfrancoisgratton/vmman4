@@ -63,7 +63,9 @@ func RemovePool(poolNames []string) *ce.CustomError {
 			return &ce.CustomError{Title: "RemovePool: cannot undefine pool " + poolName, Message: uerr.Error()}
 		}
 
-		fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.DimRed(" removed")))
+		if !shared.QuietOutput {
+			fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.DimRed(" removed")))
+		}
 	}
 	return nil
 }

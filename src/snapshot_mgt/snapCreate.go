@@ -81,7 +81,9 @@ func CreateSnapshot(vmname, snapname, parentsnap, description string) *ce.Custom
 		}
 	}
 
-	fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s on %s", snapname,
-		hftx.Bold(hftx.DimGreen("created")), hftx.Gold(vmname))))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s on %s", snapname,
+			hftx.Bold(hftx.DimGreen("created")), hftx.Gold(vmname))))
+	}
 	return nil
 }

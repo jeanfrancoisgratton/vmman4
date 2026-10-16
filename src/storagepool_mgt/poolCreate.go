@@ -48,6 +48,8 @@ func CreatePool(poolName, targetPath string) *ce.CustomError {
 		return &ce.CustomError{Title: "CreatePool: cannot build/start pool " + poolName, Message: cerr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" created")))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" created")))
+	}
 	return nil
 }

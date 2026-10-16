@@ -37,6 +37,8 @@ func StopPool(poolName string) *ce.CustomError {
 		return &ce.CustomError{Title: "StopPool: cannot stop pool " + poolName, Message: derr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.DimRed(" stopped")))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.DimRed(" stopped")))
+	}
 	return nil
 }

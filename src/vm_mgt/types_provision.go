@@ -17,6 +17,11 @@ import (
 // EnvFile is the -E/--environment flag; empty means "use DefaultEnvFile()".
 var EnvFile = ""
 
+type qgaRequest struct {
+	Execute   string `json:"execute"`
+	Arguments any    `json:"arguments,omitempty"`
+}
+
 // EnvSpec is unmarshalled from the environment JSON file 'vm provision' reads
 // network defaults from.
 type EnvSpec struct {
