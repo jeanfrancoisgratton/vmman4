@@ -15,13 +15,8 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-// KeepPoolStorage mirrors vm_mgt.KeepStorage: when true, RemovePool only
-// undefines the pool(s) and leaves the underlying storage (directory/disk)
-// untouched.
-var KeepPoolStorage bool
-
 // RemovePool stops (if active), optionally wipes the underlying storage of,
-// and undefines one or more storage pools. By default the pool's storage is
+// and undefines one or more storage pools. By default, the pool's storage is
 // wiped, unless KeepPoolStorage is set -- in which case only the pool
 // definition is removed.
 func RemovePool(poolNames []string) *ce.CustomError {
@@ -37,7 +32,7 @@ func RemovePool(poolNames []string) *ce.CustomError {
 	for _, poolName := range poolNames {
 		pool, perr := conn.LookupStoragePoolByName(poolName)
 		if perr != nil {
-			return &ce.CustomError{Title: fmt.Sprintf("RemovePool: pool %q not found", poolName), Message: perr.Error()}
+			return &ce.CustomError{Title: "RemovePool: pool " + poolName + "not found", Message: perr.Error()}
 		}
 
 		isActive, _ := pool.IsActive()
@@ -45,31 +40,30 @@ func RemovePool(poolNames []string) *ce.CustomError {
 		if !KeepPoolStorage {
 			if !isActive {
 				pool.Free()
-				return &ce.CustomError{
-					Title:   fmt.Sprintf("RemovePool: pool %q is not active", poolName),
+				return &ce.CustomError{Title: "RemovePool: pool " + poolName + " is not active",
 					Message: "the pool must be active to wipe its storage -- start it first, or pass -k/--keep to only remove the pool definition",
 				}
 			}
 			if derr := pool.Delete(libvirt.STORAGE_POOL_DELETE_NORMAL); derr != nil {
 				pool.Free()
-				return &ce.CustomError{Title: fmt.Sprintf("RemovePool: cannot delete storage for pool %q", poolName), Message: derr.Error()}
+				return &ce.CustomError{Title: "RemovePool: cannot delete storage for pool " + poolName, Message: derr.Error()}
 			}
 		}
 
 		if isActive {
 			if derr := pool.Destroy(); derr != nil {
 				pool.Free()
-				return &ce.CustomError{Title: fmt.Sprintf("RemovePool: cannot stop pool %q", poolName), Message: derr.Error()}
+				return &ce.CustomError{Title: "RemovePool: cannot stop pool " + poolName, Message: derr.Error()}
 			}
 		}
 
 		uerr := pool.Undefine()
 		pool.Free()
 		if uerr != nil {
-			return &ce.CustomError{Title: fmt.Sprintf("RemovePool: cannot undefine pool %q", poolName), Message: uerr.Error()}
+			return &ce.CustomError{Title: "RemovePool: cannot undefine pool " + poolName, Message: uerr.Error()}
 		}
 
-		fmt.Println(hftx.EnabledSign(poolName + hftx.DimRed(" REMOVED")))
+		fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.DimRed(" removed")))
 	}
 	return nil
 }

@@ -58,7 +58,7 @@ func RemoveSnapshot(vmname, sname string, withChildren, onlyChildren bool) *ce.C
 		if errors.As(err, &lverr) {
 			if strings.HasPrefix(lverr.Message, "Domain snapshot not found") {
 				return &ce.CustomError{Title: "Snapshot not found",
-					Message: "No snapshot named " + hftx.Bold(hftx.Red(sname)) + " exists for " + hftx.Bold(hftx.Red(vmname))}
+					Message: "No snapshot named " + hftx.Bold(hftx.Red(sname)) + " exists for " + hftx.Bold(hftx.Gold(vmname))}
 			}
 			return &ce.CustomError{Title: "snapshot_mgt.RevertSnapshot() failure", Message: lverr.Message}
 		}
@@ -88,7 +88,7 @@ func RemoveSnapshot(vmname, sname string, withChildren, onlyChildren bool) *ce.C
 	} else if withChildren {
 		verb = "removed along with its children"
 	}
-	fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s from %s", sname,
-		hftx.Bold(hftx.DimRed(verb)), vmname)))
+	fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s from %s", hftx.Gold(sname),
+		hftx.Red(verb), hftx.Gold(vmname))))
 	return nil
 }

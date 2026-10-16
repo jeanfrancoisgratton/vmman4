@@ -49,10 +49,7 @@ func Console(vmname string) *ce.CustomError {
 		return &ce.CustomError{Title: "Console error", Message: aerr.Error()}
 	}
 	if !active {
-		return &ce.CustomError{
-			Title:   "Console error",
-			Message: "domain '" + vmname + "' is not running",
-		}
+		return &ce.CustomError{Title: "Console error", Message: "domain '" + vmname + "' is not running"}
 	}
 
 	// A blocking stream (flags=0) is what we want: Recv() will sleep until
@@ -74,20 +71,14 @@ func Console(vmname string) *ce.CustomError {
 
 	// Empty devname → libvirt picks the first/default serial console.
 	if oerr := domain.OpenConsole("", stream, consoleFlags); oerr != nil {
-		return &ce.CustomError{
-			Title:   "Failed to open console on '" + vmname + "'",
-			Message: oerr.Error(),
-		}
+		return &ce.CustomError{Title: "Failed to open console on '" + vmname + "'", Message: oerr.Error()}
 	}
 
 	// Raw terminal mode is required so keystrokes are forwarded immediately
 	// and control characters (arrows, Ctrl-C …) pass through to the guest.
 	fd := int(os.Stdin.Fd())
 	if !term.IsTerminal(fd) {
-		return &ce.CustomError{
-			Title:   "Console error",
-			Message: "stdin is not a terminal — cannot open interactive console",
-		}
+		return &ce.CustomError{Title: "Console error", Message: "stdin is not a terminal — cannot open interactive console"}
 	}
 	oldState, terr := term.MakeRaw(fd)
 	if terr != nil {

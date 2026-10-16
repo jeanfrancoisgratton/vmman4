@@ -27,14 +27,14 @@ func StartPool(poolName string) *ce.CustomError {
 
 	pool, perr := conn.LookupStoragePoolByName(poolName)
 	if perr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("StartPool: pool %q not found", poolName), Message: perr.Error()}
+		return &ce.CustomError{Title: "StartPool: pool " + poolName + " not found", Message: perr.Error()}
 	}
 	defer pool.Free()
 
 	if cerr := pool.Create(0); cerr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("StartPool: cannot start pool %q", poolName), Message: cerr.Error()}
+		return &ce.CustomError{Title: "StartPool: cannot start pool " + poolName, Message: cerr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign(poolName + hftx.Green(" STARTED")))
+	fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" started")))
 	return nil
 }

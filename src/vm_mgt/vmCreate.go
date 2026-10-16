@@ -59,7 +59,7 @@ func CreateVM(specFile string) *ce.CustomError {
 	defer dom.Free()
 
 	name, _ := dom.GetName()
-	fmt.Println(hftx.EnabledSign(name + hftx.Green(" DEFINED")))
+	fmt.Println(hftx.EnabledSign(name + hftx.Green(" defined")))
 	return nil
 }
 

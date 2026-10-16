@@ -36,18 +36,18 @@ func CreatePool(poolName, targetPath string) *ce.CustomError {
 
 	pool, derr := conn.StoragePoolDefineXML(poolXML, 0)
 	if derr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("CreatePool: cannot define pool %q", poolName), Message: derr.Error()}
+		return &ce.CustomError{Title: "CreatePool: cannot define pool " + poolName, Message: derr.Error()}
 	}
 	defer pool.Free()
 
 	if aerr := pool.SetAutostart(true); aerr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("CreatePool: cannot set autostart on pool %q", poolName), Message: aerr.Error()}
+		return &ce.CustomError{Title: "CreatePool: cannot set autostart on pool " + poolName, Message: aerr.Error()}
 	}
 
 	if cerr := pool.Create(libvirt.STORAGE_POOL_CREATE_WITH_BUILD); cerr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("CreatePool: cannot build/start pool %q", poolName), Message: cerr.Error()}
+		return &ce.CustomError{Title: "CreatePool: cannot build/start pool " + poolName, Message: cerr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign(poolName + hftx.Green(" CREATED")))
+	fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" created")))
 	return nil
 }

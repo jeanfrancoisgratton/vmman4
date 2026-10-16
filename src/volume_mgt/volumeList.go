@@ -87,7 +87,7 @@ func ListVolumes(poolName string) *ce.CustomError {
 		if cerr != nil {
 			return &ce.CustomError{Title: "Unable to convert disk size units", Message: cerr.Error()}
 		}
-		t.AppendRow([]interface{}{r.name, r.pool, hf.SI(sizeGB) + " GB", r.path})
+		t.AppendRow([]any{r.name, r.pool, hf.SI(sizeGB) + " GB", r.path})
 	}
 
 	t.SortBy([]table.SortBy{

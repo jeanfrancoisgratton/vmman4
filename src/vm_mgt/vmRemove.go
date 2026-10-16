@@ -42,7 +42,7 @@ func RemoveVM(args []string) *ce.CustomError {
 
 		// Shut the VM down, if active
 		shared.Wait4Shutdown(domain, vmname)
-		fmt.Println(vmname + " now shutdown. Proceeding to removal from inventory.")
+		fmt.Println(hftx.Gold(vmname) + " now shutdown. Proceeding to removal from inventory.")
 
 		// Storage specs must be gathered while the domain is still defined:
 		// UndefineFlags() below removes it from libvirt's inventory, and
@@ -67,7 +67,6 @@ func RemoveVM(args []string) *ce.CustomError {
 		}
 
 		fmt.Println(hftx.EnabledSign(vmname + hftx.DimRed(" REMOVED")))
-		//fmt.Println(hftx.EnabledSign(fmt.Sprintf("VM %s has been removed.", vmname)))
 	}
 	return nil
 }

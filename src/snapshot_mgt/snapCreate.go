@@ -17,13 +17,6 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-// domainSnapshotCreate : minimal XML payload accepted by Domain.CreateSnapshotXML()
-type domainSnapshotCreate struct {
-	XMLName     xml.Name `xml:"domainsnapshot"`
-	Name        string   `xml:"name"`
-	Description string   `xml:"description,omitempty"`
-}
-
 func CreateSnapshot(vmname, snapname, parentsnap, description string) *ce.CustomError {
 	var cerr *ce.CustomError
 	var conn *libvirt.Connect
@@ -89,6 +82,6 @@ func CreateSnapshot(vmname, snapname, parentsnap, description string) *ce.Custom
 	}
 
 	fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s on %s", snapname,
-		hftx.Bold(hftx.DimGreen("created")), vmname)))
+		hftx.Bold(hftx.DimGreen("created")), hftx.Gold(vmname))))
 	return nil
 }

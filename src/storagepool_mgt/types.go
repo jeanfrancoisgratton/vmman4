@@ -6,6 +6,11 @@ package storagepool_mgt
 
 import "vmman4/volume_mgt"
 
+// KeepPoolStorage mirrors vm_mgt.KeepStorage: when true, RemovePool only
+// undefines the pool(s) and leaves the underlying storage (directory/disk)
+// untouched.
+var KeepPoolStorage bool
+
 // StoragePoolInfo describes a single libvirt storage pool.
 type StoragePoolInfo struct {
 	Name       string

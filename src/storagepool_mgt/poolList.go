@@ -72,11 +72,7 @@ func ListStoragePools() ([]StoragePoolInfo, *ce.CustomError) {
 					if vi, err := v.GetInfo(); err == nil {
 						vcap = vi.Capacity
 					}
-					pinfo.Volumes = append(pinfo.Volumes, volume_mgt.VolumeInfo{
-						Name:      vname,
-						Path:      vpath,
-						SizeBytes: vcap,
-					})
+					pinfo.Volumes = append(pinfo.Volumes, volume_mgt.VolumeInfo{Name: vname, Path: vpath, SizeBytes: vcap})
 				}
 			}
 		}
@@ -110,7 +106,7 @@ func displayPoolList(result []StoragePoolInfo) *ce.CustomError {
 			vSizes = hf.SI(convertedSize) + " GB"
 		}
 
-		t.AppendRow([]interface{}{p.Name, p.UUID, len(p.Volumes), p.TargetPath, p.State, vSizes})
+		t.AppendRow([]any{p.Name, p.UUID, len(p.Volumes), p.TargetPath, p.State, vSizes})
 	}
 	t.SortBy([]table.SortBy{
 		{Name: "Pool name", Mode: table.Asc},

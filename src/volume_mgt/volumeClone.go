@@ -6,6 +6,7 @@ package volume_mgt
 
 import (
 	"fmt"
+	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -20,22 +21,20 @@ import (
 func CloneVolume(conn *libvirt.Connect, poolName, srcVolName, destVolName string) (*libvirt.StorageVol, *ce.CustomError) {
 	pool, err := conn.LookupStoragePoolByName(poolName)
 	if err != nil {
-		return nil, &ce.CustomError{Title: fmt.Sprintf("CloneVolume: pool %q not found", poolName), Message: err.Error()}
+		return nil, &ce.CustomError{Title: "CloneVolume: pool " + poolName + " not found", Message: err.Error()}
 	}
 	defer pool.Free()
 
 	srcVol, err := pool.LookupStorageVolByName(srcVolName)
 	if err != nil {
-		return nil, &ce.CustomError{
-			Title:   fmt.Sprintf("CloneVolume: source volume %q not found in pool %q", srcVolName, poolName),
-			Message: err.Error(),
-		}
+		return nil, &ce.CustomError{Title: "CloneVolume: source volume " + srcVolName + " not found in pool " + poolName,
+			Message: err.Error()}
 	}
 	defer srcVol.Free()
 
 	srcInfo, err := srcVol.GetInfo()
 	if err != nil {
-		return nil, &ce.CustomError{Title: fmt.Sprintf("CloneVolume: cannot get info for %q", srcVolName), Message: err.Error()}
+		return nil, &ce.CustomError{Title: "CloneVolume: cannot get info for " + srcVolName, Message: err.Error()}
 	}
 
 	destXML := fmt.Sprintf(`<volume>
@@ -46,15 +45,16 @@ func CloneVolume(conn *libvirt.Connect, poolName, srcVolName, destVolName string
   </target>
 </volume>`, destVolName, srcInfo.Capacity)
 
-	fmt.Println(hftx.InProgressSign("Cloning "+hftx.Bold(srcVolName)+" to "+hftx.Bold(destVolName)) + ". This might take a while...")
+	fmt.Println(hftx.InProgressSign("Cloning "+hftx.Gold(srcVolName)+" to "+hftx.Gold(destVolName)) + ". This might take a while...")
 
 	destVol, err := pool.StorageVolCreateXMLFrom(destXML, srcVol, 0)
 	if err != nil {
-		return nil, &ce.CustomError{
-			Title:   fmt.Sprintf("CloneVolume: cannot clone %q to %q", srcVolName, destVolName),
-			Message: err.Error(),
-		}
+		return nil, &ce.CustomError{Title: "CloneVolume: cannot clone " + srcVolName + " to " + destVolName, Message: err.Error()}
 	}
 
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Volume " + hftx.Gold(srcVolName) + hftx.Green(" cloned " + " as " +
+			hftx.Gold(destVolName))))
+	}
 	return destVol, nil
 }

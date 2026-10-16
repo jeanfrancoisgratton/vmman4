@@ -29,14 +29,14 @@ func StopPool(poolName string) *ce.CustomError {
 
 	pool, perr := conn.LookupStoragePoolByName(poolName)
 	if perr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("StopPool: pool %q not found", poolName), Message: perr.Error()}
+		return &ce.CustomError{Title: "StopPool: pool " + poolName + " not found", Message: perr.Error()}
 	}
 	defer pool.Free()
 
 	if derr := pool.Destroy(); derr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("StopPool: cannot stop pool %q", poolName), Message: derr.Error()}
+		return &ce.CustomError{Title: "StopPool: cannot stop pool " + poolName, Message: derr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign(poolName + hftx.DimRed(" STOPPED")))
+	fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.DimRed(" stopped")))
 	return nil
 }
