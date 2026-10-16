@@ -22,12 +22,13 @@ func DBinit() *ce.CustomError {
 	var cerr *ce.CustomError
 	ctx := context.Background()
 
-	fmt.Printf("\n%s\n", hftx.InfoSign(" DBinit: creating the schemas"))
-	fmt.Printf("%s\n\n", hftx.HorizontalLine(0))
-
 	if pool, cerr = NewPool(ctx); cerr != nil {
 		return cerr
 	}
+
+	fmt.Printf("\n%s\n", hftx.InfoSign(" DBinit: creating the schemas"))
+	fmt.Printf("%s\n\n", hftx.HorizontalLine(0))
+
 	tx, err := pool.Begin(ctx)
 	if err != nil {
 		return &ce.CustomError{Title: "Error beginning database initialization transaction", Message: err.Error()}

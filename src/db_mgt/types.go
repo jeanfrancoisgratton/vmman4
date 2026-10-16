@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS public.vm_states (
     vms_hypervisor VARCHAR(20) NOT NULL,
     vms_last_up    TIMESTAMPTZ,
     vms_last_down  TIMESTAMPTZ,
+    vms_date_created    TIMESTAMPTZ,
+    vms_date_deleted  TIMESTAMPTZ,
     vms_os         VARCHAR(30)
 )`
 
