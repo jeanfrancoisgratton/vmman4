@@ -59,7 +59,9 @@ func CreateVM(specFile string) *ce.CustomError {
 	defer dom.Free()
 
 	name, _ := dom.GetName()
-	fmt.Println(hftx.EnabledSign(name + hftx.Green(" DEFINED")))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Domain " + hftx.Gold(name) + hftx.Green(" defined")))
+	}
 	return nil
 }
 

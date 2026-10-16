@@ -42,7 +42,7 @@ func NewVolume(poolName, volName, sizeGB string) *ce.CustomError {
 	}
 	defer vol.Free()
 
-	fmt.Println(hftx.EnabledSign(volName + hftx.Green(" CREATED")))
+	fmt.Println(hftx.EnabledSign("Volume " + hftx.Gold(volName) + hftx.Green(" created")))
 	return nil
 }
 
@@ -50,15 +50,14 @@ func NewVolume(poolName, volName, sizeGB string) *ce.CustomError {
 // inside the named storage pool. The caller must Free() the returned volume.
 func CreateVolume(conn *libvirt.Connect, poolName, volName string, sizeGB float64) (*libvirt.StorageVol, *ce.CustomError) {
 	if sizeGB <= 0 {
-		return nil, &ce.CustomError{
-			Title:   fmt.Sprintf("CreateVolume: invalid size for volume %q", volName),
+		return nil, &ce.CustomError{Title: "CreateVolume: invalid size for volume " + volName,
 			Message: fmt.Sprintf("size_gb must be > 0, got %v", sizeGB),
 		}
 	}
 
 	pool, err := conn.LookupStoragePoolByName(poolName)
 	if err != nil {
-		return nil, &ce.CustomError{Title: fmt.Sprintf("CreateVolume: pool %q not found", poolName), Message: err.Error()}
+		return nil, &ce.CustomError{Title: "CreateVolume: pool " + poolName + " not found", Message: err.Error()}
 	}
 	defer pool.Free()
 
@@ -74,11 +73,12 @@ func CreateVolume(conn *libvirt.Connect, poolName, volName string, sizeGB float6
 
 	vol, err := pool.StorageVolCreateXML(volXML, 0)
 	if err != nil {
-		return nil, &ce.CustomError{
-			Title:   fmt.Sprintf("CreateVolume: cannot create volume %q in pool %q", volName, poolName),
+		return nil, &ce.CustomError{Title: "CreateVolume: cannot create volume " + volName + " in pool " + poolName,
 			Message: err.Error(),
 		}
 	}
-
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Volume " + hftx.Gold(volName) + hftx.Green(" created")))
+	}
 	return vol, nil
 }

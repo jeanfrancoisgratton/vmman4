@@ -38,19 +38,19 @@ func AttachVolume(vmName, poolName, volName string) *ce.CustomError {
 
 	pool, perr := conn.LookupStoragePoolByName(poolName)
 	if perr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("AttachVolume: pool %q not found", poolName), Message: perr.Error()}
+		return &ce.CustomError{Title: "AttachVolume: pool " + poolName + " not found", Message: perr.Error()}
 	}
 	defer pool.Free()
 
 	vol, verr := pool.LookupStorageVolByName(volName)
 	if verr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("AttachVolume: volume %q not found in pool %q", volName, poolName), Message: verr.Error()}
+		return &ce.CustomError{Title: "AttachVolume: volume " + volName + " not found in pool " + poolName, Message: verr.Error()}
 	}
 	defer vol.Free()
 
 	volPath, verr := vol.GetPath()
 	if verr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("AttachVolume: cannot get path for volume %q", volName), Message: verr.Error()}
+		return &ce.CustomError{Title: "AttachVolume: cannot get path for volume " + volName, Message: verr.Error()}
 	}
 
 	shared.Wait4Shutdown(domain, vmName)
@@ -68,12 +68,13 @@ func AttachVolume(vmName, poolName, volName string) *ce.CustomError {
 
 	if aerr := domain.AttachDeviceFlags(diskXML, libvirt.DOMAIN_DEVICE_MODIFY_CONFIG); aerr != nil {
 		return &ce.CustomError{
-			Title:   fmt.Sprintf("AttachVolume: cannot attach %q to %q", volName, vmName),
-			Message: aerr.Error(),
-		}
+			Title: "AttachVolume: cannot attach " + volName + " to " + vmName, Message: aerr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign(fmt.Sprintf("%s/%s", poolName, volName) + hftx.Green(" ATTACHED") + fmt.Sprintf(" to %s as %s", vmName, dev)))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign(hftx.Gold(volName) + "/" + hftx.Gold(poolName) +
+			hftx.Green(" attached to ") + hftx.Gold(volName) + " as " + hftx.Gold(dev)))
+	}
 	return nil
 }
 

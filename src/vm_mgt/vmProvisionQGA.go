@@ -21,11 +21,6 @@ import (
 // there are for, say, domain lifecycle calls), so every command below is
 // hand-built JSON.
 
-type qgaRequest struct {
-	Execute   string      `json:"execute"`
-	Arguments interface{} `json:"arguments,omitempty"`
-}
-
 // qgaCall sends a single QGA command and, if out is non-nil, unmarshals the
 // response into it.
 func qgaCall(dom *libvirt.Domain, execute string, args interface{}, out interface{}) *ce.CustomError {
@@ -36,12 +31,12 @@ func qgaCall(dom *libvirt.Domain, execute string, args interface{}, out interfac
 
 	respJSON, err := dom.QemuAgentCommand(string(reqJSON), libvirt.DOMAIN_QEMU_AGENT_COMMAND_BLOCK, 0)
 	if err != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("qgaCall: %s failed", execute), Message: err.Error()}
+		return &ce.CustomError{Title: "qgaCall: " + execute + " failed", Message: err.Error()}
 	}
 
 	if out != nil {
 		if err := json.Unmarshal([]byte(respJSON), out); err != nil {
-			return &ce.CustomError{Title: fmt.Sprintf("qgaCall: cannot parse %s response", execute), Message: err.Error()}
+			return &ce.CustomError{Title: "qgaCall: cannot parse " + execute + "response", Message: err.Error()}
 		}
 	}
 	return nil

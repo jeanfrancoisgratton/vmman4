@@ -75,7 +75,7 @@ func SetVMem(vmname string, memParams []string) *ce.CustomError {
 		return &ce.CustomError{Title: "Cannot set memory for " + vmname, Message: serr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign(vmname + hftx.Green(fmt.Sprintf(" memory set: min=%d MiB, max=%d MiB", minMem, maxMem))))
+	fmt.Println(hftx.EnabledSign(hftx.Gold(vmname) + hftx.Green(fmt.Sprintf(" memory set: min=%d MiB, max=%d MiB", minMem, maxMem))))
 
 	if warning != nil {
 		return warning
@@ -131,7 +131,9 @@ func SetVCPUs(vmname, count string) *ce.CustomError {
 		return &ce.CustomError{Title: "Cannot set vCPUs for " + vmname, Message: serr.Error()}
 	}
 
-	fmt.Println(hftx.EnabledSign(vmname + hftx.Green(fmt.Sprintf(" vCPUs set: %d", vcpus))))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign(hftx.Gold(vmname) + hftx.Green(fmt.Sprintf(" vCPUs set: %d", vcpus))))
+	}
 
 	if warning != nil {
 		return warning

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -139,7 +140,10 @@ func WriteSample(destPath string) *ce.CustomError {
 	if err := os.WriteFile(destPath, []byte(sampleSpec), 0644); err != nil {
 		return &ce.CustomError{Title: "WriteSample: cannot write file", Message: err.Error()}
 	}
-	fmt.Println(hftx.EnabledSign("Sample spec written to " + hftx.Blue(destPath)))
-	fmt.Println(hftx.WarningSign("This file has // comments and is NOT valid JSON -- edit it into a real spec before using it with 'vm create'"))
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Sample spec written to " + hftx.Blue(destPath)))
+		fmt.Println(hftx.WarningSign(hftx.Blink("IMPORTANT")))
+		fmt.Println("This file has // comments and is NOT valid JSON -- edit it into a real spec before using it with 'vm create'")
+	}
 	return nil
 }

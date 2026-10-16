@@ -18,3 +18,10 @@ type SnapshotXMLstruct struct {
 	Parent          ParentElement `xml:"parent"`
 	CurrentSnapshot bool
 }
+
+// domainSnapshotCreate : minimal XML payload accepted by Domain.CreateSnapshotXML()
+type domainSnapshotCreate struct {
+	XMLName     xml.Name `xml:"domainsnapshot"`
+	Name        string   `xml:"name"`
+	Description string   `xml:"description,omitempty"`
+}

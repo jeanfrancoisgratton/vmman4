@@ -44,14 +44,13 @@ func startDomains(conn *libvirt.Connect, args []string) *ce.CustomError {
 
 		bIsActive, _ = domain.IsActive()
 		if bIsActive {
-			fmt.Println(hftx.WarningSign("Domain " + vmname + " already active"))
+			fmt.Println(hftx.WarningSign(" Domain " + hftx.Gold(vmname) + " already active"))
 		} else {
 			if serr := domain.Create(); serr != nil {
 				fmt.Println()
 				return &ce.CustomError{Title: "Could not start " + vmname, Message: serr.Error()}
-			} else {
-				fmt.Println(hftx.EnabledSign("Domain " + vmname + hftx.Green(" started")))
 			}
+			fmt.Println(hftx.EnabledSign("Domain " + hftx.Gold(vmname) + hftx.Green(" started")))
 		}
 	}
 	return nil

@@ -28,23 +28,24 @@ func RemoveVolume(poolName string, volNames []string) *ce.CustomError {
 
 	pool, perr := conn.LookupStoragePoolByName(poolName)
 	if perr != nil {
-		return &ce.CustomError{Title: fmt.Sprintf("RemoveVolume: pool %q not found", poolName), Message: perr.Error()}
+		return &ce.CustomError{Title: "RemoveVolume: pool " + poolName + " not found", Message: perr.Error()}
 	}
 	defer pool.Free()
 
 	for _, volName := range volNames {
 		vol, verr := pool.LookupStorageVolByName(volName)
 		if verr != nil {
-			return &ce.CustomError{Title: fmt.Sprintf("RemoveVolume: volume %q not found in pool %q", volName, poolName), Message: verr.Error()}
+			return &ce.CustomError{Title: "RemoveVolume: volume " + volName + " not found in pool " + poolName, Message: verr.Error()}
 		}
 
 		derr := vol.Delete(libvirt.STORAGE_VOL_DELETE_NORMAL)
 		vol.Free()
 		if derr != nil {
-			return &ce.CustomError{Title: fmt.Sprintf("RemoveVolume: cannot remove volume %q", volName), Message: derr.Error()}
+			return &ce.CustomError{Title: "RemoveVolume: cannot remove volume " + volName, Message: derr.Error()}
 		}
-
-		fmt.Println(hftx.EnabledSign(volName + hftx.DimRed(" REMOVED")))
+		if !shared.QuietOutput {
+			fmt.Println(hftx.EnabledSign("Volume " + hftx.Gold(volName) + hftx.DimRed(" removed")))
+		}
 	}
 	return nil
 }
