@@ -50,7 +50,9 @@ func startDomains(conn *libvirt.Connect, args []string) *ce.CustomError {
 				fmt.Println()
 				return &ce.CustomError{Title: "Could not start " + vmname, Message: serr.Error()}
 			}
-			fmt.Println(hftx.EnabledSign("Domain " + hftx.Gold(vmname) + hftx.Green(" started")))
+			if !shared.QuietOutput {
+				fmt.Println(hftx.EnabledSign("Domain " + hftx.Gold(vmname) + hftx.Green(" started")))
+			}
 		}
 	}
 	return nil

@@ -1,7 +1,7 @@
 {
   "softwarename": "vmman4",
   "binaryname": "vmman",
-  "goversion": "1.27.2",
+  "goversion": "1.27.4",
   "versionnumber": "1.3.0",
   "defaultreleasenumber": "1",
   "description": "Virtual Machine Manager",
@@ -15,7 +15,8 @@
     "alpine": true,
     "debian": true,
     "redhat": true,
-    "archlinux": true,
+    "archlinux": false,
+    "windows": false,
     "skeleton": true
   }
 }

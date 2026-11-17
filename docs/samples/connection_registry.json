@@ -1,0 +1,42 @@
+{
+  "DBcreds": {
+    "dbhost": "vps",
+    "dbport": 65432,
+    "dbname": "vmmandb",
+    "dbuser": "vmman",
+    "dbpassword": "cp+EUCvPymgbHqFThitlz4A1lcBi"
+  },
+  "clusterList": {
+    "local": {
+      "templates": [
+        "alpine",
+        "arch",
+        "centos",
+        "debian",
+        "rocky",
+        "ubuntu"
+      ]
+    },
+    "oslo": {
+      "k8s": [
+        "kmaster01",
+        "kmaster02",
+        "kmaster03",
+        "knode01",
+        "knode02",
+        "knode03",
+        "kmgmt01"
+      ],
+      "templates": [
+        "alpine2",
+        "arch2",
+        "centos2",
+        "debian2",
+        "rocky2",
+        "ubuntu2",
+        "opensuse2",
+        "fedora2"
+      ]
+    }
+  }
+}

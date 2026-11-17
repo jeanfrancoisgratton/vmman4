@@ -57,7 +57,10 @@ func GetDomain(conn *libvirt.Connect, vmname string) (*libvirt.Domain, *customEr
 // Wait4Shutdown : Tries 15 seconds to gracefully shutdown the VM, if not it will shutdown forcefully
 func Wait4Shutdown(vm *libvirt.Domain, vmname string) {
 	var bIsActive = false
-	fmt.Println(hftx.InProgressSign("Waiting for VM to shutdown..."))
+
+	if !QuietOutput {
+		fmt.Println(hftx.InProgressSign("Waiting for VM to shutdown..."))
+	}
 	//fmt.Println("Will await that the VM " + vmname + " gracefully shuts down on " + shared.ConnectURI)
 	bIsActive, _ = vm.IsActive()
 	if bIsActive {
@@ -75,7 +78,9 @@ func Wait4Shutdown(vm *libvirt.Domain, vmname string) {
 		bIsActive, _ = vm.IsActive()
 		if bIsActive {
 			vm.DestroyFlags(libvirt.DOMAIN_DESTROY_DEFAULT)
-			fmt.Println("The VM " + vmname + " was slow to shutdown and was forcely shut down")
+			if !QuietOutput {
+				fmt.Println(hftx.SkullBonesSign("The VM " + hftx.Brown(vmname) + " was slow to shutdown and was forcibly terminated"))
+			}
 		}
 	}
 }

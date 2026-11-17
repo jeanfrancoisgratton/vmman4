@@ -5,12 +5,14 @@
 package vm_mgt
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"vmman4/connection_mgt"
 	"vmman4/shared"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"libvirt.org/go/libvirt"
 )
 
@@ -53,6 +55,10 @@ func DumpVmXML(vmname string, xmlfile string) *ce.CustomError {
 		return &ce.CustomError{Title: "file.WriteString() : Unable to write XML file", Message: e.Error()}
 	}
 	file.Sync()
+
+	if !shared.QuietOutput {
+		fmt.Println(hftx.EnabledSign("Dumped VM " + hftx.Brown(vmname) + " to " + hftx.Brown(xmlfile)))
+	}
 
 	return nil
 }
