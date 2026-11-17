@@ -19,7 +19,7 @@ set -eu
 SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-TARGETS="vmman4.json __alpine/APKBUILD __archlinux/PKGBUILD __debian/control __redhat/vmman4.spec"
+TARGETS="vmman4.json __alpine/APKBUILD __debian/control __redhat/vmman4.spec"
 
 print_usage() {
   cat <<EOF
@@ -117,12 +117,6 @@ patch __alpine/APKBUILD \
    s/^pkgrel=.*/pkgrel=1/"
 verify __alpine/APKBUILD "pkgver=$NEWVERSION"
 verify __alpine/APKBUILD "pkgrel=1"
-
-patch __archlinux/PKGBUILD \
-  "s/^pkgver=.*/pkgver=$NEWVERSION/
-   s/^pkgrel=.*/pkgrel=1/"
-verify __archlinux/PKGBUILD "pkgver=$NEWVERSION"
-verify __archlinux/PKGBUILD "pkgrel=1"
 
 patch __redhat/vmman4.spec \
   "s/^%define _version .*/%define _version $NEWVERSION/
