@@ -61,6 +61,10 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Nov 17 2026 Binary package builder <builder@famillegratton.net> 1.2.3-1
+- bug: -d shortflag conflicted in snapshot creation command
+- chore: update changelog for 1.2.2-1
+
 * Tue Nov 17 2026 Binary package builder <builder@famillegratton.net> 1.2.2-1
 - version bump
 - removed no-longer supported builddirs, tui cosmetic fixes
