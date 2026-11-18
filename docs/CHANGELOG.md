@@ -1,5 +1,6 @@
 | Release  | Date               | Comments             |
 |----------|--------------------|----------------------|
+| 1.2.3| 2026.11.17 | Remove the short flag `-d` , kept `--db` as it conflicted with other flags |
 | 1.2.2 | 2026.11.17 | Minor TUI enhancements/fixes, removed archlinux, macOS and windows support |
 | 1.2.1 | 2026.09.17 | Change parameter ordering in the `cluster` command |
 | 1.2.0 | 2026.09.17 | Stop/Start VM(s) now pause 3 seconds between operations |

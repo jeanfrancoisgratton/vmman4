@@ -132,7 +132,6 @@ echo
 echo "Changed:"
 grep -H '"versionnumber"\|"defaultreleasenumber"' vmman4.json
 grep -H '^pkgver=\|^pkgrel=' __alpine/APKBUILD
-grep -H '^pkgver=\|^pkgrel=' __archlinux/PKGBUILD
 grep -H '^Version:' __debian/control
 grep -H '^%define _version\|^%define _rel' __redhat/vmman4.spec
 echo
