@@ -1,5 +1,5 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// vm_mgt/vmStop.go
+// vm_mgt/stop.go
 // 2022-08-22 13:13:14
 
 package vm_mgt

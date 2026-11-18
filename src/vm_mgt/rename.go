@@ -1,5 +1,5 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// src/vm_mgt/vmRename.go
+// src/vm_mgt/rename.go
 // 2022-10-29 19:04:58
 
 package vm_mgt

@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_mgt/vmHelpers.go
+// Original filename: src/vm_mgt/helpers.go
 // Original timestamp: 2026/05/26 19:08:41
 
 package vm_mgt

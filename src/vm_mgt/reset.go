@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_mgt/vmReset.go
+// Original filename: src/vm_mgt/reset.go
 // Original timestamp : 2026.09.11 16:43:26
 
 package vm_mgt

@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_mgt/vmProvisionScripts.go
+// Original filename: src/vm_mgt/provision_scripts.go
 
 package vm_mgt
 

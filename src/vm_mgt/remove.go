@@ -1,5 +1,5 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// src/vm_mgt/vmRemove.go
+// src/vm_mgt/remove.go
 // 2022-10-22 12:42:35
 
 package vm_mgt

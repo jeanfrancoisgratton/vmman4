@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_mgt/vmInfo.go
+// Original filename: src/vm_mgt/info.go
 // Original timestamp: 2026/09/11
 
 package vm_mgt

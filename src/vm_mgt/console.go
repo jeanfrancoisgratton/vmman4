@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_mgt/vmConsole.go
+// Original filename: src/vm_mgt/console.go
 // Original timestamp: 2026/05/27
 
 package vm_mgt

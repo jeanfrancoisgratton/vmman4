@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_mgt/vmProvisionQGA.go
+// Original filename: src/vm_mgt/provision_qemu-guest-agent.go
 
 package vm_mgt
 

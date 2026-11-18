@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
-// Original filename: src/vm_mgt/vmSetResources.go
+// Original filename: src/vm_mgt/set_resources.go
 // Original timestamp : 2026.09.11 17:13:49
 
 package vm_mgt

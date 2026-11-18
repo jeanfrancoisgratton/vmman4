@@ -1,5 +1,5 @@
 // vmman3 : Écrit par Jean-François Gratton (jean-francois@famillegratton.net)
-// src/vmmanagement/vmDumpXML.go
+// src/vmmanagement/dumpxml.go
 // 2022-11-05 13:45:39
 
 package vm_mgt
