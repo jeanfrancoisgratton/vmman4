@@ -61,6 +61,17 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Nov 17 2026 Binary package builder <builder@famillegratton.net> 1.2.4-1
+- refactor phase 5: volume management
+- refactor phase 4: vm management
+- refactor phase 3: storage pool management
+- Merge remote-tracking branch 'refs/remotes/origin/develop' into develop
+- refactor phase 2: connection management
+- refactor phase 1: cluster management
+- enhancement: tui fixes
+- housekeeping: version bump
+- chore: update changelog for 1.2.3-1
+
 * Tue Nov 17 2026 Binary package builder <builder@famillegratton.net> 1.2.3-1
 - bug: -d shortflag conflicted in snapshot creation command
 - chore: update changelog for 1.2.2-1
