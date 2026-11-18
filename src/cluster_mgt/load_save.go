@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/cluster_mgt/loadSaveClustersFile.go
+// Original filename: src/cluster_mgt/load_save.go
 
 package cluster_mgt
 

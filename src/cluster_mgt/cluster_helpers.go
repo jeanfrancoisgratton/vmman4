@@ -1,18 +1,36 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/cluster_mgt/hypervisorKey.go
+// Original filename: src/cluster_mgt/cluster_helpers.go
 
 package cluster_mgt
 
 import (
 	"strings"
-
 	"vmman4/shared"
+
+	ce "github.com/jeanfrancoisgratton/customError/v3"
 )
 
-// DefaultHypervisorKey is the clusters.json hypervisor key used when
-// -c/--connectionfile is not given.
-const DefaultHypervisorKey = "local"
+// nodesFor returns the node list for cluster on the hypervisor implied by
+// hypervisorKey().
+func nodesFor(cluster string) ([]string, *ce.CustomError) {
+	hv := hypervisorKey()
+
+	cf, cerr := loadClustersFile()
+	if cerr != nil {
+		return nil, cerr
+	}
+
+	clusters, ok := cf[hv]
+	if !ok {
+		return nil, &ce.CustomError{Title: "Unknown hypervisor", Message: hv}
+	}
+	nodes, ok := clusters[cluster]
+	if !ok {
+		return nil, &ce.CustomError{Title: "Unknown cluster", Message: cluster + " on hypervisor " + hv}
+	}
+	return nodes, nil
+}
 
 // hypervisorKey returns the raw hypervisor name -- the clusters.json
 // top-level key -- implied by the -c/--connectionfile flag, taken as typed

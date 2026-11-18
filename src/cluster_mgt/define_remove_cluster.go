@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/cluster_mgt/defineRemoveCluster.go
+// Original filename: src/cluster_mgt/define_remove_cluster.go
 
 package cluster_mgt
 

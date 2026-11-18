@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/cluster_mgt/clusterOps.go
+// Original filename: src/cluster_mgt/cluster_ops.go
 
 package cluster_mgt
 

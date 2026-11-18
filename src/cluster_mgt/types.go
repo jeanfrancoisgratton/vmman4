@@ -8,3 +8,7 @@ package cluster_mgt
 // A cluster name may appear under several hypervisors independently, since a
 // single cluster (eg. a k8s cluster) can be spread across them.
 type ClustersFile map[string]map[string][]string
+
+// DefaultHypervisorKey is the clusters.json hypervisor key used when
+// -c/--connectionfile is not given.
+const DefaultHypervisorKey = "local"
