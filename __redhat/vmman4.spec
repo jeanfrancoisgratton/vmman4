@@ -61,6 +61,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Wed Nov 18 2026 Binary package builder <builder@famillegratton.net> 1.2.5-1
+- enhancement : vm command help prettyfied
+- completed package refactoring, yet another TUI standardization pass
+- chore: update changelog for 1.2.4-1
+
 * Tue Nov 17 2026 Binary package builder <builder@famillegratton.net> 1.2.4-1
 - refactor phase 5: volume management
 - refactor phase 4: vm management
