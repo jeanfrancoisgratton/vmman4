@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/connection_mgt/listInfo.go
+// Original filename: src/connection_mgt/list_info.go
 // Original timestamp: 2026/05/20 08:09:45
 
 package connection_mgt

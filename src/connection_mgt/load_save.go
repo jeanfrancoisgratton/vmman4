@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/connection_mgt/loadSaveConnectionFile.go
+// Original filename: src/connection_mgt/load_save.go
 // Original timestamp: 2026/05/19 20:05:24
 
 package connection_mgt

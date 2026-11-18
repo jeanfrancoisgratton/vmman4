@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/connection_mgt/createRemoveConnections.go
+// Original filename: src/connection_mgt/create_remove.go
 // Original timestamp: 2026/05/19 19:54:47
 
 package connection_mgt
