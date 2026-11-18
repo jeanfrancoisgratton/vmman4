@@ -64,7 +64,7 @@ func RemovePool(poolNames []string) *ce.CustomError {
 		}
 
 		if !shared.QuietOutput {
-			fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.DimRed(" removed")))
+			fmt.Println(hftx.EnabledSign("Pool " + hftx.Brown(poolName) + hftx.DimRed(" removed")))
 		}
 	}
 	return nil

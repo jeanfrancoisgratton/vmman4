@@ -72,8 +72,8 @@ func AttachVolume(vmName, poolName, volName string) *ce.CustomError {
 	}
 
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign(hftx.Gold(volName) + "/" + hftx.Gold(poolName) +
-			hftx.Green(" attached to ") + hftx.Gold(volName) + " as " + hftx.Gold(dev)))
+		fmt.Println(hftx.EnabledSign(hftx.Brown(volName) + "/" + hftx.Brown(poolName) +
+			hftx.Green(" attached to ") + hftx.Brown(volName) + " as " + hftx.Brown(dev)))
 	}
 	return nil
 }

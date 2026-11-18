@@ -45,7 +45,7 @@ func ListSnapshots(vmnames []string, asTree bool) *ce.CustomError {
 		defer domain.Free()
 		numsnap, _ := domain.SnapshotNum(0)
 		if numsnap == 0 {
-			hftx.InfoSign("No snapshot on domain " + hftx.Gold(vmname))
+			hftx.InfoSign("No snapshot on domain " + hftx.Brown(vmname))
 		}
 		snapshots, _ := domain.ListAllSnapshots(0)
 

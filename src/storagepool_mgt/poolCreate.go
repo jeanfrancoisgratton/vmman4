@@ -49,7 +49,7 @@ func CreatePool(poolName, targetPath string) *ce.CustomError {
 	}
 
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" created")))
+		fmt.Println(hftx.EnabledSign("Pool " + hftx.Brown(poolName) + hftx.Green(" created")))
 	}
 	return nil
 }

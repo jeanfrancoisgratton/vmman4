@@ -54,7 +54,7 @@ func RevertSnapshot(vmname, sname string) *ce.CustomError {
 		if lverr, ok := errors.AsType[libvirt.Error](err); ok {
 			if strings.HasPrefix(lverr.Message, "Domain snapshot not found") {
 				return &ce.CustomError{Title: "Snapshot not found",
-					Message: "No snapshot named " + hftx.Bold(hftx.Red(sname)) + " exists for " + hftx.Gold(vmname)}
+					Message: "No snapshot named " + hftx.Bold(hftx.Red(sname)) + " exists for " + hftx.Brown(vmname)}
 			}
 			return &ce.CustomError{Title: "snapshot_mgt.RevertSnapshot() failure", Message: lverr.Message}
 		}
@@ -70,7 +70,7 @@ func RevertSnapshot(vmname, sname string) *ce.CustomError {
 	}
 	if !shared.QuietOutput {
 		fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s from %s", sname,
-			hftx.Bold(hftx.DimGreen("reverted")), hftx.Gold(vmname))))
+			hftx.Bold(hftx.DimGreen("reverted")), hftx.Brown(vmname))))
 	}
 	return nil
 }

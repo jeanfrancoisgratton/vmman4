@@ -47,14 +47,14 @@ func stopDomains(conn *libvirt.Connect, args []string) *ce.CustomError {
 			fmt.Println(e.Error())
 		}
 		if !bIsActive {
-			fmt.Println(hftx.WarningSign("Domain " + hftx.Gold(vmname) + " is already shut down"))
+			fmt.Println(hftx.WarningSign("Domain " + hftx.Brown(vmname) + " is already shut down"))
 		} else {
 			if serr := domain.ShutdownFlags(libvirt.DOMAIN_SHUTDOWN_DEFAULT); serr != nil {
 				fmt.Println()
 				return &ce.CustomError{Title: "Could not stop " + vmname, Message: serr.Error()}
 			}
 			if !shared.QuietOutput {
-				fmt.Println(hftx.EnabledSign("Domain " + hftx.Gold(vmname) + hftx.Red(" stopped")))
+				fmt.Println(hftx.EnabledSign("Domain " + hftx.Brown(vmname) + hftx.Red(" stopped")))
 			}
 		}
 	}

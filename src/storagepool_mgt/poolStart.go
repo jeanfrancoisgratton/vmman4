@@ -36,7 +36,7 @@ func StartPool(poolName string) *ce.CustomError {
 	}
 
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign("Pool " + hftx.Gold(poolName) + hftx.Green(" started")))
+		fmt.Println(hftx.EnabledSign("Pool " + hftx.Brown(poolName) + hftx.Green(" started")))
 	}
 	return nil
 }

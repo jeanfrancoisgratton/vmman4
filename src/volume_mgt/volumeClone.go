@@ -45,7 +45,7 @@ func CloneVolume(conn *libvirt.Connect, poolName, srcVolName, destVolName string
   </target>
 </volume>`, destVolName, srcInfo.Capacity)
 
-	fmt.Println(hftx.InProgressSign("Cloning "+hftx.Gold(srcVolName)+" to "+hftx.Gold(destVolName)) + ". This might take a while...")
+	fmt.Println(hftx.InProgressSign("Cloning "+hftx.Brown(srcVolName)+" to "+hftx.Brown(destVolName)) + ". This might take a while...")
 
 	destVol, err := pool.StorageVolCreateXMLFrom(destXML, srcVol, 0)
 	if err != nil {
@@ -53,8 +53,8 @@ func CloneVolume(conn *libvirt.Connect, poolName, srcVolName, destVolName string
 	}
 
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign("Volume " + hftx.Gold(srcVolName) + hftx.Green(" cloned " + " as " +
-			hftx.Gold(destVolName))))
+		fmt.Println(hftx.EnabledSign("Volume " + hftx.Brown(srcVolName) + hftx.Green(" cloned " + " as " +
+			hftx.Brown(destVolName))))
 	}
 	return destVol, nil
 }
