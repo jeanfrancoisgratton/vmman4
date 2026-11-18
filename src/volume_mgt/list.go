@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/volume_mgt/volumeList.go
+// Original filename: src/volume_mgt/list.go
 
 package volume_mgt
 
@@ -17,14 +17,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/text"
 	"libvirt.org/go/libvirt"
 )
-
-// volumeRow is a single line of the `vol list` table.
-type volumeRow struct {
-	pool string
-	name string
-	path string
-	size uint64
-}
 
 // ListVolumes prints all volumes in the named storage pool, or across every
 // active pool on the hypervisor when poolName is empty.

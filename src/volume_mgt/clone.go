@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/volume_mgt/volumeClone.go
+// Original filename: src/volume_mgt/clone.go
 
 package volume_mgt
 
@@ -53,7 +53,7 @@ func CloneVolume(conn *libvirt.Connect, poolName, srcVolName, destVolName string
 	}
 
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign("Volume " + hftx.Brown(srcVolName) + hftx.Green(" cloned " + " as " +
+		fmt.Println(hftx.EnabledSign("Volume " + hftx.Brown(srcVolName) + hftx.Green(" cloned "+" as "+
 			hftx.Brown(destVolName))))
 	}
 	return destVol, nil

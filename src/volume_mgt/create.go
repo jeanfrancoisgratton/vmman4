@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/volume_mgt/volumeCreate.go
+// Original filename: src/volume_mgt/create.go
 
 package volume_mgt
 

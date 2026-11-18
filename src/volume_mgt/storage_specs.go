@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/volume_mgt/storageSpecs.go
+// Original filename: src/volume_mgt/storage_specs.go
 
 package volume_mgt
 

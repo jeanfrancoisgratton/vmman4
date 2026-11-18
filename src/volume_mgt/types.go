@@ -61,3 +61,11 @@ type diskTarget struct {
 	Dev string `xml:"dev,attr"`
 	Bus string `xml:"bus,attr"`
 }
+
+// volumeRow is a single line of the `vol list` table.
+type volumeRow struct {
+	pool string
+	name string
+	path string
+	size uint64
+}
