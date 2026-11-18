@@ -21,7 +21,8 @@ var vmCmd = &cobra.Command{
 	Long:    `Commands to manage the VMs`,
 	Example: "vmman vm list",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftx.ScrollSign("Available commands: vm [ list | stop | start | restart ]"))
+		fmt.Println(hftx.ScrollSign("Available commands: vm [ list | info | stop[all] | start[all] | reset[all] | remove ]"))
+		fmt.Println(hftx.ScrollSign("other available commands: vm [console | rename setvmem | setvcpus | dumpxml create | provision ]"))
 	},
 }
 
