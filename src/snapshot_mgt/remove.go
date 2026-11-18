@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
-// Original filename: src/snapshot_mgt/snapRemove.go
+// Original filename: src/snapshot_mgt/remove.go
 // Original timestamp : 2026.09.13 12:57:50
 
 package snapshot_mgt

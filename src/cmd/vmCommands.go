@@ -150,8 +150,8 @@ Also, if the VM holds any snapshot, they need to be removed before effecting the
 }
 
 var vmSetMemCmd = &cobra.Command{
-	Use:     "setmem <VM> <MIN_MB> [MAX_MB]",
-	Example: "vmman vm setmem myvm 2048\nvmman vm setmem myvm 2048 4096",
+	Use:     "setvmem <VM> <MIN_MB> [MAX_MB]",
+	Example: "vmman vm setvmem myvm 2048\nvmman vm setvmem myvm 2048 4096",
 	Short:   "Set a VM's memory (in MiB)",
 	Long: `Expects 1 or 2 numeric arguments: min_mem [max_mem].
 If only min_mem is passed, min_mem = max_mem.

@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
-// Original filename: src/snapshot_mgt/snapCreate.go
+// Original filename: src/snapshot_mgt/create.go
 // Original timestamp : 2026.09.13 15:28:50
 
 package snapshot_mgt
@@ -82,8 +82,7 @@ func CreateSnapshot(vmname, snapname, parentsnap, description string) *ce.Custom
 	}
 
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s on %s", snapname,
-			hftx.Bold(hftx.DimGreen("created")), hftx.Brown(vmname))))
+		fmt.Println(hftx.EnabledSign("Snapshot " + snapname + hftx.Green(" created.")))
 	}
 	return nil
 }

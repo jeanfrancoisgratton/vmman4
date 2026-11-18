@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
-// Original filename: src/snapshot_mgt/snapRevert.go
+// Original filename: src/snapshot_mgt/revert.go
 // Original timestamp : 2026.09.12 22:09:37
 
 package snapshot_mgt

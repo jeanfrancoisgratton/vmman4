@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton (jean-francois@famillegratton.net)
-// Original filename : src/snapshot_mgt/snapList.go
+// Original filename : src/snapshot_mgt/list.go
 // original timestamp : 2026/05/31 14:57:46
 
 package snapshot_mgt

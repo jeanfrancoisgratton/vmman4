@@ -44,7 +44,7 @@ func RemoveVolume(poolName string, volNames []string) *ce.CustomError {
 			return &ce.CustomError{Title: "RemoveVolume: cannot remove volume " + volName, Message: derr.Error()}
 		}
 		if !shared.QuietOutput {
-			fmt.Println(hftx.EnabledSign("Volume " + hftx.Brown(volName) + hftx.DimRed(" removed")))
+			fmt.Println(hftx.EnabledSign("Volume " + volName + hftx.DimRed(" removed")))
 		}
 	}
 	return nil

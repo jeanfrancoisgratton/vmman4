@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
-// Original filename: src/snapshot_mgt/snapDumpXML.go
+// Original filename: src/snapshot_mgt/dumpxml.go
 // Original timestamp : 2026.09.13 16:00:00
 
 package snapshot_mgt

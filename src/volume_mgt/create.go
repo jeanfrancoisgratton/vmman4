@@ -42,7 +42,6 @@ func NewVolume(poolName, volName, sizeGB string) *ce.CustomError {
 	}
 	defer vol.Free()
 
-	fmt.Println(hftx.EnabledSign("Volume " + hftx.Brown(volName) + hftx.Green(" created")))
 	return nil
 }
 
@@ -78,7 +77,7 @@ func CreateVolume(conn *libvirt.Connect, poolName, volName string, sizeGB float6
 		}
 	}
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign("Volume " + hftx.Brown(volName) + hftx.Green(" created")))
+		fmt.Println(hftx.EnabledSign("Volume " + volName + hftx.Green(" created")))
 	}
 	return vol, nil
 }
