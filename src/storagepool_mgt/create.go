@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storagepool_mgt/poolCreate.go
+// Original filename: src/storagepool_mgt/create.go
 
 package storagepool_mgt
 

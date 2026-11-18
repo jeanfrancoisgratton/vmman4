@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/storagepool_mgt/poolStop.go
+// Original filename: src/storagepool_mgt/stop.go
 
 package storagepool_mgt
 
