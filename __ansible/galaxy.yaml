@@ -1,0 +1,23 @@
+namespace: devops
+name: vmman4
+version: 1.2.5
+readme: README.md
+authors:
+  - J.F. Gratton <jean-francois@famillegratton.net>
+description: Ansible collection for managing virtual machines using vmman4
+license:
+  - GPL-3.0-or-later
+tags:
+  - virtualization
+  - libvirt
+  - qemu
+  - vmman
+  - vmman4
+repository: https://git.famillegratton.net:3000/devops/vmman4.git
+documentation: https://git.famillegratton.net:3000/devops/vmman4
+issues: https://git.famillegratton.net:3000/devops/vmman4/issues
+build_ignore:
+  - "*.tar.gz"
+  - ".git*"
+  - "Makefile"
+  - "tests"

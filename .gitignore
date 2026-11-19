@@ -1,4 +1,4 @@
-# ---> Go
+# ----> Go
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -16,6 +16,7 @@
 # vendor/
 
 .idea/
+skills/
 _SCRATCHPAD/
 
 

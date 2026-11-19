@@ -1,0 +1,33 @@
+---
+- name: Test vmman module locally
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    test_vm: "test-ansible-vm"
+    # By default, use vmman or pass custom binary path if testing against build artifact
+    vmman_bin: "vmman"
+
+  tasks:
+    - name: Query VM status via vmman_info
+      vmman_info:
+        name: "{{ test_vm }}"
+        executable: "{{ vmman_bin }}"
+      register: initial_info
+
+    - name: Display query result
+      ansible.builtin.debug:
+        var: initial_info.vm
+
+    - name: Test idempotent absence (check mode)
+      vmman:
+        name: "{{ test_vm }}"
+        state: absent
+        executable: "{{ vmman_bin }}"
+      check_mode: true
+      register: check_absent
+
+    - name: Display check_mode result
+      ansible.builtin.debug:
+        var: check_absent
