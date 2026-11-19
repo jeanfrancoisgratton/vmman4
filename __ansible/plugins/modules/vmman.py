@@ -80,36 +80,36 @@ options:
 
 EXAMPLES = r'''
 - name: Ensure a VM is provisioned from a template
-  devops.vmman4.vmman:
+  jfgratton.vmman4.vmman:
     name: web-node-01
     state: present
     template: debian12-template
     ip_address: 192.168.1.100
 
 - name: Create a VM from a JSON specification file
-  devops.vmman4.vmman:
+  jfgratton.vmman4.vmman:
     name: db-node-01
     state: present
     spec_file: /etc/vmman/specs/db-node.json
 
 - name: Ensure VM is running
-  devops.vmman4.vmman:
+  jfgratton.vmman4.vmman:
     name: web-node-01
     state: running
 
 - name: Stop a running VM
-  devops.vmman4.vmman:
+  jfgratton.vmman4.vmman:
     name: web-node-01
     state: stopped
 
 - name: Adjust VM resources
-  devops.vmman4.vmman:
+  jfgratton.vmman4.vmman:
     name: web-node-01
     memory_mb: 4096
     vcpus: 4
 
 - name: Delete a VM but keep its storage disks
-  devops.vmman4.vmman:
+  jfgratton.vmman4.vmman:
     name: web-node-01
     state: absent
     keep_storage: true

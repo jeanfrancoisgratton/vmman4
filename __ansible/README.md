@@ -1,4 +1,4 @@
-# Ansible Collection: devops.vmman4
+# Ansible Collection: jfgratton.vmman4
 
 Ansible collection and modules wrapping the **`vmman4`** virtual machine management CLI.
 
@@ -61,20 +61,20 @@ make test
 Build the `.tar.gz` collection package and install it locally:
 
 ```bash
-# Build devops-vmman4-*.tar.gz
+# Build jfgratton-vmman4-*.tar.gz
 make build
 
 # Install into ~/.ansible/collections
 make install
 ```
 
-Once installed, use the fully-qualified collection name (`devops.vmman4.vmman`) in your playbooks:
+Once installed, use the fully-qualified collection name (`jfgratton.vmman4.vmman`) in your playbooks:
 
 ```yaml
 - hosts: localhost
   tasks:
     - name: Ensure test VM is running
-      devops.vmman4.vmman:
+      jfgratton.vmman4.vmman:
         name: test-vm
         state: running
 ```
@@ -103,7 +103,7 @@ Depending on your deployment environment, configure your Ansible playbook reposi
 2. In your playbook's `requirements.yaml`:
    ```yaml
    collections:
-     - name: devops.vmman4
+     - name: jfgratton.vmman4
        version: ">=1.0.0"
    ```
 
@@ -131,13 +131,13 @@ Install from a locally built collection archive:
 
 ```yaml
 collections:
-  - name: /localrepos/devops/vmman4/__ansible/devops-vmman4-1.2.5.tar.gz
+  - name: /localrepos/devops/vmman4/__ansible/jfgratton-vmman4-1.2.5.tar.gz
     type: file
 ```
 
 ---
 
-## Module Parameters (`devops.vmman4.vmman`)
+## Module Parameters (`jfgratton.vmman4.vmman`)
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|

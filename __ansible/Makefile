@@ -1,7 +1,7 @@
-# Makefile for __ansible (devops.vmman4 collection)
+# Makefile for __ansible (jfgratton.vmman4 collection)
 
 SHELL := /bin/bash
-COLLECTION_NAME := devops-vmman4
+COLLECTION_NAME := jfgratton-vmman4
 
 .PHONY: help build clean install test lint
 

@@ -39,7 +39,7 @@ options:
 
 EXAMPLES = r'''
 - name: Get VM details
-  devops.vmman4.vmman_info:
+  jfgratton.vmman4.vmman_info:
     name: web-node-01
   register: vm_details
 

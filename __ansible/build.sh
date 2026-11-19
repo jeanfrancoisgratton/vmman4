@@ -21,7 +21,7 @@ case "${ACTION}" in
     ;;
   install)
     "${SCRIPT_DIR}/build.sh" build
-    ansible-galaxy collection install "${SCRIPT_DIR}"/devops-vmman4-*.tar.gz --force
+    ansible-galaxy collection install "${SCRIPT_DIR}"/jfgratton-vmman4-*.tar.gz --force
     ;;
   clean)
     rm -f "${SCRIPT_DIR}"/*.tar.gz
