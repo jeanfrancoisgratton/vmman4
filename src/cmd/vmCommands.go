@@ -77,7 +77,7 @@ var vmStartAllCmd = &cobra.Command{
 
 var vmStopCmd = &cobra.Command{
 	Use:     "stop <VM...>",
-	Aliases: []string{"down"},
+	Aliases: []string{"down", "shutdown"},
 	Example: "vmman vm stop myvm\nvmman vm stop myvm1 myvm2",
 	Short:   "Stop one or many VMs",
 	Args:    cobra.MinimumNArgs(1),
@@ -90,6 +90,7 @@ var vmStopCmd = &cobra.Command{
 
 var vmStopAllCmd = &cobra.Command{
 	Use:     "stopall",
+	Aliases: []string{"shutdownall"},
 	Example: "vmman vm stopall",
 	Short:   "Stop all VMs at once",
 	Run: func(cmd *cobra.Command, args []string) {
