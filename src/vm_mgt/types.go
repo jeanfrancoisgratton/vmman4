@@ -8,6 +8,7 @@ package vm_mgt
 var ForceConsoleConnection = false
 var KeepStorage = false
 var SampleMode = false
+var KillVM = false
 
 type vmInfo struct {
 	viId              uint

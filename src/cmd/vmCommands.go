@@ -40,6 +40,7 @@ var vmLsCmd = &cobra.Command{
 
 var vmInfoCmd = &cobra.Command{
 	Use:     "info <VM>",
+	Aliases: []string{"describe"},
 	Example: "vmman vm info myvm",
 	Short:   "Show detailed information about a VM",
 	Args:    cobra.ExactArgs(1),
@@ -125,6 +126,7 @@ var vmResetAllCmd = &cobra.Command{
 
 var vmConsoleCmd = &cobra.Command{
 	Use:     "console <VM>",
+	Aliases: []string{"tty"},
 	Example: "vmman vm console myvm\nvmman vm console myvm -f",
 	Short:   "Open a console session on the VM",
 	Long:    "The -f/--force flag disconnects a previous session on the same VM before opening the new one.",
@@ -152,6 +154,7 @@ Also, if the VM holds any snapshot, they need to be removed before effecting the
 
 var vmSetMemCmd = &cobra.Command{
 	Use:     "setvmem <VM> <MIN_MB> [MAX_MB]",
+	Aliases: []string{"setmem"},
 	Example: "vmman vm setvmem myvm 2048\nvmman vm setvmem myvm 2048 4096",
 	Short:   "Set a VM's memory (in MiB)",
 	Long: `Expects 1 or 2 numeric arguments: min_mem [max_mem].
@@ -181,6 +184,7 @@ var vmSetVcpusCmd = &cobra.Command{
 
 var vmDumpXmlCmd = &cobra.Command{
 	Use:     "dumpxml <VM> <FILE>",
+	Aliases: []string{"dump", "xml"},
 	Example: "vmman vm dumpxml myvm myvm.xml",
 	Short:   "Dump a VM's XML configuration to a file",
 	Long:    `Shuts the VM down (if active) before dumping its inactive, migratable XML description.`,
@@ -263,5 +267,9 @@ func init() {
 	vmConsoleCmd.Flags().BoolVarP(&vm_mgt.ForceConsoleConnection, "force", "f", false, "Force previous session logout")
 	vmRemoveCmd.Flags().BoolVarP(&vm_mgt.KeepStorage, "keep", "k", false, "Keep VM disk after removal")
 	vmCreateCmd.Flags().BoolVarP(&vm_mgt.SampleMode, "sample", "s", false, "Write an annotated sample spec file instead of creating a VM")
+	vmStopCmd.Flags().BoolVarP(&vm_mgt.KillVM, "kill", "k", false, "Kill the VM (ungracefull shutdown)")
+	vmStopAllCmd.Flags().BoolVarP(&vm_mgt.KillVM, "kill", "k", false, "Kill the VM (ungracefull shutdown)")
+	vmResetCmd.Flags().BoolVarP(&vm_mgt.KillVM, "kill", "k", false, "Kill the VM (ungracefull shutdown)")
+	vmResetAllCmd.Flags().BoolVarP(&vm_mgt.KillVM, "kill", "k", false, "Kill the VM (ungracefull shutdown)")
 	vmProvisionCmd.Flags().StringVarP(&vm_mgt.EnvFile, "environment", "E", "", "Environment file (default: ~/.config/JFG/vmman4/env.json)")
 }

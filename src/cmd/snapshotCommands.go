@@ -55,7 +55,7 @@ var snapCreateCmd = &cobra.Command{
 
 var snapRevertCmd = &cobra.Command{
 	Use:     "revert",
-	Aliases: []string{"set"},
+	Aliases: []string{"set", "rev"},
 	Example: "vmman snap revert VM [SNAPSHOTNAME]",
 	Short:   "Reverts (sets) a VM to SNAPSHOTNAME",
 	Long:    "If SNAPSHOTNAME is not set, the current snapshot will be used",
@@ -91,6 +91,7 @@ var snapRmCmd = &cobra.Command{
 
 var snapDumpXmlCmd = &cobra.Command{
 	Use:     "dumpxml",
+	Aliases: []string{"dump", "xmldump"},
 	Example: "vmman snap dumpxml VM [SNAPSHOTNAME] [-f filename]",
 	Short:   "Dumps a snapshot's XML description",
 	Long:    "If SNAPSHOTNAME is not set, the current snapshot will be used. Without -f, the XML is printed to stdout.",

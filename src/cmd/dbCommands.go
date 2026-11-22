@@ -35,8 +35,7 @@ var dbEnvCmd = &cobra.Command{
 }
 
 var dbInitCmd = &cobra.Command{
-	Use: "init",
-	//Aliases: []string{"ls"},
+	Use:     "init",
 	Example: "vmman db init",
 	Short:   "Creates the database",
 	Run: func(cmd *cobra.Command, args []string) {

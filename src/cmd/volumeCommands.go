@@ -16,7 +16,6 @@ import (
 var volCmd = &cobra.Command{
 	Use:     "vol",
 	Aliases: []string{"volume"},
-	Example: "vmman vol list",
 	Short:   "Storage volume subcommands",
 	Long:    `You need to provide one of the subcommands: ls, create, attach, rm.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -55,6 +54,7 @@ var volCreateCmd = &cobra.Command{
 
 var volAttachCmd = &cobra.Command{
 	Use:     "attach <VM> <POOL> <VOL_NAME>",
+	Aliases: []string{"att"},
 	Example: "vmman vol attach myvm default my-extra-disk.qcow2",
 	Short:   "Attach an existing storage volume to a VM as a new disk",
 	Long:    `The VM is shut down first (gracefully, then forcefully after 15s) if it's running, since the disk is attached to the persistent, inactive domain config. The new disk is given the next free vd* target device on the virtio bus.`,
