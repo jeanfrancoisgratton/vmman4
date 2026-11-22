@@ -61,6 +61,15 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Sun Nov 22 2026 Binary package builder <builder@famillegratton.net> 1.3.0-1
+- other new command aliases
+- added shortened command aliases, -k (kill) signal to vm shutdown
+- version bump
+- fix: changed the ansible module namespace name
+- Merge branch 'ansible_module' into develop
+- feature: added ansible module support
+- chore: update changelog for 1.2.5-1
+
 * Wed Nov 18 2026 Binary package builder <builder@famillegratton.net> 1.2.5-1
 - enhancement : vm command help prettyfied
 - completed package refactoring, yet another TUI standardization pass
