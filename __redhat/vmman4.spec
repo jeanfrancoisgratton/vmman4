@@ -61,6 +61,10 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Nov 24 2026 Binary package builder <builder@famillegratton.net> 1.4.0-2
+- removed db support from planned features
+- chore: update changelog for 1.4.0-1
+
 * Mon Nov 23 2026 Binary package builder <builder@famillegratton.net> 1.4.0-1
 - feature: 2 new cluster snapshot commands, more consistent colour scheme in output
 - version bump
