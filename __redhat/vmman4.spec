@@ -61,6 +61,12 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Mon Nov 23 2026 Binary package builder <builder@famillegratton.net> 1.4.0-1
+- feature: 2 new cluster snapshot commands, more consistent colour scheme in output
+- version bump
+- forgot to update the CL
+- chore: update changelog for 1.3.0-1
+
 * Sun Nov 22 2026 Binary package builder <builder@famillegratton.net> 1.3.0-1
 - other new command aliases
 - added shortened command aliases, -k (kill) signal to vm shutdown
