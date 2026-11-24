@@ -61,6 +61,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Nov 24 2026 Binary package builder <builder@famillegratton.net> 1.4.0-3
+- removed pgsql dependencies that were not needed anymore
+- removed db support from planned features
+- chore: update changelog for 1.4.0-1
+
 * Tue Nov 24 2026 Binary package builder <builder@famillegratton.net> 1.4.0-2
 - removed db support from planned features
 - chore: update changelog for 1.4.0-1
