@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In-cluster snapshot removal with _cluster snaprm [snapshot_name] cluster_name_
 - In-cluster snapshot creation with _cluster snapset snapshot_name [parent_snapshot_name] cluster_name_
 
+### Removed
+
+- Database support, which hasn't yet made it yet in the final release
+
 ### Changed
 - More consistent coloured output in various the snapshot commands
 
