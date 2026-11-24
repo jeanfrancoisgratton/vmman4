@@ -6,7 +6,7 @@ require (
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/jeanfrancoisgratton/customError/v3 v3.1.1
 	github.com/jeanfrancoisgratton/helperFunctions/v5 v5.9.1
-	github.com/jedib0t/go-pretty/v6 v6.9.2
+	github.com/jedib0t/go-pretty/v6 v6.9.3
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/term v0.48.0
 	libvirt.org/go/libvirt v1.12009.0
@@ -15,8 +15,8 @@ require (
 require (
 	charm.land/lipgloss/v2 v2.1.1 // indirect
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect
-	github.com/charmbracelet/ultraviolet v0.0.0-20261023060817-a45b7c86333f // indirect
-	github.com/charmbracelet/x/ansi v0.11.9 // indirect
+	github.com/charmbracelet/ultraviolet v0.0.0-20261119151026-8ecbcf0e188c // indirect
+	github.com/charmbracelet/x/ansi v0.11.10 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect

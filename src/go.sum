@@ -4,8 +4,12 @@ github.com/charmbracelet/colorprofile v0.4.3 h1:QPa1IWkYI+AOB+fE+mg/5/4HRMZcaXex
 github.com/charmbracelet/colorprofile v0.4.3/go.mod h1:/zT4BhpD5aGFpqQQqw7a+VtHCzu+zrQtt1zhMt9mR4Q=
 github.com/charmbracelet/ultraviolet v0.0.0-20261023060817-a45b7c86333f h1:D2JpB65eehsnkEwEG401dMBSNYtTDgvKXZZSl7ZCxWI=
 github.com/charmbracelet/ultraviolet v0.0.0-20261023060817-a45b7c86333f/go.mod h1:aJDVk+WOVM1K04rdc/71PMPoUGfjxjhvXfP3Pjz1Zio=
+github.com/charmbracelet/ultraviolet v0.0.0-20261119151026-8ecbcf0e188c h1:izHJ6cjHd9HGtre1J+c/+QE3rQZ2t4EZH6BqykQbpjc=
+github.com/charmbracelet/ultraviolet v0.0.0-20261119151026-8ecbcf0e188c/go.mod h1:aJDVk+WOVM1K04rdc/71PMPoUGfjxjhvXfP3Pjz1Zio=
 github.com/charmbracelet/x/ansi v0.11.9 h1:kIrqLBxtTVbLyyHO2Evoi93EjQo1mylWmpNEsfPxXAM=
 github.com/charmbracelet/x/ansi v0.11.9/go.mod h1:DG/hpOnaI2QJ/KMMqLL2h0KVhluuJLazf8973P+Vy5w=
+github.com/charmbracelet/x/ansi v0.11.10 h1:GjcX3+rAk+8wDX/jY0XwrZstxkjRcLkYU3TvwzZWiRA=
+github.com/charmbracelet/x/ansi v0.11.10/go.mod h1:DG/hpOnaI2QJ/KMMqLL2h0KVhluuJLazf8973P+Vy5w=
 github.com/charmbracelet/x/term v0.2.2 h1:xVRT/S2ZcKdhhOuSP4t5cLi5o+JxklsoEObBSgfgZRk=
 github.com/charmbracelet/x/term v0.2.2/go.mod h1:kF8CY5RddLWrsgVwpw4kAa6TESp6EB5y3uxGLeCqzAI=
 github.com/charmbracelet/x/termios v0.1.1 h1:o3Q2bT8eqzGnGPOYheoYS8eEleT5ZVNYNy8JawjaNZY=
@@ -36,6 +40,8 @@ github.com/jeanfrancoisgratton/helperFunctions/v5 v5.9.1 h1:+gbghkg0yhtwygjOEEWI
 github.com/jeanfrancoisgratton/helperFunctions/v5 v5.9.1/go.mod h1:Nay3UiFfltDF8C1rd+6szx15rZ+GzXGN1F8DI0FXptg=
 github.com/jedib0t/go-pretty/v6 v6.9.2 h1:aS5VZAJR1zSFNS45+pBywhe4CZYKU27Owl1SF/432Rs=
 github.com/jedib0t/go-pretty/v6 v6.9.2/go.mod h1:rDsMESQ3QyK0VMr1aeq/BErQLPk0tJ+ORkcjMMpnjeg=
+github.com/jedib0t/go-pretty/v6 v6.9.3 h1:JprieNeffKslmUAk7GTJZcGAhgJxnS0TLi29DCegFG4=
+github.com/jedib0t/go-pretty/v6 v6.9.3/go.mod h1:rDsMESQ3QyK0VMr1aeq/BErQLPk0tJ+ORkcjMMpnjeg=
 github.com/jwalton/gchalk v1.3.0 h1:uTfAaNexN8r0I9bioRTksuT8VGjrPs9YIXR1PQbtX/Q=
 github.com/jwalton/gchalk v1.3.0/go.mod h1:ytRlj60R9f7r53IAElbpq4lVuPOPNg2J4tJcCxtFqr8=
 github.com/jwalton/go-supportscolor v1.1.0/go.mod h1:hFVUAZV2cWg+WFFC4v8pT2X/S2qUUBYMioBD9AINXGs=

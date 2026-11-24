@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.4.0 - 2026-11-23
+
+### Added
+
+- In-cluster snapshot removal with _cluster snaprm [snapshot_name] cluster_name_
+- In-cluster snapshot creation with _cluster snapset snapshot_name [parent_snapshot_name] cluster_name_
+
+### Changed
+- More consistent coloured output in various the snapshot commands
+
+
 ## 1.3.0 - 2026-11-22
 
 ### Added
