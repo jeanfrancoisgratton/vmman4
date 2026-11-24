@@ -1,6 +1,6 @@
 // vmman4
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
-// Original filename: src/cluster_mgt/snpshot_ops.go
+// Original filename: src/cluster_mgt/snapshot_ops.go
 // Original timestamp : 2026.11.23 19:13:55
 
 package cluster_mgt
@@ -43,13 +43,13 @@ func SnapshotRemoveOnClusterNodes(cluster, snapshotName string) *ce.CustomError 
 }
 
 // SnapshotCreateOnClusterNodes creates a snapshot on every node in the cluster.
-func SnapshotCreateOnClusterNodes(cluster, snapshotName string) *ce.CustomError {
+func SnapshotCreateOnClusterNodes(cluster, snapshotName, parentSnapshotname string) *ce.CustomError {
 	nodes, cerr := nodesFor(cluster)
 	if cerr != nil {
 		return cerr
 	}
 	for _, node := range nodes {
-		if cerr := snapshot_mgt.CreateSnapshot(node, snapshotName); cerr != nil {
+		if cerr := snapshot_mgt.CreateSnapshot(node, snapshotName, parentSnapshotname); cerr != nil {
 			return cerr
 		}
 	}

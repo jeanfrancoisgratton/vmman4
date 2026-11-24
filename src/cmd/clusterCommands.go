@@ -36,7 +36,7 @@ var clusterLsCmd = &cobra.Command{
 
 var clusterDefineCmd = &cobra.Command{
 	Use:     "define <node1> [node2...nodeN] <cluster>",
-	Example: "vmman [-c hypervisor] cluster define node1 node2 cluster1",
+	Example: "vmman [-c hypervisor] cluster define node1 node2 cluster",
 	Short:   "Define (or redefine) a cluster's node list",
 	Long:    `The target hypervisor is taken from -c/--connectionfile (defaults to "local" when omitted). If the hypervisor/cluster pair already exists, its node list is replaced in place.`,
 	Args:    cobra.MinimumNArgs(2),
@@ -52,7 +52,7 @@ var clusterDefineCmd = &cobra.Command{
 var clusterRemoveCmd = &cobra.Command{
 	Use:     "remove <cluster>",
 	Aliases: []string{"rm"},
-	Example: "vmman [-c hypervisor] cluster remove cluster1",
+	Example: "vmman [-c hypervisor] cluster remove cluster",
 	Short:   "Remove a cluster",
 	Long:    `The target hypervisor is taken from -c/--connectionfile (defaults to "local" when omitted).`,
 	Args:    cobra.ExactArgs(1),
@@ -79,7 +79,7 @@ var clusterStartCmd = &cobra.Command{
 var clusterStopCmd = &cobra.Command{
 	Use:     "stop <cluster>",
 	Aliases: []string{"down"},
-	Example: "vmman [-c hypervisor] cluster stop cluster1",
+	Example: "vmman [-c hypervisor] cluster stop cluster",
 	Short:   "Stop every node in a cluster",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -92,7 +92,7 @@ var clusterStopCmd = &cobra.Command{
 var clusterResetCmd = &cobra.Command{
 	Use:     "reset <cluster>",
 	Aliases: []string{"reboot", "restart"},
-	Example: "vmman [-c hypervisor] cluster reset cluster1",
+	Example: "vmman [-c hypervisor] cluster reset cluster",
 	Short:   "Stop then start every node in a cluster",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -105,7 +105,7 @@ var clusterResetCmd = &cobra.Command{
 var clusterSnaprevCmd = &cobra.Command{
 	Use:     "snaprev [snapshot_name] <cluster>",
 	Aliases: []string{"revert"},
-	Example: "vmman [-c hypervisor] cluster snaprev baseline cluster1",
+	Example: "vmman [-c hypervisor] cluster snaprev baseline cluster",
 	Short:   "Revert every node in a cluster to a snapshot",
 	Long:    "If snapshot_name is not set, each node's current snapshot will be used.",
 	Args:    cobra.RangeArgs(1, 2),
@@ -115,7 +115,44 @@ var clusterSnaprevCmd = &cobra.Command{
 		if len(args) == 2 {
 			sname = args[0]
 		}
-		if err := cluster_mgt.SnaprevCluster(cluster, sname); err != nil {
+		if err := cluster_mgt.SnapshotRevertOnClusterNodes(cluster, sname); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var clusterSnaprmCmd = &cobra.Command{
+	Use:     "snaprm [snapshot_name] <cluster>",
+	Example: "vmman [-c hypervisor] cluster snaprm [snapshot_name] cluster",
+	Short:   "Remove snapshot_name every node in a cluster",
+	Long:    "If snapshot_name is not set, each node's current snapshot will be removed.",
+	Args:    cobra.RangeArgs(1, 2),
+	Run: func(cmd *cobra.Command, args []string) {
+		cluster := args[len(args)-1]
+		sname := ""
+		if len(args) == 2 {
+			sname = args[0]
+		}
+		if err := cluster_mgt.SnapshotRemoveOnClusterNodes(cluster, sname); err != nil {
+			fmt.Println(err.Error())
+		}
+	},
+}
+
+var clusterSnapCreateCmd = &cobra.Command{
+	Use:     "snapset snapshot_name [parent_snapshot_name] <cluster>",
+	Example: "vmman [-c hypervisor] cluster snapset snapshot_name [parent_snapshot_name] cluster",
+	Short:   "Create snapshot $SNAPSHOT_NAME on every node in the cluster $CLUSTER",
+	Long:    "If parent_snapshot_name is not set, the parent snapshot will be the current one",
+	Args:    cobra.RangeArgs(2, 3),
+	Run: func(cmd *cobra.Command, args []string) {
+		cluster := args[len(args)-1]
+		sname := args[0]
+		pname := ""
+		if len(args) == 3 {
+			pname = args[1]
+		}
+		if err := cluster_mgt.SnapshotCreateOnClusterNodes(cluster, sname, pname); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -123,5 +160,6 @@ var clusterSnaprevCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(clusterCmd)
-	clusterCmd.AddCommand(clusterLsCmd, clusterDefineCmd, clusterRemoveCmd, clusterStartCmd, clusterStopCmd, clusterResetCmd, clusterSnaprevCmd)
+	clusterCmd.AddCommand(clusterLsCmd, clusterDefineCmd, clusterRemoveCmd, clusterStartCmd, clusterStopCmd,
+		clusterResetCmd, clusterSnaprevCmd, clusterSnapCreateCmd, clusterSnaprmCmd)
 }

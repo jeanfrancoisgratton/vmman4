@@ -17,12 +17,12 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-func RemoveSnapshot(vmname, sname string, withChildren, onlyChildren bool) *ce.CustomError {
+func RemoveSnapshot(vmname, sname string) *ce.CustomError {
 	var cerr *ce.CustomError
 	var conn *libvirt.Connect
 	var domain *libvirt.Domain
 
-	if withChildren && onlyChildren {
+	if SnapRmWithChildren && SnapRmOnlyChildren {
 		return &ce.CustomError{Title: "Conflicting flags", Message: "--with-children and --only-children are mutually exclusive"}
 	}
 
@@ -68,9 +68,9 @@ func RemoveSnapshot(vmname, sname string, withChildren, onlyChildren bool) *ce.C
 
 	var flags libvirt.DomainSnapshotDeleteFlags
 	switch {
-	case withChildren:
+	case SnapRmWithChildren:
 		flags = libvirt.DOMAIN_SNAPSHOT_DELETE_CHILDREN
-	case onlyChildren:
+	case SnapRmOnlyChildren:
 		flags = libvirt.DOMAIN_SNAPSHOT_DELETE_CHILDREN_ONLY
 	}
 
@@ -83,14 +83,14 @@ func RemoveSnapshot(vmname, sname string, withChildren, onlyChildren bool) *ce.C
 	}
 
 	verb := " removed"
-	if onlyChildren {
+	if SnapRmOnlyChildren {
 		verb = " pruned of its children "
-	} else if withChildren {
+	} else if SnapRmWithChildren {
 		verb = " removed along with its children "
 	}
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign("Snapshot " + hftx.Brown(sname) + hftx.Red(verb) +
-			" from " + (hftx.Brown(vmname))))
+		fmt.Println(hftx.EnabledSign("Snapshot " + hftx.Gold(sname) + hftx.Red(verb) +
+			" from " + (hftx.Gold(vmname))))
 	}
 	return nil
 }

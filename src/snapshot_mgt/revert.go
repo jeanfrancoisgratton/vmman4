@@ -69,8 +69,7 @@ func RevertSnapshot(vmname, sname string) *ce.CustomError {
 		return &ce.CustomError{Title: "Cannot revert " + vmname + " to snapshot " + sname, Message: err.Error()}
 	}
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s %s from %s", sname,
-			hftx.Bold(hftx.DimGreen("reverted")), hftx.Brown(vmname))))
+		fmt.Println(hftx.EnabledSign("Snapshot " + hftx.Gold(sname) + hftx.Red(" reverted")))
 	}
 	return nil
 }

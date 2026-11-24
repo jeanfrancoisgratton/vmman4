@@ -17,7 +17,7 @@ import (
 	"libvirt.org/go/libvirt"
 )
 
-func CreateSnapshot(vmname, snapname, parentsnap, description string) *ce.CustomError {
+func CreateSnapshot(vmname, snapname, parentsnap string) *ce.CustomError {
 	var cerr *ce.CustomError
 	var conn *libvirt.Connect
 	var domain *libvirt.Domain
@@ -59,7 +59,7 @@ func CreateSnapshot(vmname, snapname, parentsnap, description string) *ce.Custom
 		}
 	}
 
-	snapshotXML, err := xml.Marshal(domainSnapshotCreate{Name: snapname, Description: description})
+	snapshotXML, err := xml.Marshal(domainSnapshotCreate{Name: snapname, Description: SnapCreateDescription})
 	if err != nil {
 		return &ce.CustomError{Title: "snapshot_mgt.CreateSnapshot() failure", Message: err.Error()}
 	}
@@ -82,7 +82,7 @@ func CreateSnapshot(vmname, snapname, parentsnap, description string) *ce.Custom
 	}
 
 	if !shared.QuietOutput {
-		fmt.Println(hftx.EnabledSign("Snapshot " + snapname + hftx.Green(" created.")))
+		fmt.Println(hftx.EnabledSign("Snapshot " + hftx.Gold(snapname) + hftx.Green(" created.")))
 	}
 	return nil
 }

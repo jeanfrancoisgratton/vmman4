@@ -7,6 +7,10 @@ package snapshot_mgt
 
 import "encoding/xml"
 
+var SnapRmWithChildren bool
+var SnapRmOnlyChildren bool
+var SnapCreateDescription string
+
 // Snapshot XML definitions
 type ParentElement struct {
 	XMLName    xml.Name `xml:"parent"`

@@ -84,6 +84,6 @@ func DumpSnapshotXML(vmname, sname, filename string) *ce.CustomError {
 	}
 	file.Sync()
 
-	fmt.Println(hftx.EnabledSign(fmt.Sprintf("Snapshot %s XML dumped to %s", sname, filename)))
+	fmt.Println(hftx.EnabledSign("Snapshot " + hftx.Gold(sname) + " XML dumped to " + hftx.Gold(filename)))
 	return nil
 }

@@ -11,5 +11,5 @@ var buildDate = "unknown"
 
 // snapshotCommands related vars
 
-var snapCreateDescription, snapDumpXMLFile string
-var snapLsAsTree, snapRmWithChildren, snapRmOnlyChildren bool
+var snapDumpXMLFile string
+var snapLsAsTree bool

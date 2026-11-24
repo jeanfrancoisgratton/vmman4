@@ -1,11 +1,10 @@
 // vmman4
 // Written by J.F.Gratton <jean-francois@famillegratton.net>
-// Original filename: src/cluster_mgt/cluster_ops.go
+// Original filename: src/cluster_mgt/vm_ops.go
 
 package cluster_mgt
 
 import (
-	"vmman4/snapshot_mgt"
 	"vmman4/vm_mgt"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -37,20 +36,4 @@ func ResetCluster(cluster string) *ce.CustomError {
 		return cerr
 	}
 	return vm_mgt.ResetVM(nodes)
-}
-
-// SnaprevCluster reverts every node in cluster to snapshotName. An empty
-// snapshotName means "the current snapshot", resolved per-node by
-// snapshot_mgt.RevertSnapshot.
-func SnaprevCluster(cluster, snapshotName string) *ce.CustomError {
-	nodes, cerr := nodesFor(cluster)
-	if cerr != nil {
-		return cerr
-	}
-	for _, node := range nodes {
-		if cerr := snapshot_mgt.RevertSnapshot(node, snapshotName); cerr != nil {
-			return cerr
-		}
-	}
-	return nil
 }

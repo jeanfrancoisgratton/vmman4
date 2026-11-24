@@ -47,7 +47,7 @@ var snapCreateCmd = &cobra.Command{
 		if len(args) > 2 {
 			pname = args[2]
 		}
-		if err := snapshot_mgt.CreateSnapshot(args[0], args[1], pname, snapCreateDescription); err != nil {
+		if err := snapshot_mgt.CreateSnapshot(args[0], args[1], pname); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -83,7 +83,7 @@ var snapRmCmd = &cobra.Command{
 		if len(args) > 1 {
 			sname = args[1]
 		}
-		if err := snapshot_mgt.RemoveSnapshot(args[0], sname, snapRmWithChildren, snapRmOnlyChildren); err != nil {
+		if err := snapshot_mgt.RemoveSnapshot(args[0], sname); err != nil {
 			fmt.Println(err.Error())
 		}
 	},
@@ -113,10 +113,10 @@ func init() {
 
 	snapLsCmd.Flags().BoolVarP(&snapLsAsTree, "tree", "x", false, "Render the snapshot hierarchy as a tree")
 
-	snapCreateCmd.Flags().StringVarP(&snapCreateDescription, "description", "d", "", "Description to embed in the snapshot")
+	snapCreateCmd.Flags().StringVarP(&snapshot_mgt.SnapCreateDescription, "description", "d", "", "Description to embed in the snapshot")
 
-	snapRmCmd.Flags().BoolVarP(&snapRmWithChildren, "with-children", "k", false, "Also delete the snapshot's children")
-	snapRmCmd.Flags().BoolVarP(&snapRmOnlyChildren, "only-children", "K", false, "Delete only the snapshot's children, keeping the snapshot itself")
+	snapRmCmd.Flags().BoolVarP(&snapshot_mgt.SnapRmWithChildren, "with-children", "k", false, "Also delete the snapshot's children")
+	snapRmCmd.Flags().BoolVarP(&snapshot_mgt.SnapRmOnlyChildren, "only-children", "K", false, "Delete only the snapshot's children, keeping the snapshot itself")
 	snapRmCmd.MarkFlagsMutuallyExclusive("with-children", "only-children")
 
 	snapDumpXmlCmd.Flags().StringVarP(&snapDumpXMLFile, "file", "f", "", "Write XML to file instead of stdout")
