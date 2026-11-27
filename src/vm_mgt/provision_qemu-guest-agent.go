@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -36,7 +37,7 @@ func qgaCall(dom *libvirt.Domain, execute string, args interface{}, out interfac
 
 	if out != nil {
 		if err := json.Unmarshal([]byte(respJSON), out); err != nil {
-			return &ce.CustomError{Title: "qgaCall: cannot parse " + execute + "response", Message: err.Error()}
+			return &ce.CustomError{Title: "qgaCall: cannot parse " + execute + " response", Message: err.Error()}
 		}
 	}
 	return nil
@@ -89,6 +90,72 @@ func guestPrimaryInterface(dom *libvirt.Domain) (string, *ce.CustomError) {
 		return iface.Name, nil
 	}
 	return "", &ce.CustomError{Title: "guestPrimaryInterface: guest agent reported no non-loopback interface"}
+}
+
+// ─── Guest agent capability preflight ──────────────────────────────────────────
+//
+// Several distros ship qemu-ga with the guest-file-* and guest-exec* commands
+// blocked by default (the RHEL family via /etc/sysconfig/qemu-ga, openSUSE
+// similarly). Calling a blocked command fails with a terse "has been disabled"
+// error, possibly after other work was done, so guest-info -- which lists every
+// command along with its enabled flag and is never blocked -- is consulted
+// first.
+
+// qgaRequiredCommands are the agent commands runProvisionScript relies on.
+var qgaRequiredCommands = []string{
+	"guest-file-open",
+	"guest-file-write",
+	"guest-file-close",
+	"guest-exec",
+	"guest-exec-status",
+}
+
+type qgaInfoResult struct {
+	Return struct {
+		Version           string `json:"version"`
+		SupportedCommands []struct {
+			Name    string `json:"name"`
+			Enabled bool   `json:"enabled"`
+		} `json:"supported_commands"`
+	} `json:"return"`
+}
+
+// missingQGACommands returns those of required that info reports as disabled
+// or does not list at all (an agent too old to know the command), in the order
+// of required.
+func missingQGACommands(info *qgaInfoResult, required []string) []string {
+	enabled := make(map[string]bool, len(info.Return.SupportedCommands))
+	for _, c := range info.Return.SupportedCommands {
+		enabled[c.Name] = c.Enabled
+	}
+	var missing []string
+	for _, name := range required {
+		if !enabled[name] {
+			missing = append(missing, name)
+		}
+	}
+	return missing
+}
+
+// checkGuestAgentCommands fails early, and explicitly, when the template's
+// guest agent blocks any command the provisioning needs.
+func checkGuestAgentCommands(dom *libvirt.Domain) *ce.CustomError {
+	var info qgaInfoResult
+	if cerr := qgaCall(dom, "guest-info", nil, &info); cerr != nil {
+		return cerr
+	}
+	missing := missingQGACommands(&info, qgaRequiredCommands)
+	if len(missing) == 0 {
+		return nil
+	}
+	return &ce.CustomError{
+		Title: "checkGuestAgentCommands: the template's QEMU guest agent blocks commands that vm provision needs",
+		Message: fmt.Sprintf("disabled or unsupported: %s (qemu-ga %s). This is fixed in the template, not here: "+
+			"find where its block/allow list is set (see 'systemctl cat qemu-guest-agent' and /etc/sysconfig/qemu-ga; "+
+			"typically a BLACKLIST_RPC, BLOCK_RPCS or FILTER_RPC_ARGS line), remove or comment it out, restart "+
+			"qemu-guest-agent, and re-clone from the updated template",
+			strings.Join(missing, ", "), info.Return.Version),
+	}
 }
 
 // ─── guest-file-* / guest-exec ─────────────────────────────────────────────────
@@ -187,6 +254,10 @@ func qgaExec(dom *libvirt.Domain, path string, args []string, timeout time.Durat
 // runProvisionScript pushes script into the guest and executes it via /bin/sh.
 func runProvisionScript(dom *libvirt.Domain, script string) *ce.CustomError {
 	const scriptPath = "/tmp/.vmman4-provision.sh"
+
+	if cerr := checkGuestAgentCommands(dom); cerr != nil {
+		return cerr
+	}
 
 	if cerr := qgaWriteFile(dom, scriptPath, script); cerr != nil {
 		return cerr
