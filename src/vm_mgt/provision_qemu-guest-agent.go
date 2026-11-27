@@ -164,7 +164,7 @@ func checkGuestAgentCommands(dom *libvirt.Domain) *ce.CustomError {
 // no SSH -- just the virtio-serial channel).
 func qgaWriteFile(dom *libvirt.Domain, path, content string) *ce.CustomError {
 	var openRes qgaFileOpenResult
-	if cerr := qgaCall(dom, "guest-file-open", qgaFileOpenArgs{Path: path, Mode: "xw+"}, &openRes); cerr != nil {
+	if cerr := qgaCall(dom, "guest-file-open", qgaFileOpenArgs{Path: path, Mode: "w+"}, &openRes); cerr != nil {
 		return cerr
 	}
 	handle := openRes.Return
