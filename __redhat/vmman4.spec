@@ -61,6 +61,23 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Fri Nov 27 2026 Binary package builder <builder@famillegratton.net> 1.4.1-1
+- Version bump
+- Merge branch 'provision_fixes' into develop
+- provisioning fix stage3
+- fix: provisioning, stage2
+- some humour when cloning a volume....
+- Merge branch 'develop' into provision_fixes
+- provisioning fixes staging
+- fix: file permission on provisioning scripts written on the guest domain
+- updated ISSUES.md with newly-discovered bugs
+- Merge branch 'main' into develop
+- chore: update changelog for 1.4.0-3
+- removed pgsql dependencies that were not needed anymore
+- chore: update changelog for 1.4.0-2
+- removed db support from planned features
+- chore: update changelog for 1.4.0-1
+
 * Tue Nov 24 2026 Binary package builder <builder@famillegratton.net> 1.4.0-3
 - removed pgsql dependencies that were not needed anymore
 - removed db support from planned features
