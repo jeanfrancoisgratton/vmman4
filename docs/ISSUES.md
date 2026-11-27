@@ -1,6 +1,6 @@
-- [ ] `vmman vm provision $VM $IP fedora2` breaks (see note1)`<br> 
-- [ ] `vmman vm provision $VM $IP opensuse2` breaks (see note2)<br>
-- [ ] inconsistent coloured output in `vmmman vm provision`
+- [x] `vmman vm provision $VM $IP fedora2` breaks (see note1)`<br> 
+- [x] `vmman vm provision $VM $IP opensuse2` breaks (see note2)<br>
+- [ ] inconsistent colored output in `vmmman vm provision`
 
 ___
 
