@@ -32,6 +32,46 @@ type EnvSpec struct {
 	DNSSearch []string `json:"dnssearch"` // DNS search domains, may be empty
 }
 
+type qgaFileOpenArgs struct {
+	Path string `json:"path"`
+	Mode string `json:"mode"`
+}
+type qgaFileOpenResult struct {
+	Return int `json:"return"`
+}
+
+type qgaFileWriteArgs struct {
+	Handle int    `json:"handle"`
+	BufB64 string `json:"buf-b64"`
+}
+
+type qgaFileCloseArgs struct {
+	Handle int `json:"handle"`
+}
+
+type qgaExecArgs struct {
+	Path          string   `json:"path"`
+	Arg           []string `json:"arg,omitempty"`
+	CaptureOutput bool     `json:"capture-output"`
+}
+type qgaExecResult struct {
+	Return struct {
+		PID int `json:"pid"`
+	} `json:"return"`
+}
+
+type qgaExecStatusArgs struct {
+	PID int `json:"pid"`
+}
+type qgaExecStatusResult struct {
+	Return struct {
+		Exited   bool   `json:"exited"`
+		Exitcode int    `json:"exitcode"`
+		OutData  string `json:"out-data"`
+		ErrData  string `json:"err-data"`
+	} `json:"return"`
+}
+
 // DefaultEnvFile returns ~/.config/JFG/vmman4/env.json, the default
 // environment file path used when -E is not passed.
 func DefaultEnvFile() string {

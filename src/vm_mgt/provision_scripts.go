@@ -24,6 +24,11 @@ import (
 // removes or neutralises whatever else could configure the same interface
 // (other NetworkManager profiles, other netplan files, cloud-init network
 // rendering).
+//
+// IPv6 is disabled on every distro: in the network configuration itself where
+// the mechanism has a knob for it (NetworkManager, netplan), and unconditionally
+// through a sysctl drop-in, which is what actually guarantees it, whatever
+// renders the network.
 func buildProvisionScript(osID, iface, hostname, ipaddr string, env *EnvSpec) (string, *ce.CustomError) {
 	ip := net.ParseIP(ipaddr)
 	if ip == nil || ip.To4() == nil {
@@ -39,6 +44,8 @@ func buildProvisionScript(osID, iface, hostname, ipaddr string, env *EnvSpec) (s
 	prefix, _ := ipnet.Mask.Size()
 	mask := net.IP(ipnet.Mask).String()
 
+	// IPv6 is disabled on the guest, so IPv6 nameservers would be useless
+	// everywhere: only the IPv4 ones are ever configured.
 	dns4 := ipv4Only(env.DNS)
 
 	// netConfig is the distro-specific part. writeResolv says whether the
@@ -94,6 +101,9 @@ network:
   ethernets:
     %s:
       dhcp4: false
+      dhcp6: false
+      accept-ra: false
+      link-local: []
       addresses: [%s/%d]
       routes:
         - to: default
@@ -140,7 +150,7 @@ method=manual
 address1=%s/%d,%s
 %s
 [ipv6]
-method=auto
+method=disabled
 NMEOF
 chown 0:0 "$NMFILE" /etc/NetworkManager/conf.d/90-vmman4.conf
 chmod 600 "$NMFILE"
@@ -159,7 +169,7 @@ fi`, iface, iface, iface, ipaddr, prefix, env.Gateway, nmDNSLines(dns4, env.DNSS
 	var resolvBlock string
 	if writeResolv {
 		var rc strings.Builder
-		for _, ns := range env.DNS {
+		for _, ns := range dns4 {
 			rc.WriteString("nameserver " + ns + "\n")
 		}
 		if len(env.DNSSearch) > 0 {
@@ -185,6 +195,20 @@ fi
 
 %s
 
+# IPv6 off, whatever renders the network. Both 'all' and 'default' are set so
+# that interfaces appearing later inherit it. systemd-sysctl reads this on
+# systemd distros; on Alpine the openrc 'sysctl' service does, so make sure
+# it is enabled.
+mkdir -p /etc/sysctl.d
+cat > /etc/sysctl.d/90-vmman4-disable-ipv6.conf <<'SYSCTLEOF'
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+SYSCTLEOF
+chmod 644 /etc/sysctl.d/90-vmman4-disable-ipv6.conf
+if command -v rc-update >/dev/null 2>&1; then
+  rc-update add sysctl boot >/dev/null 2>&1 || true
+fi
+
 %s
 rm -f /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub
 ssh-keygen -A >/dev/null 2>&1 || true
@@ -193,9 +217,9 @@ exit 0
 `, hostname, hostname, netConfig, resolvBlock), nil
 }
 
-// ipv4Only returns the IPv4 literals of list, in order. It feeds the
-// NetworkManager [ipv4] section and netplan's nameserver list; the
-// resolv.conf-based branches (alpine, debian) still get the full env.DNS list.
+// ipv4Only returns the IPv4 literals of list, in order. IPv6 is disabled on
+// provisioned guests, so this feeds every DNS configuration: the NetworkManager
+// [ipv4] section, netplan's nameserver list and resolv.conf.
 func ipv4Only(list []string) []string {
 	var out []string
 	for _, s := range list {

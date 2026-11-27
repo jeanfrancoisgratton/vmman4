@@ -160,23 +160,6 @@ func checkGuestAgentCommands(dom *libvirt.Domain) *ce.CustomError {
 
 // ─── guest-file-* / guest-exec ─────────────────────────────────────────────────
 
-type qgaFileOpenArgs struct {
-	Path string `json:"path"`
-	Mode string `json:"mode"`
-}
-type qgaFileOpenResult struct {
-	Return int `json:"return"`
-}
-
-type qgaFileWriteArgs struct {
-	Handle int    `json:"handle"`
-	BufB64 string `json:"buf-b64"`
-}
-
-type qgaFileCloseArgs struct {
-	Handle int `json:"handle"`
-}
-
 // qgaWriteFile writes content to path inside the guest, via QGA (no network,
 // no SSH -- just the virtio-serial channel).
 func qgaWriteFile(dom *libvirt.Domain, path, content string) *ce.CustomError {
@@ -196,29 +179,6 @@ func qgaWriteFile(dom *libvirt.Domain, path, content string) *ce.CustomError {
 		return writeErr
 	}
 	return closeErr
-}
-
-type qgaExecArgs struct {
-	Path          string   `json:"path"`
-	Arg           []string `json:"arg,omitempty"`
-	CaptureOutput bool     `json:"capture-output"`
-}
-type qgaExecResult struct {
-	Return struct {
-		PID int `json:"pid"`
-	} `json:"return"`
-}
-
-type qgaExecStatusArgs struct {
-	PID int `json:"pid"`
-}
-type qgaExecStatusResult struct {
-	Return struct {
-		Exited   bool   `json:"exited"`
-		Exitcode int    `json:"exitcode"`
-		OutData  string `json:"out-data"`
-		ErrData  string `json:"err-data"`
-	} `json:"return"`
 }
 
 // qgaExec runs path (with args) inside the guest via guest-exec, polling
