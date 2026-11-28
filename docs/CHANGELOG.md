@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.4.3 - 2026.11.27
+
+### Changed
+
+- Enhanced coloured output in various commands (cosmetic changes only)
+
+
 ## 1.4.2 - 2026.11.27
 
 ### Removed
