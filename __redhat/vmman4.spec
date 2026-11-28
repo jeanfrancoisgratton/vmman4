@@ -61,6 +61,10 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Fri Nov 27 2026 Binary package builder <builder@famillegratton.net> 1.4.2-1
+- fix: removed db support mention in vmman -h
+- chore: update changelog for 1.4.1-1
+
 * Fri Nov 27 2026 Binary package builder <builder@famillegratton.net> 1.4.1-1
 - Version bump
 - Merge branch 'provision_fixes' into develop
