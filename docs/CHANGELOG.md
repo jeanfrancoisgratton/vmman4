@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 1.4.2 - 2026.11.27
+
+### Removed
+
+- db support mentions in src/cmd/root.go. Mainly cosmetic, but it showed up in `vmman -h`, which might be confusing if one did not know I intended not to mention db support anymore
+
 ## 1.4.1 - 2026.11.27
 
 ### Changed

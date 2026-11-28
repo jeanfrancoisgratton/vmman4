@@ -74,7 +74,6 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVarP(&shared.QuietOutput, "quiet", "q", false, "Suppress output")
 	rootCmd.PersistentFlags().BoolVarP(&shared.DebugMode, "debug", "D", false, "Enable debug mode")
-	rootCmd.PersistentFlags().BoolVar(&shared.DBsupport, "db", false, "Enable database support")
 	rootCmd.PersistentFlags().StringVarP(&shared.ConnectionFilename, "connectionfile", "c", "", "Connection configuration file")
 	rootCmd.PersistentFlags().StringVarP(&shared.ConnectURI, "connectionuri", "C", "qemu:///system", "Connection URI")
 }
