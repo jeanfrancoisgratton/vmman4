@@ -74,10 +74,9 @@ func ListVMs() *ce.CustomError {
 	})
 
 	//vmlistStyle := table.StyleColoredBlackOnYellowWhite
-	vmlistStyle := table.StyleRounded
-	//vmlistStyle.Color.Row = text.Colors{text.FgHiWhite}
-	//vmlistStyle.Color.RowAlternate = text.Colors{text.FgHiWhite, text.BgBlack}
-	t.SetStyle(vmlistStyle)
+	//vmlistStyle := table.StyleRounded
+	t.SetStyle(table.StyleColoredBlackOnYellowWhite)
+	t.Style().Color.Header = text.Colors{text.FgHiWhite, text.Bg256Color(88)}
 	t.Style().Format.Header = text.FormatDefault
 
 	// Stretch table to terminal width: cap at terminal width; "VM name"

@@ -86,9 +86,8 @@ func displaySnapshots(snaps []SnapshotXMLstruct, vmname string) {
 	t.SortBy([]table.SortBy{
 		{Name: "Snapshot name", Mode: table.Asc},
 	})
-	t.SetStyle(table.StyleDefault)
-	t.Style().Options.DrawBorder = false
-	//t.Style().Options.SeparateColumns = false
+	t.SetStyle(table.StyleColoredBlackOnYellowWhite)
+	t.Style().Color.Header = text.Colors{text.FgHiWhite, text.Bg256Color(22)}
 	t.Style().Format.Header = text.FormatDefault
 	t.SetRowPainter(func(row table.Row) text.Colors {
 		switch row[1] {
